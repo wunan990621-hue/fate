@@ -1,0 +1,2946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>TOTO Luck | Jade &amp; Prosperity</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            headline: ['"Noto Serif"', 'serif'],
+            body: ['Manrope', 'sans-serif'],
+            chinese: ['"Noto Serif SC"', '"Noto Serif"', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #f8faf5; color: #191c1a; font-family: 'Manrope', sans-serif; }
+    .jade-grad { background: linear-gradient(135deg, #00321f 0%, #004b31 100%); }
+    .jade-grad-btn { background: linear-gradient(134.4deg, #00321f 0%, #004b31 100%); }
+    .chinese-char { font-family: 'Noto Serif SC', 'Noto Serif', serif; font-weight: 700; }
+    @keyframes popIn {
+      0%   { transform: scale(0.5); opacity: 0; }
+      70%  { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .num-reveal { animation: popIn 0.5s ease forwards; opacity: 0; }
+    @keyframes barFill { from { width: 0; } }
+    .bar-anim { animation: barFill 1s ease forwards; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .pillar-anim { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+    .input-field {
+      width: 100%; background: #ecefea; border: none; border-bottom: 2px solid transparent;
+      border-radius: 8px 8px 0 0; padding: 16px; font-family: 'Manrope', sans-serif;
+      font-size: 16px; outline: none; transition: border-color 0.2s;
+    }
+    .input-field:focus { border-color: #00321f; }
+    .input-error { border-color: #ba1a1a !important; background: #fff8f7 !important; }
+    .input-error::placeholder { color: #ba1a1a; opacity: 0.6; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .lang-btn { color: #404943; transition: all 0.2s; }
+    .lang-btn.active { background: #004b31 !important; color: white; }
+    .nav-tab { position: relative; transition: all 0.2s; }
+    .nav-tab.active { color: #004b36 !important; font-weight: 600; }
+    .nav-tab.active::after { content:''; position:absolute; bottom:-6px; left:0; right:0; height:2px; background:#735c00; border-radius:2px; }
+    .sidebar-tab { color: #404943; }
+    .sidebar-tab:not(.active):hover { background: #ecefea; }
+    .sidebar-tab.active { background: white; color: #004b36 !important; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .sidebar-tab.active svg { stroke: #004b36; }
+    .drawer-tab { color: #404943; }
+    .drawer-tab.active { background: #ecefea; color: #004b36 !important; }
+    .drawer-tab.active svg { stroke: #004b36; }
+    /* Hexagram line styles */
+    .hx-yang { height:5px; background:#004b31; border-radius:3px; }
+    .hx-yin  { display:flex; gap:6px; }
+    .hx-yin span { flex:1; height:5px; background:#004b31; border-radius:3px; }
+    .hx-changing .hx-yang, .hx-changing .hx-yin span { background:#c8850a; box-shadow:0 0 6px rgba(200,133,10,0.5); }
+    @keyframes hexReveal { from{opacity:0;transform:scaleX(0)} to{opacity:1;transform:scaleX(1)} }
+    .hx-anim { animation: hexReveal 0.4s ease forwards; opacity:0; transform-origin:left; }
+    @keyframes resultFadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    .result-anim { animation: resultFadeIn 0.6s ease forwards; opacity:0; }
+    /* AI Chat */
+    @keyframes typingBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+    .typing-dot { width:6px;height:6px;border-radius:50%;background:#bcedda;display:inline-block;animation:typingBounce 1.2s ease infinite; }
+    .chat-msg { animation:resultFadeIn 0.3s ease forwards; opacity:0; }
+    .ai-chip { background:rgba(188,237,218,0.15);color:#bcedda;border:1px solid rgba(188,237,218,0.25);border-radius:999px;padding:5px 14px;font-size:11px;font-weight:600;white-space:nowrap;transition:background 0.15s;cursor:pointer; }
+    .ai-chip:hover { background:rgba(188,237,218,0.3); }
+    #aiChatPanel { will-change:transform; }
+    /* Mobile drawer */
+    #mobileDrawer { transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+    #mobileDrawer.open { transform: translateX(0); }
+    #drawerBackdrop { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    #drawerBackdrop.open { opacity: 1; pointer-events: auto; }
+    .drawer-tab { display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:12px; color:#404943; transition:background 0.15s, color 0.15s; font-size:15px; font-weight:500; }
+    .drawer-tab:hover { background:#ecefea; }
+    .drawer-tab.active { background:#004b31; color:white; }
+    .drawer-tab.active svg { stroke:white; }
+    .result-card { animation: resultFadeIn 0.4s ease forwards; opacity: 0; }
+  </style>
+</head>
+<body>
+
+<!-- ══ AI CHAT OVERLAY ══ -->
+<div id="aiChatOverlay" class="fixed inset-0 z-[90] pointer-events-none">
+  <div id="aiChatBackdrop" onclick="closeAiChat()"
+       class="absolute inset-0 bg-[rgba(15,20,18,0.55)] backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <div id="aiChatPanel"
+       class="absolute right-0 top-0 h-full w-full sm:max-w-[420px] bg-[#f8faf5] flex flex-col translate-x-full transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] shadow-[-20px_0_60px_rgba(15,20,18,0.18)]">
+
+    <!-- ── Jade Header ── -->
+    <div class="jade-grad px-5 pt-10 pb-5 flex flex-col gap-4 shrink-0">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#4ade80] inline-block animate-pulse"></span>
+          <span id="ai-status" class="text-[#bcedda] text-[11px] tracking-wide font-medium">Online · Ready</span>
+        </div>
+        <button onclick="closeAiChat()" class="w-8 h-8 rounded-full bg-[rgba(188,237,218,0.1)] flex items-center justify-center hover:bg-[rgba(188,237,218,0.2)] transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="#bcedda" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="relative shrink-0">
+          <div class="w-[56px] h-[56px] rounded-full bg-[rgba(188,237,218,0.1)] border border-[rgba(188,237,218,0.2)] flex items-center justify-center text-3xl">☯</div>
+          <span class="absolute bottom-0.5 right-0.5 w-3 h-3 rounded-full bg-[#22c55e] border-2 border-[#004b31]"></span>
+        </div>
+        <div>
+          <h2 id="ai-master-name" class="text-white font-headline text-xl font-bold leading-tight">Master Jade</h2>
+          <p class="text-[#bcedda] text-xs mt-0.5">Ba Zi · Plum Blossom · Feng Shui</p>
+          <div class="flex items-center gap-1 mt-1.5">
+            <span class="text-[#ffe088] text-[11px]">★★★★★</span>
+            <span class="text-[rgba(188,237,218,0.55)] text-[10px] font-medium tracking-wide ml-1">MASTER DIVINER</span>
+          </div>
+        </div>
+      </div>
+      <!-- Prompt chips -->
+      <div id="aiChips" class="flex gap-2 overflow-x-auto no-scrollbar pb-0.5 mt-1"></div>
+    </div>
+
+    <!-- ── Messages ── -->
+    <div id="aiMessages" class="flex-1 overflow-y-auto px-4 py-5 flex flex-col gap-4 no-scrollbar"></div>
+
+    <!-- ── Typing indicator ── -->
+    <div id="aiTyping" class="hidden px-4 pb-1">
+      <div class="flex items-end gap-2.5">
+        <div class="w-8 h-8 rounded-full bg-[#004b31] flex items-center justify-center text-base shrink-0">☯</div>
+        <div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm border border-[#eef0ed]">
+          <div class="flex gap-1 items-center h-4">
+            <span class="typing-dot"></span>
+            <span class="typing-dot" style="animation-delay:.15s"></span>
+            <span class="typing-dot" style="animation-delay:.3s"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Input area ── -->
+    <div class="shrink-0 border-t border-[#e4e7e2] bg-white px-4 py-3 flex items-end gap-3">
+      <div class="flex-1 bg-[#f2f4ef] rounded-2xl px-4 py-2.5 flex items-end gap-2 min-h-[44px]">
+        <textarea id="aiInput" rows="1"
+                  class="flex-1 bg-transparent text-sm text-[#191c1a] placeholder-[#9eaa9e] resize-none outline-none leading-relaxed max-h-[120px] overflow-y-auto self-center"
+                  onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAiMessage();}"
+                  oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+      </div>
+      <button onclick="sendAiMessage()" id="aiSendBtn"
+              class="w-11 h-11 jade-grad-btn rounded-full flex items-center justify-center shrink-0 hover:opacity-90 active:scale-95 transition-all shadow-md">
+        <svg class="w-4 h-4 translate-x-0.5" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- ── Disclaimer ── -->
+    <p class="text-center text-[10px] text-[#b0b8b0] py-2 bg-white border-t border-[#eef0ed]" id="ai-disclaimer">仅供参考</p>
+
+  </div>
+</div>
+
+<!-- Top Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-50 h-20 flex items-center justify-between px-4 sm:px-6 md:px-8
+            bg-[rgba(248,250,245,0.85)] backdrop-blur-xl shadow-[0_12px_40px_rgba(25,28,26,0.06)]">
+  <div class="flex items-center gap-7 min-w-0">
+    <div class="font-headline text-sm sm:text-xl md:text-2xl font-bold italic text-[#004b36] leading-tight shrink-0">Jade &amp; Prosperity</div>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#" onclick="showTab('toto');return false;" id="tab-toto" class="nav-tab active text-[#404943] text-base hover:text-[#00321f]" data-i18n="nav_totoLuck">TOTO Luck</a>
+      <a href="#" onclick="showTab('meihua');return false;" id="tab-meihua" class="nav-tab text-[#404943] text-base hover:text-[#00321f]" data-i18n="nav_meihua">梅花易数</a>
+      <a href="#" class="text-[#404943] text-base hover:text-[#00321f] transition-colors" data-i18n="nav_baZi">Ba Zi Analysis</a>
+      <a href="#" class="text-[#404943] text-base hover:text-[#00321f] transition-colors" data-i18n="nav_dailyRituals">Daily Rituals</a>
+    </div>
+  </div>
+  <div class="shrink-0 flex items-center gap-2 sm:gap-3">
+    <div class="flex items-center gap-0.5 bg-[#ecefea] rounded-full p-0.5 sm:p-1 whitespace-nowrap">
+      <button onclick="setLang('en')" id="lang-en" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">EN</button>
+      <button onclick="setLang('zh')" id="lang-zh" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">中文</button>
+      <button onclick="setLang('ms')" id="lang-ms" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">BM</button>
+    </div>
+    <button onclick="toggleMobileMenu()" id="userBtn" aria-label="Menu"
+            class="relative w-8 h-8 md:w-[38px] md:h-[38px] rounded-full overflow-hidden shrink-0 focus:outline-none">
+      <img id="avatarImg" src="" alt="avatar" class="w-full h-full object-cover">
+      <div id="closeOverlay" class="hidden absolute inset-0 bg-[rgba(0,43,28,0.72)] flex items-center justify-center">
+        <svg class="w-4 h-4" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile drawer backdrop -->
+<div id="drawerBackdrop" onclick="toggleMobileMenu()" class="fixed inset-0 z-[60] bg-[rgba(25,28,26,0.45)] backdrop-blur-sm"></div>
+
+<!-- Mobile slide-in drawer -->
+<div id="mobileDrawer" class="fixed top-0 right-0 h-full w-72 z-[70] bg-[#f8faf5] shadow-[−20px_0_60px_rgba(25,28,26,0.18)] flex flex-col pt-6 pb-8 px-5">
+  <!-- Close row -->
+  <div class="flex items-center justify-between mb-6 px-1">
+    <span class="font-headline text-base font-bold italic text-[#004b36]">Jade &amp; Prosperity</span>
+    <button onclick="toggleMobileMenu()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#ecefea] transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="#404943" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <!-- Profile card -->
+  <div class="flex items-center gap-3 mb-6 px-[10px] py-3 bg-[#ecefea] rounded-2xl">
+    <div class="w-11 h-11 rounded-full overflow-hidden shrink-0" id="drawerAvatar">
+      <img id="drawerAvatarImg" src="" alt="avatar" class="w-full h-full object-cover">
+    </div>
+    <div class="min-w-0">
+      <p class="font-headline text-sm font-bold text-[#004b36] truncate" id="drawerName">Master Lin</p>
+      <p class="text-[10px] font-normal uppercase tracking-[1.1px] text-[#404943] truncate" id="drawerPhase">Wood Dragon Phase</p>
+    </div>
+  </div>
+
+  <!-- Tab links -->
+  <p class="text-[10px] font-bold uppercase tracking-widest text-[#9eaa9e] px-2 mb-2" data-i18n="sidebar_navigation">Navigation</p>
+  <nav class="flex flex-col gap-1">
+    <a href="#" id="mtab-toto" onclick="showTab('toto');toggleMobileMenu();return false;" class="drawer-tab active">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      <span data-i18n="nav_totoLuck">TOTO Luck</span>
+    </a>
+    <a href="#" id="mtab-meihua" onclick="showTab('meihua');toggleMobileMenu();return false;" class="drawer-tab">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 0 10A5 5 0 0 1 12 2z"/><path d="M12 12c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z"/></svg>
+      <span data-i18n="nav_meihua">梅花易数</span>
+    </a>
+    <a href="#" id="mtab-fengshui" onclick="showTab('fengshui');toggleMobileMenu();return false;" class="drawer-tab">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span data-i18n="sidebar_fengShui">Feng Shui</span>
+    </a>
+    <a href="#" class="drawer-tab">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span data-i18n="nav_baZi">Ba Zi Analysis</span>
+    </a>
+    <a href="#" class="drawer-tab">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span data-i18n="nav_dailyRituals">Daily Rituals</span>
+    </a>
+  </nav>
+
+  <!-- Divider -->
+  <div class="my-6 border-t border-[#e0e4df]"></div>
+
+  <!-- Language switcher -->
+  <p class="text-[10px] font-bold uppercase tracking-widest text-[#9eaa9e] px-2 mb-3" data-i18n="sidebar_language">Language</p>
+  <div class="flex items-center gap-1.5 px-1">
+    <button onclick="setLang('en')" id="mlang-en" class="lang-btn flex-1 text-xs font-bold py-2 rounded-full bg-[#ecefea] text-center">EN</button>
+    <button onclick="setLang('zh')" id="mlang-zh" class="lang-btn flex-1 text-xs font-bold py-2 rounded-full bg-[#ecefea] text-center">中文</button>
+    <button onclick="setLang('ms')" id="mlang-ms" class="lang-btn flex-1 text-xs font-bold py-2 rounded-full bg-[#ecefea] text-center">BM</button>
+  </div>
+
+  <!-- Book Consultation button -->
+  <div class="mt-auto flex flex-col gap-3 pt-4">
+    <button onclick="openAiChat();toggleMobileMenu();" class="w-full bg-[#004b31] text-[#bcedda] py-3 rounded-xl font-semibold text-sm tracking-wide text-center hover:opacity-90 transition-opacity" data-i18n="sidebar_bookConsult">
+      Book Consultation
+    </button>
+    <p class="text-[10px] text-[#9eaa9e] leading-relaxed px-1">Jade &amp; Prosperity · Fortune &amp; Destiny</p>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-screen w-72 bg-[#f2f4ef] pt-24 pb-6 px-6 z-40">
+  <nav class="flex flex-col gap-2">
+    <a href="#" class="sidebar-tab flex items-center gap-3 h-12 px-3 rounded-xl text-[#404943] hover:bg-[#ecefea] transition-all">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span class="text-[11px] font-medium uppercase tracking-[1.1px]" data-i18n="sidebar_dashboard">Dashboard</span>
+    </a>
+    <a href="#" id="stab-toto" onclick="showTab('toto');return false;" class="sidebar-tab active flex items-center gap-3 h-12 px-3 rounded-xl transition-all">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <span class="text-[11px] font-medium uppercase tracking-[1.1px]" data-i18n="nav_totoLuck">TOTO Luck</span>
+    </a>
+    <a href="#" id="stab-meihua" onclick="showTab('meihua');return false;" class="sidebar-tab flex items-center gap-3 h-12 px-3 rounded-xl transition-all">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      <span class="text-[11px] font-medium uppercase tracking-[1.1px]" data-i18n="sidebar_bazi">Personal Ba Zi</span>
+    </a>
+    <a href="#" id="stab-fengshui" onclick="showTab('fengshui');return false;" class="sidebar-tab flex items-center gap-3 h-12 px-3 rounded-xl transition-all">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="text-[11px] font-medium uppercase tracking-[1.1px]" data-i18n="sidebar_fengShui">Feng Shui</span>
+    </a>
+  </nav>
+  <div class="mt-auto flex flex-col gap-4">
+    <button onclick="openAiChat()" class="w-full bg-[#004b31] text-[#bcedda] py-3 rounded-xl font-semibold text-sm tracking-wide text-center hover:opacity-90 transition-opacity" data-i18n="sidebar_bookConsult">
+      Book Consultation
+    </button>
+    <div class="flex flex-col gap-1">
+      <a href="#" class="flex items-center gap-3 px-3 py-2 text-[#404943] hover:text-[#004b36] text-xs transition-colors" data-i18n="sidebar_settings">⚙ Settings</a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 text-[#404943] hover:text-[#004b36] text-xs transition-colors" data-i18n="sidebar_support">? Support</a>
+    </div>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="pt-20 lg:pl-72 min-h-screen">
+
+<!-- ══ TOTO LUCK SECTION ══ -->
+<div id="totoSection">
+  <div class="max-w-[1152px] mx-auto px-6 py-12 flex flex-col gap-16">
+
+    <!-- Hero -->
+    <section class="relative h-[300px] rounded-3xl overflow-hidden flex items-center px-12 jade-grad">
+      <div class="absolute inset-0 opacity-20" style="background:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22><defs><radialGradient id=%22g%22><stop offset=%220%25%22 stop-color=%22%23bcedda%22 stop-opacity=%220.4%22/><stop offset=%22100%25%22 stop-color=%22transparent%22/></radialGradient></defs><ellipse cx=%22300%22 cy=%22100%22 rx=%22200%22 ry=%22150%22 fill=%22url(%23g)%22/></svg>') center/cover"></div>
+      <div class="relative z-10 max-w-xl flex flex-col gap-3">
+        <span class="inline-block bg-[#ffe088] text-[#241a00] text-[11px] font-bold uppercase tracking-[2.2px] px-4 py-1 rounded-full w-fit" data-i18n="hero_badge">Celestial Alignment</span>
+        <h1 class="font-headline text-[56px] md:text-[60px] font-bold leading-[1.05] text-white mt-2" id="heroTitle">
+          Seek Your <span class="italic text-[#ffe088]">Jade<br/>Fortune</span>
+        </h1>
+        <p class="text-[#bcedda] text-lg font-light leading-relaxed mt-1" data-i18n="hero_subtitle">
+          Harmonizing your personal elements with the flow of the universe to reveal prosperous sequences.
+        </p>
+      </div>
+    </section>
+
+    <!-- Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- Left Column -->
+      <section class="lg:col-span-4 flex flex-col gap-8">
+
+        <!-- Form -->
+        <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-8 flex flex-col gap-6">
+          <h3 class="font-headline text-xl font-bold text-[#00321f] flex items-center gap-2">
+            <svg class="w-5 h-5 text-[#004b31]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+            <span data-i18n="form_title">Scholar's Input</span>
+          </h3>
+          <form id="baziForm" class="flex flex-col gap-5" onsubmit="return false;">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="form_nameLabel">Full Name</label>
+              <input class="input-field" id="nameInput" placeholder="Enter name" type="text"/>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="form_dateLabel">Birth Date</label>
+              <input class="input-field" id="birthDate" type="date" oninput="clearInputError(this)"/>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]">
+                <span data-i18n="form_timeLabel">Birth Time</span> <span class="normal-case font-normal opacity-60" data-i18n="form_optional">(optional)</span>
+              </label>
+              <input class="input-field" id="birthTime" type="time"/>
+            </div>
+            <div id="formError" class="hidden text-[#ba1a1a] text-sm font-medium bg-[#ffdad6] rounded-lg px-4 py-2"></div>
+            <button class="w-full jade-grad-btn text-white py-4 rounded-xl font-bold text-[12px] uppercase tracking-[1.2px]
+                           hover:shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                    id="calcBtn" onclick="calculate()">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+              <span data-i18n="form_calcBtn">Calculate Manifestation</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Luck Attribute Cards -->
+        <div class="flex flex-col gap-4">
+          <div class="rounded-xl p-6 flex items-center justify-between transition-all duration-700" id="colorCard" style="background:#bcedda">
+            <div>
+              <p class="text-[10px] font-extrabold uppercase tracking-[1px] opacity-70" id="colorLabel" style="color:#214f41" data-i18n="attr_luckyColor">Lucky Color</p>
+              <p class="font-headline text-lg font-bold mt-0.5" id="colorValue" style="color:#002118">Imperial Jade</p>
+            </div>
+            <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 transition-colors duration-700" id="colorIcon" style="background:#00321f">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            </div>
+          </div>
+          <div class="bg-[#ecefea] rounded-xl p-6 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] font-extrabold uppercase tracking-[1px] text-[#404944]" data-i18n="attr_goldenHour">Golden Hour</p>
+              <p class="font-headline text-lg font-bold text-[#00321f] mt-0.5" id="goldenHour">17:00 – 19:00</p>
+            </div>
+            <div class="w-12 h-12 bg-[#735c00] rounded-full flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+          <div class="bg-[#f2f4ef] rounded-xl p-6 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] font-extrabold uppercase tracking-[1px] text-[#404944]" data-i18n="attr_direction">Prosperous Direction</p>
+              <p class="font-headline text-lg font-bold text-[#00321f] mt-0.5" id="luckyDir">North-East</p>
+            </div>
+            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
+              <svg class="w-5 h-5 text-[#00321f]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Master's Reading -->
+        <div class="bg-[#004b31] rounded-3xl p-6 hidden flex-col gap-3" id="masterReading">
+          <h4 class="font-headline text-base font-bold text-[#ffe088]" data-i18n="reading_title">Master's Reading</h4>
+          <p class="text-[#bcedda] text-sm leading-relaxed" id="readingText"></p>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="text-[10px] uppercase tracking-widest text-[#a1d1bf]" id="readingStrength"></span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Right Column -->
+      <section class="lg:col-span-8 flex flex-col gap-8">
+
+        <!-- Ba Zi Four Pillars -->
+        <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-8 flex flex-col gap-8">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <h3 class="font-headline text-2xl font-bold text-[#00321f]" data-i18n="bazi_title">Ba Zi: The Four Pillars</h3>
+            <span class="text-sm text-[#004b31] italic" id="dayMasterLabel">Day Master: — </span>
+          </div>
+          <div class="grid grid-cols-4 gap-3 text-center" id="pillarsGrid">
+          </div>
+        </div>
+
+        <!-- Sacred Manifestation -->
+        <div class="rounded-3xl p-1 jade-grad shadow-2xl">
+          <div class="bg-[rgba(0,50,31,0.92)] backdrop-blur-md rounded-[22px] p-10 relative overflow-hidden flex flex-col gap-10">
+            <div class="absolute top-[-48px] right-[-48px] w-64 h-64 rounded-full bg-[rgba(115,92,0,0.12)] blur-[40px] pointer-events-none"></div>
+            <div class="text-center relative z-10">
+              <h4 class="font-headline text-3xl font-bold text-[#e9c349]" data-i18n="manifest_title">Sacred Manifestation</h4>
+              <p class="text-[rgba(188,237,218,0.6)] text-[12px] uppercase tracking-[1.2px] mt-2" id="manifestSubtitle">
+                Numerology sequence derived from the Five Elements
+              </p>
+            </div>
+            <div class="flex flex-col items-center gap-5 relative z-10" id="numbersDisplay">
+              <div class="flex flex-wrap justify-center gap-5" id="mainNumbers"></div>
+              <div class="flex items-end gap-5" id="bonusRow"></div>
+            </div>
+            <div class="flex justify-center relative z-10">
+              <button onclick="realign()"
+                      class="flex items-center gap-3 px-8 py-4 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)]
+                             hover:bg-[rgba(255,255,255,0.10)] rounded-full transition-all
+                             text-[#bcedda] text-sm font-semibold uppercase tracking-[1.4px]">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+                <span data-i18n="manifest_realign">Re-align Elements</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Elemental Balance -->
+        <div class="bg-[#f2f4ef] rounded-3xl p-8 flex flex-col gap-8">
+          <h4 class="font-headline text-xl font-bold text-[#00321f]" data-i18n="elements_title">Elemental Balance</h4>
+          <div class="flex flex-col gap-5" id="elementBars"></div>
+        </div>
+
+        <!-- Five Elements Interaction -->
+        <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-8 hidden" id="elementInteraction">
+          <h4 class="font-headline text-xl font-bold text-[#00321f] mb-6" data-i18n="dynamics_title">Element Dynamics</h4>
+          <div class="grid grid-cols-5 gap-3 text-center" id="elementDynamicsGrid"></div>
+        </div>
+
+      </section>
+    </div>
+  </div>
+</div><!-- /totoSection -->
+
+<!-- ══ MEIHUA SECTION ══ -->
+<div id="meihuaSection" class="hidden">
+  <div class="max-w-[1152px] mx-auto px-6 py-12 flex flex-col gap-10">
+
+    <!-- Hero Banner -->
+    <section class="relative rounded-3xl overflow-hidden jade-grad px-12 py-10 flex items-center gap-10">
+      <div class="absolute inset-0 opacity-10" style="background:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22300%22><text x=%2220%22 y=%22200%22 font-size=%22180%22 fill=%22%23bcedda%22 opacity=%220.15%22>梅</text><text x=%22300%22 y=%22260%22 font-size=%22120%22 fill=%22%23ffe088%22 opacity=%220.1%22>☯</text></svg>') center/cover"></div>
+      <div class="relative z-10 flex-1">
+        <span class="inline-block bg-[#ffe088] text-[#241a00] text-[11px] font-bold uppercase tracking-[2.2px] px-4 py-1 rounded-full mb-4" data-i18n="mh_banner_badge">Song Dynasty Oracle</span>
+        <h1 class="font-headline text-5xl font-bold text-white leading-tight" id="mh-hero-title">梅花易数<br/><span class="text-[#bcedda] text-2xl font-normal italic">Plum Blossom Divination</span></h1>
+        <p class="text-[#bcedda] text-base mt-3 leading-relaxed max-w-lg" data-i18n="mh_banner_desc">邵康节先生所创，以先天易数起卦，通过体用生克关系，洞察事物发展脉络，预测吉凶祸福。</p>
+      </div>
+      <div class="relative z-10 hidden lg:flex flex-col items-center gap-2">
+        <div class="text-[80px] leading-none opacity-60">☰</div>
+        <div class="text-[#ffe088] text-xs tracking-widest uppercase" data-i18n="mh_heaven_earth">Heaven &amp; Earth</div>
+      </div>
+    </section>
+
+    <!-- Main Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- Left: Input Panel -->
+      <div class="lg:col-span-4 flex flex-col gap-6">
+
+        <!-- Method Tabs -->
+        <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-8 flex flex-col gap-6">
+          <h3 class="font-headline text-xl font-bold text-[#00321f] flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span data-i18n="mh_methodTitle">起卦方式</span>
+          </h3>
+          <!-- Method selector -->
+          <div class="flex gap-2">
+            <button onclick="setMeihuaMethod('time')" id="mh-method-time"
+              class="mh-method-btn flex-1 py-2.5 rounded-xl text-xs font-bold tracking-wider border-2 transition-all border-[#004b31] bg-[#004b31] text-white" data-i18n="mh_method_time">
+              时间起卦
+            </button>
+            <button onclick="setMeihuaMethod('number')" id="mh-method-number"
+              class="mh-method-btn flex-1 py-2.5 rounded-xl text-xs font-bold tracking-wider border-2 transition-all border-[#ecefea] text-[#404943] bg-[#ecefea]" data-i18n="mh_method_number">
+              数字起卦
+            </button>
+            <button onclick="setMeihuaMethod('object')" id="mh-method-object"
+              class="mh-method-btn flex-1 py-2.5 rounded-xl text-xs font-bold tracking-wider border-2 transition-all border-[#ecefea] text-[#404943] bg-[#ecefea]" data-i18n="mh_method_object">
+              万物起卦
+            </button>
+          </div>
+
+          <!-- Time method -->
+          <div id="mh-input-time" class="flex flex-col gap-4">
+            <div class="bg-[#f2f4ef] rounded-2xl p-4 flex flex-col gap-2">
+              <p class="text-[10px] font-bold uppercase tracking-widest text-[#404944]" data-i18n="mh_timeAutoLabel">当前时间自动取数</p>
+              <p class="font-headline text-lg font-bold text-[#00321f]" id="mh-time-display">—</p>
+              <p class="text-[11px] text-[#404943]" id="mh-time-numbers" data-i18n="mh_timeNumbersLabel">年数 + 月数 + 日数 + 时数</p>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_questionLabel">所问之事</label>
+              <input class="input-field" id="mh-question-time" placeholder="请输入所求问的事项..." type="text" oninput="clearInputError(this)"/>
+            </div>
+          </div>
+
+          <!-- Number method -->
+          <div id="mh-input-number" class="hidden flex-col gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]"><span data-i18n="mh_upperNumLabel">上卦数</span> <span class="normal-case font-normal opacity-60" data-i18n="mh_anyPosInt">(任意正整数)</span></label>
+              <input class="input-field" id="mh-upper-num" placeholder="例：7" type="number" oninput="clearInputError(this)"/>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]"><span data-i18n="mh_lowerNumLabel">下卦数</span> <span class="normal-case font-normal opacity-60" data-i18n="mh_anyPosInt">(任意正整数)</span></label>
+              <input class="input-field" id="mh-lower-num" placeholder="例：3" type="number" oninput="clearInputError(this)"/>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]"><span data-i18n="mh_lineNumLabel">动爻数</span> <span class="normal-case font-normal opacity-60">(1-6)</span></label>
+              <input class="input-field" id="mh-line-num" placeholder="例：5" type="number" oninput="clearInputError(this)"/>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_questionLabel">所问之事</label>
+              <input class="input-field" id="mh-question-number" placeholder="请输入所求问的事项..." type="text" oninput="clearInputError(this)"/>
+            </div>
+          </div>
+
+          <!-- Object method -->
+          <div id="mh-input-object" class="hidden flex-col gap-4">
+            <div class="bg-[#fff3c4] border border-[#ffe088] rounded-2xl p-4 text-sm text-[#574500] leading-relaxed">
+              <p class="font-bold mb-1" data-i18n="mh_objectMethodTitle">万物类象起卦法</p>
+              <span data-i18n="mh_objectMethodDesc">观察眼前之物，数其数量取上卦，再数动态之物取下卦，两数相加除以6取余为动爻。</span>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_staticCountLabel">静物数量 (上卦)</label>
+              <input class="input-field" id="mh-obj-upper" placeholder="例：窗格数 12" type="number" oninput="clearInputError(this)"/>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_dynamicCountLabel">动态数量 (下卦)</label>
+              <input class="input-field" id="mh-obj-lower" placeholder="例：飞鸟数 5" type="number" oninput="clearInputError(this)"/>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_questionLabel">所问之事</label>
+              <input class="input-field" id="mh-question-object" placeholder="请输入所求问的事项..." type="text" oninput="clearInputError(this)"/>
+            </div>
+          </div>
+
+          <div id="mh-error" class="hidden text-[#ba1a1a] text-sm font-medium bg-[#ffdad6] rounded-lg px-4 py-2"></div>
+
+          <button onclick="castMeihua()"
+            class="w-full jade-grad-btn text-white py-4 rounded-xl font-bold text-[12px] uppercase tracking-[1.4px]
+                   hover:shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            </svg>
+            <span data-i18n="mh_castBtn">占卜起卦</span>
+          </button>
+        </div>
+
+        <!-- Eight Trigrams Reference -->
+        <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-6 flex flex-col gap-4">
+          <h4 class="font-headline text-base font-bold text-[#00321f]" data-i18n="mh_trigramRef">先天八卦数</h4>
+          <div class="grid grid-cols-4 gap-2" id="mh-trigram-grid">
+            <div class="bg-[#dcf5ec] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#004b31]">乾</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_1">1・天</div></div>
+            <div class="bg-[#dcf5ec] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#004b31]">兑</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_2">2・泽</div></div>
+            <div class="bg-[#ffdad6] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#ba1a1a]">离</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_3">3・火</div></div>
+            <div class="bg-[#dcf5ec] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#004b31]">震</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_4">4・雷</div></div>
+            <div class="bg-[#dcf5ec] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#004b31]">巽</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_5">5・风</div></div>
+            <div class="bg-[#dbeafe] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#1d4ed8]">坎</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_6">6・水</div></div>
+            <div class="bg-[#fff3c4] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#735c00]">艮</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_7">7・山</div></div>
+            <div class="bg-[#fff3c4] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#735c00]">坤</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_8">8・地</div></div>
+          </div>
+          <p class="text-[11px] text-[#404943] leading-relaxed" data-i18n="mh_trigramFormula">上卦 = 总数 ÷ 8 取余（余0用8）<br/>动爻 = 总数 ÷ 6 取余（余0用6）</p>
+        </div>
+      </div><!-- /left -->
+
+      <!-- Right: Results -->
+      <div class="lg:col-span-8 flex flex-col gap-8" id="mh-results-area">
+
+        <!-- Placeholder -->
+        <div id="mh-placeholder" class="flex flex-col items-center justify-center min-h-[400px] bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] gap-6 py-16">
+          <div class="text-8xl opacity-20">☯</div>
+          <p class="text-[#404943] text-base" data-i18n="mh_placeholderText">起卦后，卦象与解析将在此处显示</p>
+          <p class="text-[#404943] text-sm opacity-60" data-i18n="mh_placeholderSub">Cast a hexagram to reveal the oracle reading</p>
+        </div>
+
+        <!-- Result (hidden until cast) -->
+        <div id="mh-result" class="hidden flex-col gap-8">
+
+          <!-- Question display -->
+          <div class="bg-[#004b31] rounded-2xl px-6 py-4 flex items-center gap-4">
+            <svg class="w-5 h-5 text-[#ffe088] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div>
+              <p class="text-[10px] text-[#bcedda] uppercase tracking-widest" data-i18n="mh_questionLabel">所问之事</p>
+              <p class="text-white font-semibold" id="mh-question-display">—</p>
+            </div>
+            <div class="ml-auto text-right">
+              <p class="text-[10px] text-[#bcedda] uppercase tracking-widest" data-i18n="mh_castTimeLabel">起卦时间</p>
+              <p class="text-white text-sm font-mono" id="mh-cast-time">—</p>
+            </div>
+          </div>
+
+          <!-- Three Hexagrams Row -->
+          <div class="grid grid-cols-3 gap-4">
+            <!-- 本卦 -->
+            <div class="rounded-3xl p-1 jade-grad shadow-xl result-anim" style="animation-delay:0.1s">
+              <div class="bg-[rgba(0,50,31,0.93)] rounded-[22px] p-6 flex flex-col items-center gap-4 h-full">
+                <div class="text-[10px] font-bold uppercase tracking-[2px] text-[#bcedda]" data-i18n="mh_benHexLabel">本 卦</div>
+                <div id="mh-hex-benkua" class="flex flex-col gap-2.5 w-20"></div>
+                <div class="text-center">
+                  <div class="font-headline text-2xl font-bold text-[#ffe088]" id="mh-benkua-name">—</div>
+                  <div class="text-[11px] text-[#bcedda] mt-1" id="mh-benkua-keyword">—</div>
+                </div>
+                <div class="w-full h-px bg-[rgba(188,237,218,0.15)]"></div>
+                <div class="text-center">
+                  <p class="text-[10px] text-[#bcedda] uppercase tracking-widest mb-1" data-i18n="mh_changingLineLabel">动爻</p>
+                  <div class="w-8 h-8 rounded-full bg-[#c8850a] flex items-center justify-center text-white font-bold text-sm" id="mh-changing-line">—</div>
+                </div>
+              </div>
+            </div>
+            <!-- 互卦 -->
+            <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.2)] p-6 flex flex-col items-center gap-4 result-anim" style="animation-delay:0.2s">
+              <div class="text-[10px] font-bold uppercase tracking-[2px] text-[#404944]" data-i18n="mh_nuHexLabel">互 卦</div>
+              <div id="mh-hex-hukua" class="flex flex-col gap-2.5 w-20"></div>
+              <div class="text-center">
+                <div class="font-headline text-xl font-bold text-[#00321f]" id="mh-hukua-name">—</div>
+                <div class="text-[11px] text-[#404944] mt-1" id="mh-hukua-keyword">—</div>
+              </div>
+              <div class="w-full h-px bg-[#ecefea]"></div>
+              <p class="text-[11px] text-[#404943] text-center" data-i18n="mh_nuHexDesc">事物内部<br/>隐含动向</p>
+            </div>
+            <!-- 变卦 -->
+            <div class="bg-[#f2f4ef] rounded-3xl p-6 flex flex-col items-center gap-4 result-anim" style="animation-delay:0.3s">
+              <div class="text-[10px] font-bold uppercase tracking-[2px] text-[#404944]" data-i18n="mh_bianHexLabel">变 卦</div>
+              <div id="mh-hex-biankua" class="flex flex-col gap-2.5 w-20"></div>
+              <div class="text-center">
+                <div class="font-headline text-xl font-bold text-[#00321f]" id="mh-biankua-name">—</div>
+                <div class="text-[11px] text-[#404944] mt-1" id="mh-biankua-keyword">—</div>
+              </div>
+              <div class="w-full h-px bg-[#ecefea]"></div>
+              <p class="text-[11px] text-[#404943] text-center" data-i18n="mh_bianHexDesc">事物发展<br/>最终走向</p>
+            </div>
+          </div>
+
+          <!-- 体用分析 -->
+          <div class="rounded-3xl p-1 bg-gradient-to-br from-[#735c00] to-[#c8850a] shadow-xl result-anim" style="animation-delay:0.4s">
+            <div class="bg-[rgba(36,26,0,0.92)] rounded-[22px] p-8 flex flex-col gap-6">
+              <div class="flex items-center justify-between">
+                <h4 class="font-headline text-2xl font-bold text-[#ffe088]" data-i18n="mh_tiyongTitle">体用生克分析</h4>
+                <div class="px-4 py-1.5 rounded-full text-sm font-bold" id="mh-fortune-badge" style="background:#ffe088;color:#241a00">—</div>
+              </div>
+              <div class="grid grid-cols-2 gap-6">
+                <div class="flex flex-col gap-3">
+                  <p class="text-[10px] text-[rgba(255,224,136,0.6)] uppercase tracking-widest" data-i18n="mh_tiLabel">体卦（代表问卜者）</p>
+                  <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center chinese-char text-2xl" id="mh-ti-icon" style="background:rgba(255,255,255,0.1);color:#ffe088">—</div>
+                    <div>
+                      <div class="font-bold text-white" id="mh-ti-name">—</div>
+                      <div class="text-[11px] text-[rgba(188,237,218,0.7)]" id="mh-ti-element">—</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-col gap-3">
+                  <p class="text-[10px] text-[rgba(255,224,136,0.6)] uppercase tracking-widest" data-i18n="mh_yongLabel">用卦（代表所问之事）</p>
+                  <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center chinese-char text-2xl" id="mh-yong-icon" style="background:rgba(255,255,255,0.1);color:#ffe088">—</div>
+                    <div>
+                      <div class="font-bold text-white" id="mh-yong-name">—</div>
+                      <div class="text-[11px] text-[rgba(188,237,218,0.7)]" id="mh-yong-element">—</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-[rgba(255,255,255,0.06)] rounded-2xl p-5">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="text-xl" id="mh-relation-icon">⚡</div>
+                  <div class="font-headline text-lg font-bold text-[#ffe088]" id="mh-relation-label">—</div>
+                </div>
+                <p class="text-[#bcedda] text-sm leading-relaxed" id="mh-relation-desc">—</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 详细解读 -->
+          <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-8 flex flex-col gap-6 result-anim" style="animation-delay:0.5s">
+            <h4 class="font-headline text-xl font-bold text-[#00321f] flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <span data-i18n="mh_hexDetailTitle">卦象详解</span>
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-[#f2f4ef] rounded-2xl p-5 flex flex-col gap-2">
+                <p class="text-[10px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_benHexInterpLabel">本卦解读</p>
+                <p class="text-[#004b36] font-headline text-base font-bold" id="mh-benkua-full-name">—</p>
+                <p class="text-sm text-[#404943] leading-relaxed" id="mh-benkua-meaning">—</p>
+              </div>
+              <div class="bg-[#f2f4ef] rounded-2xl p-5 flex flex-col gap-2">
+                <p class="text-[10px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_bianHexTrendLabel">变卦走向</p>
+                <p class="text-[#004b36] font-headline text-base font-bold" id="mh-biankua-full-name">—</p>
+                <p class="text-sm text-[#404943] leading-relaxed" id="mh-biankua-meaning">—</p>
+              </div>
+            </div>
+            <div class="border-t border-[#ecefea] pt-5 flex flex-col gap-3">
+              <p class="text-[10px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_summaryLabel">综合断语</p>
+              <p class="text-[#004b36] text-base leading-relaxed font-medium" id="mh-summary">—</p>
+            </div>
+            <!-- 五行生克图 -->
+            <div class="border-t border-[#ecefea] pt-5">
+              <p class="text-[10px] font-bold uppercase tracking-[1.1px] text-[#404944] mb-4" data-i18n="mh_yaoAnalysisLabel">爻位卦气分析</p>
+              <div class="grid grid-cols-6 gap-2" id="mh-yao-grid"></div>
+            </div>
+          </div>
+
+          <!-- Domain Readings (六亲/六神 simplified) -->
+          <div class="bg-[#004b31] rounded-3xl p-8 flex flex-col gap-5 result-anim" style="animation-delay:0.6s">
+            <h4 class="font-headline text-xl font-bold text-[#ffe088]" data-i18n="mh_domainsTitle">各领域指引</h4>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="mh-domains"></div>
+          </div>
+
+        </div><!-- /mh-result -->
+      </div><!-- /right -->
+    </div>
+  </div>
+</div><!-- /meihuaSection -->
+
+<!-- ══ FENG SHUI SECTION ══ -->
+<div id="fengShuiSection" class="hidden">
+  <div class="max-w-[1152px] mx-auto px-6 py-12 flex flex-col gap-10">
+
+    <!-- Hero -->
+    <div class="jade-grad rounded-3xl px-8 py-10 flex flex-col gap-3 relative overflow-hidden">
+      <div class="absolute right-0 top-0 w-64 h-64 opacity-[0.06]">
+        <svg viewBox="0 0 200 200" fill="none"><path d="M100 10 L190 100 L100 190 L10 100 Z" stroke="white" stroke-width="1.5"/><circle cx="100" cy="100" r="60" stroke="white" stroke-width="1.5"/><path d="M100 40 L160 100 L100 160 L40 100 Z" stroke="white" stroke-width="1"/></svg>
+      </div>
+      <span class="text-[#bcedda] text-xs font-bold uppercase tracking-[2px]" data-i18n="fs_badge">Feng Shui Analysis</span>
+      <h1 class="font-headline text-3xl md:text-4xl font-bold text-white leading-tight" data-i18n="fs_heroTitle">Read the Energy<br/><span class="italic text-[#ffe088]">of Your Space</span></h1>
+      <p class="text-[#bcedda] text-sm max-w-md leading-relaxed" data-i18n="fs_heroDesc">Upload a photo of your home, office, or room — Master Jade will reveal the qi flow, identify wealth corners, and offer precise adjustments.</p>
+    </div>
+
+    <!-- Upload + Camera -->
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <!-- Upload card -->
+      <div id="fsUploadCard" class="group relative flex flex-col items-center justify-center gap-4 bg-white border-2 border-dashed border-[#c8d0c4] rounded-3xl px-8 py-12 cursor-pointer hover:border-[#004b31] hover:bg-[#f4f8f4] transition-all"
+           onclick="document.getElementById('fsFileInput').click()">
+        <input type="file" id="fsFileInput" accept="image/*" class="hidden" onchange="fsFIleSelected(this)">
+        <div class="w-16 h-16 rounded-full bg-[#ecefea] flex items-center justify-center group-hover:bg-[#d4e8d4] transition-colors">
+          <svg class="w-8 h-8 text-[#004b31]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div class="text-center">
+          <p class="font-semibold text-[#004b31] text-sm" data-i18n="fs_uploadTitle">Upload a Photo</p>
+          <p class="text-[#9eaa9e] text-xs mt-1" data-i18n="fs_uploadDesc">JPG, PNG, HEIC supported</p>
+        </div>
+      </div>
+
+      <!-- Camera card -->
+      <div id="fsCameraCard" class="group flex flex-col items-center justify-center gap-4 bg-white border-2 border-dashed border-[#c8d0c4] rounded-3xl px-8 py-12 cursor-pointer hover:border-[#004b31] hover:bg-[#f4f8f4] transition-all"
+           onclick="fsStartCamera()">
+        <div class="w-16 h-16 rounded-full bg-[#ecefea] flex items-center justify-center group-hover:bg-[#d4e8d4] transition-colors">
+          <svg class="w-8 h-8 text-[#004b31]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+        <div class="text-center">
+          <p class="font-semibold text-[#004b31] text-sm" data-i18n="fs_cameraTitle">Take a Photo</p>
+          <p class="text-[#9eaa9e] text-xs mt-1" data-i18n="fs_cameraDesc">Use your camera directly</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Camera live view (hidden until activated) -->
+    <div id="fsCameraView" class="hidden flex flex-col items-center gap-4">
+      <div class="relative w-full max-w-lg mx-auto rounded-3xl overflow-hidden bg-black shadow-xl">
+        <video id="fsVideo" autoplay playsinline class="w-full rounded-3xl" style="max-height:400px;object-fit:cover;"></video>
+        <div class="absolute inset-0 border-2 border-[rgba(188,237,218,0.4)] rounded-3xl pointer-events-none"></div>
+        <!-- Corner guides -->
+        <div class="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-[#bcedda] rounded-tl-lg"></div>
+        <div class="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-[#bcedda] rounded-tr-lg"></div>
+        <div class="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-[#bcedda] rounded-bl-lg"></div>
+        <div class="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-[#bcedda] rounded-br-lg"></div>
+      </div>
+      <canvas id="fsCanvas" class="hidden"></canvas>
+      <div class="flex gap-3">
+        <button onclick="fsCapture()" class="jade-grad-btn text-white px-8 py-3 rounded-xl font-semibold text-sm hover:opacity-90 transition-opacity shadow-md flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M20.94 11A9 9 0 1 1 12 3"/></svg>
+          <span data-i18n="fs_capture">Capture</span>
+        </button>
+        <button onclick="fsStopCamera()" class="px-6 py-3 rounded-xl font-semibold text-sm border border-[#c8d0c4] text-[#404943] hover:bg-[#ecefea] transition-colors">
+          <span data-i18n="fs_cancel">Cancel</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Preview + Analyze -->
+    <div id="fsPreview" class="hidden flex flex-col gap-6">
+      <div class="flex flex-col md:flex-row gap-6 items-start">
+        <!-- Image preview -->
+        <div class="relative w-full md:w-80 shrink-0">
+          <img id="fsPreviewImg" src="" alt="preview" class="w-full rounded-2xl shadow-lg object-cover" style="max-height:300px;">
+          <button onclick="fsClearImage()" class="absolute top-3 right-3 w-8 h-8 bg-[rgba(0,0,0,0.55)] rounded-full flex items-center justify-center hover:bg-[rgba(0,0,0,0.75)] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="white" stroke-width="2.2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <!-- Description input + Analyze button -->
+        <div class="flex-1 flex flex-col gap-4">
+          <div class="flex flex-col gap-2">
+            <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="fs_questionLabel">What would you like to know?</label>
+            <textarea id="fsQuestion" rows="3"
+              class="w-full border border-[#c8d0c4] rounded-2xl px-4 py-3 text-sm text-[#191c1a] placeholder-[#9eaa9e] resize-none outline-none focus:border-[#004b31] focus:ring-2 focus:ring-[rgba(0,75,49,0.08)] transition-all leading-relaxed"
+              data-i18n-placeholder="fs_questionPlaceholder"></textarea>
+          </div>
+          <button onclick="fsAnalyze()" id="fsAnalyzeBtn"
+            class="jade-grad-btn text-white py-4 rounded-2xl font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity shadow-md flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <span data-i18n="fs_analyzeBtn">Analyze Feng Shui</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analysis Loading -->
+    <div id="fsLoading" class="hidden flex flex-col items-center gap-5 py-10">
+      <div class="relative w-20 h-20">
+        <div class="absolute inset-0 rounded-full border-4 border-[#ecefea]"></div>
+        <div class="absolute inset-0 rounded-full border-4 border-t-[#004b31] border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
+        <div class="absolute inset-0 flex items-center justify-center text-2xl">☯</div>
+      </div>
+      <div class="text-center">
+        <p class="font-semibold text-[#004b31] text-sm" data-i18n="fs_analyzing">Master Jade is reading your space…</p>
+        <p class="text-[#9eaa9e] text-xs mt-1" data-i18n="fs_analyzingDesc">Sensing the qi flow and energy patterns</p>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div id="fsResult" class="hidden flex flex-col gap-6">
+      <!-- Result header -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-[#004b31] flex items-center justify-center text-lg shrink-0">☯</div>
+        <div>
+          <p class="font-bold text-[#004b31] text-sm" id="fsResultTitle">Feng Shui Reading</p>
+          <p class="text-[#9eaa9e] text-xs" data-i18n="fs_resultSubtitle">AI-powered spatial energy analysis</p>
+        </div>
+        <button onclick="fsClearResult()" class="ml-auto text-xs text-[#9eaa9e] hover:text-[#004b31] flex items-center gap-1 transition-colors">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>
+          <span data-i18n="fs_reAnalyze">Re-analyse</span>
+        </button>
+      </div>
+
+      <!-- Result image thumbnail + score -->
+      <div class="flex gap-4 items-center bg-[#f4f8f4] rounded-2xl px-5 py-4">
+        <img id="fsResultThumb" src="" alt="" class="w-16 h-16 rounded-xl object-cover shrink-0 shadow">
+        <div class="flex-1 min-w-0">
+          <p class="text-xs text-[#9eaa9e] font-medium" data-i18n="fs_overallScore">Overall Qi Score</p>
+          <div class="flex items-end gap-2 mt-1">
+            <span id="fsScoreNum" class="font-headline text-3xl font-bold text-[#004b31]">—</span>
+            <span class="text-[#9eaa9e] text-sm mb-0.5">/100</span>
+          </div>
+          <div class="w-full bg-[#e0e4df] rounded-full h-1.5 mt-2">
+            <div id="fsScoreBar" class="h-1.5 rounded-full bg-[#004b31] transition-all duration-700" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result cards -->
+      <div id="fsResultCards" class="flex flex-col gap-4"></div>
+
+      <!-- Disclaimer -->
+      <p class="text-center text-[10px] text-[#b0b8b0]" data-i18n="fs_disclaimer">仅供参考</p>
+    </div>
+
+  </div>
+</div><!-- /fengShuiSection -->
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-[#00321f] w-full pt-16 pb-8 px-12 mt-20 flex flex-col items-center gap-8">
+  <div class="font-headline text-3xl font-bold text-white">Jade &amp; Prosperity</div>
+  <div class="flex flex-wrap justify-center gap-8 text-sm">
+    <a href="#" class="text-[rgba(188,237,218,0.7)] hover:text-white transition-colors" data-i18n="footer_scholarPath">The Scholar's Path</a>
+    <a href="#" class="text-[rgba(188,237,218,0.7)] hover:text-white transition-colors" data-i18n="footer_privacy">Privacy Policy</a>
+    <a href="#" class="text-[#ffe088] underline underline-offset-4" data-i18n="footer_lunar">Lunar Calendar</a>
+    <a href="#" class="text-[rgba(188,237,218,0.7)] hover:text-white transition-colors" data-i18n="footer_terms">Terms of Service</a>
+  </div>
+  <div class="w-full max-w-4xl h-px bg-[#004b31]"></div>
+  <p class="text-xs text-[rgba(188,237,218,0.5)]" data-i18n="footer_copyright">© 2024 Jade &amp; Prosperity Metaphysics. All Rights Reserved.</p>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  TRANSLATIONS
+// ═══════════════════════════════════════════════════════
+const TRANSLATIONS = {
+  en: {
+    nav_luckPortal:'Luck Portal', nav_totoLuck:'TOTO Luck', nav_baZi:'Ba Zi Analysis', nav_dailyRituals:'Daily Rituals',
+    sidebar_navigation:'Navigation', sidebar_language:'Language',
+    sidebar_dashboard:'Dashboard', sidebar_bazi:'Personal Ba Zi', sidebar_fengShui:'Feng Shui',
+    fs_badge:'Feng Shui Analysis', fs_heroTitle:'Read the Energy of Your Space', fs_heroDesc:'Upload a photo of your home, office, or room — Master Jade will reveal the qi flow, identify wealth corners, and offer precise adjustments.', fs_uploadTitle:'Upload a Photo', fs_uploadDesc:'JPG, PNG, HEIC supported', fs_cameraTitle:'Take a Photo', fs_cameraDesc:'Use your camera directly', fs_questionLabel:'What would you like to know?', fs_questionPlaceholder:'E.g. Is the wealth corner activated? How can I improve the bedroom energy?', fs_analyzeBtn:'Analyze Feng Shui', fs_analyzing:'Master Jade is reading your space…', fs_analyzingDesc:'Sensing the qi flow and energy patterns', fs_capture:'Capture', fs_cancel:'Cancel', fs_overallScore:'Overall Qi Score', fs_resultSubtitle:'AI-powered spatial energy analysis', fs_reAnalyze:'Re-analyse', fs_disclaimer:'仅供参考',
+    sidebar_bookConsult:'Book Consultation', sidebar_settings:'⚙ Settings', sidebar_support:'? Support',
+    sidebar_masterName:'Master Lin', sidebar_phase:'Wood Dragon Phase',
+    hero_badge:'Celestial Alignment',
+    hero_title:'Seek Your <span class="italic text-[#ffe088]">Jade<br/>Fortune</span>',
+    hero_subtitle:'Harmonizing your personal elements with the flow of the universe to reveal prosperous sequences.',
+    form_title:"Scholar's Input", form_nameLabel:'Full Name', form_namePlaceholder:'Enter name',
+    form_dateLabel:'Birth Date', form_timeLabel:'Birth Time', form_optional:'(optional)',
+    form_calcBtn:'Calculate Manifestation', form_errorDate:'Please enter your birth date to begin the calculation.',
+    attr_luckyColor:'Lucky Color', attr_goldenHour:'Golden Hour', attr_direction:'Prosperous Direction',
+    reading_title:"Master's Reading",
+    bazi_title:'Ba Zi: The Four Pillars', bazi_dayMasterDash:'Day Master: — ',
+    manifest_title:'Sacred Manifestation', manifest_subtitle:'Numerology sequence derived from the Five Elements',
+    manifest_subtitleDynamic:'{yy} {el} Day Master · Numbers aligned with Five Element harmony',
+    manifest_realign:'Re-align Elements', manifest_bonusLabel:'Bonus Number',
+    elements_title:'Elemental Balance', dynamics_title:'Element Dynamics',
+    dynamics_dayMaster:'Day Master', dynamics_favorable:'★ Favorable',
+    pillar_year:'YEAR', pillar_month:'MONTH', pillar_day:'DAY', pillar_hour:'HOUR',
+    el_Wood:'Wood', el_Fire:'Fire', el_Earth:'Earth', el_Metal:'Metal', el_Water:'Water',
+    el_label_Wood:'Imperial Jade', el_label_Fire:'Phoenix Red', el_label_Earth:'Imperial Gold', el_label_Metal:'Pearl Silver', el_label_Water:'Sapphire Blue',
+    dir_East:'East', dir_South:'South', dir_NE:'North-East', dir_West:'West', dir_North:'North',
+    animal_Rat:'Rat', animal_Ox:'Ox', animal_Tiger:'Tiger', animal_Rabbit:'Rabbit',
+    animal_Dragon:'Dragon', animal_Snake:'Snake', animal_Horse:'Horse', animal_Goat:'Goat',
+    animal_Monkey:'Monkey', animal_Rooster:'Rooster', animal_Dog:'Dog', animal_Pig:'Pig',
+    yy_Yang:'Yang', yy_Yin:'Yin',
+    strength_Strong:'Strong', strength_Weak:'Weak', strength_Balanced:'Balanced',
+    ft_sentence:'Born in the year of the {animal}, your {yy} {el} Day Master makes you naturally {desc}. {strength} Cultivate {favEls} energy for fortune.',
+    ft_strengthLabel:'Day Master: {yy} {el} · {strength} chart',
+    ft_and:' and ',
+    ft_desc_Wood:'creative, compassionate, and growth-oriented',
+    ft_desc_Fire:'passionate, inspiring, and radiant',
+    ft_desc_Earth:'stable, nurturing, and trustworthy',
+    ft_desc_Metal:'disciplined, principled, and decisive',
+    ft_desc_Water:'wise, intuitive, and adaptable',
+    ft_strong_Wood:'Your Wood energy is abundant — channel it into creative expression.',
+    ft_balanced_Wood:'Your Wood energy flows steadily, bringing natural growth.',
+    ft_weak_Wood:'Nourish your Wood essence with Water activities and quiet reflection.',
+    ft_strong_Fire:'Your Fire blazes brightly — temper it with Earth and Water pursuits.',
+    ft_balanced_Fire:'Your Fire radiates with purpose and clarity.',
+    ft_weak_Fire:'Kindle your Fire with Wood energy: read, learn, and connect.',
+    ft_strong_Earth:'Your Earth is rich and fertile — let Metal help you refine your focus.',
+    ft_balanced_Earth:'Your Earth is stable — a pillar others naturally lean on.',
+    ft_weak_Earth:'Ground yourself with Fire energy: warmth, community, celebration.',
+    ft_strong_Metal:'Your Metal is sharp and decisive — soften it with Water wisdom.',
+    ft_balanced_Metal:'Your Metal cuts clearly through confusion with principled action.',
+    ft_weak_Metal:'Temper your Metal with Earth support: patience, accumulation.',
+    ft_strong_Water:'Your Water flows deep — guide it with Wood ambition and direction.',
+    ft_balanced_Water:'Your Water intelligence navigates life with grace and fluidity.',
+    ft_weak_Water:'Replenish your Water with Metal discipline and structured rest.',
+    phase_template:'{el} {animal} · {yy} {dayEl}',
+    footer_scholarPath:"The Scholar's Path", footer_privacy:'Privacy Policy',
+    footer_lunar:'Lunar Calendar', footer_terms:'Terms of Service',
+    footer_copyright:'© 2024 Jade & Prosperity Metaphysics. All Rights Reserved.',
+    // ── Meihua UI ──
+    mh_banner_badge:'Song Dynasty Oracle', mh_banner_desc:'Created by Shao Kangjie, this oracle derives hexagrams from the primordial numbers, revealing fortune through the cycle of elemental generation and overcoming.',
+    mh_heaven_earth:'Heaven & Earth',
+    mh_heroTitleHTML:'梅花易数<br/><span class="text-[#bcedda] text-2xl font-normal italic">Plum Blossom Divination</span>',
+    mh_methodTitle:'Divination Method', mh_method_time:'By Time', mh_method_number:'By Number', mh_method_object:'By Object',
+    mh_timeAutoLabel:'Current time (auto)', mh_timeNumbersLabel:'Yr + Mo + Day + Hour',
+    mh_questionLabel:'Question / Intent', mh_questionPh:'What would you like to divine?',
+    mh_upperNumLabel:'Upper Trigram No.', mh_lowerNumLabel:'Lower Trigram No.', mh_lineNumLabel:'Changing Line (1–6)',
+    mh_anyPosInt:'(any positive integer)',
+    mh_objectMethodTitle:'Observation Method', mh_objectMethodDesc:'Count still objects around you (upper trigram), then count moving objects (lower trigram). Sum ÷ 6 remainder = changing line.',
+    mh_staticCountLabel:'Still objects (upper)', mh_dynamicCountLabel:'Moving objects (lower)',
+    mh_castBtn:'Cast Hexagram',
+    mh_trigramRef:'Primordial Trigram Numbers',
+    mh_tri_1:'1·Heaven', mh_tri_2:'2·Lake', mh_tri_3:'3·Fire', mh_tri_4:'4·Thunder',
+    mh_tri_5:'5·Wind',  mh_tri_6:'6·Water', mh_tri_7:'7·Mountain', mh_tri_8:'8·Earth',
+    mh_trigramFormula:'Upper = Sum ÷ 8 remainder (0→8)\nChanging line = Sum ÷ 6 remainder (0→6)',
+    mh_placeholderText:'Cast a hexagram — your reading will appear here.',
+    mh_placeholderSub:'Choose a method and click Cast Hexagram to begin.',
+    mh_castTimeLabel:'Cast Time',
+    mh_benHexLabel:'Original', mh_changingLineLabel:'Changing', mh_nuHexLabel:'Nuclear', mh_bianHexLabel:'Changed',
+    mh_nuHexDesc:'Hidden inner dynamics', mh_bianHexDesc:'Ultimate outcome & direction',
+    mh_tiyongTitle:'Ti–Yong Elemental Analysis',
+    mh_tiLabel:'Ti Gua — Represents the querent',
+    mh_yongLabel:'Yong Gua — Represents the matter asked',
+    mh_hexDetailTitle:'Hexagram Reading',
+    mh_benHexInterpLabel:'Original Hexagram', mh_bianHexTrendLabel:'Changed Hexagram Trend',
+    mh_summaryLabel:'Overall Verdict', mh_yaoAnalysisLabel:'Line Position Analysis',
+    mh_domainsTitle:'Domain Guidance',
+    mh_errorInputs:'Please fill in upper number, lower number, and a changing line between 1–6.',
+    mh_errorObjects:'Please fill in still-object count and moving-object count.',
+    mh_errorQuestion:'Please enter your question or matter of inquiry.',
+    mh_defaultQuestion:'General Fortune',
+    mh_changingLineTpl:'Line {n}',
+    mh_hexFullNameTpl:'Hexagram {num} · {name} ({upper} above {lower})',
+    nav_meihua:'Plum Blossom',
+    mh_triName:{1:'Qian',2:'Dui',3:'Li',4:'Zhen',5:'Xun',6:'Kan',7:'Gen',8:'Kun'},
+    mh_yaoLabels:['Line 1','Line 2','Line 3','Line 4','Line 5','Line 6'],
+    mh_yaoRoles:['Foundation','Growth','Threshold','Outer shift','Core event','Extreme turn'],
+    mh_domLabels:{wealth:'Wealth',career:'Career',love:'Love',health:'Health',year:'Year Fortune',advice:'Advice'},
+    mh_relHarmony:'Harmony (比和)', mh_relHarmonyFortune:'Moderate Auspicious',
+    mh_relHarmonyDesc:'Ti and Yong share the same element — balanced, stable. The matter proceeds evenly without sudden changes. Best to maintain the current course.',
+    mh_relTiProdYong:'Ti Generates Yong (体生用)', mh_relTiProdYongFortune:'Moderate',
+    mh_relTiProdYongDesc:'The querent actively gives to the matter — beneficial to the subject, but draining to the querent. Act within your means.',
+    mh_relYongProdTi:'Yong Generates Ti (用生体)', mh_relYongProdTiFortune:'Highly Auspicious',
+    mh_relYongProdTiDesc:'The matter nourishes the querent — outside assistance flows in. Benefactors and opportunities arrive naturally. Highly auspicious.',
+    mh_relTiOverYong:'Ti Overcomes Yong (体克用)', mh_relTiOverYongFortune:'Auspicious',
+    mh_relTiOverYongDesc:'The querent dominates the situation — you hold the initiative. The matter can be resolved as wished. Act with confidence.',
+    mh_relYongOverTi:'Yong Overcomes Ti (用克体)', mh_relYongOverTiFortune:'Inauspicious',
+    mh_relYongOverTiDesc:'The matter exerts pressure on the querent — external forces are unfavourable. Retreat, be cautious, and wait for a better moment.',
+    mh_summaryTemplate:'Original hexagram "{ben}" — {benKw}, {benF}. Ti–Yong: {rel}, {relF}. Changed hexagram "{bian}" signals: {bianKw}, {bianF}. Nuclear hexagram "{nu}" reveals inner dynamics: {nuKw}. Overall: {verdict}',
+    mh_verdictGood:'Timing is favourable — seize the moment and act.',
+    mh_verdictBad:'Caution advised — hold steady and await the right time.',
+    mh_dom:{
+      金:{wealth:'Favourable for finance & investment.',career:'Decisive action yields results.',love:'Express more tenderness.',health:'Attend to respiratory health.'},
+      木:{wealth:'Wealth grows steadily.',career:'Creative energy runs high — plan boldly.',love:'Let feelings grow naturally.',health:'Tend to liver & tendons.'},
+      火:{wealth:'Windfall luck is active — seize opportunities.',career:'Reputation and career both flourish.',love:'Passion is strong; sustain it.',health:'Monitor heart and blood pressure.'},
+      土:{wealth:'Steady wealth — favour conservative approaches.',career:'Methodical effort accumulates success.',love:'Stable and enduring bonds.',health:'Care for digestion and spleen.'},
+      水:{wealth:'Money flows in and out — track your cash flow.',career:'Strategy and adaptability are your strengths.',love:'Emotional depth; communicate openly.',health:'Support kidney and urinary health.'}
+    },
+    mh_triNature:{1:'Heaven',2:'Lake',3:'Fire',4:'Thunder',5:'Wind',6:'Water',7:'Mountain',8:'Earth'},
+    mh_triElement:{1:'Metal',2:'Metal',3:'Fire',4:'Wood',5:'Wood',6:'Water',7:'Earth',8:'Earth'},
+    mh_triFortune:{大吉:'Very Auspicious',吉:'Auspicious',中吉:'Moderately Auspicious',小吉:'Slightly Auspicious',中:'Neutral',小凶:'Slightly Inauspicious',凶:'Inauspicious',大凶:'Very Inauspicious'},
+    // 64 Hexagram EN
+    mh_hex:{
+      '1_1':{name:'Heaven',keyword:'Creative strength',meaning:'Pure yang energy — bold initiative brings great success. Ideal for new ventures and leadership.'},
+      '1_2':{name:'Treading',keyword:'Careful conduct',meaning:'Tread mindfully as if near a tiger — propriety and caution ensure safe progress.'},
+      '1_3':{name:'Fellowship',keyword:'United purpose',meaning:'Like-minded allies gather — cooperation and open communication lead to shared success.'},
+      '1_4':{name:'Innocence',keyword:'Act without agenda',meaning:'Follow natural laws without hidden motives. Unsolicited misfortune may arise if you stray.'},
+      '1_5':{name:'Coming to Meet',keyword:'Unexpected encounter',meaning:'One yin meets five yang — guard against sly individuals; relationships need careful discernment.'},
+      '1_6':{name:'Conflict',keyword:'Dispute & litigation',meaning:'Conflict is inauspicious — seek mediation and compromise; do not press forward aggressively.'},
+      '1_7':{name:'Retreat',keyword:'Strategic withdrawal',meaning:'The wise know when to step back. Preserve strength in retreat and await the right moment.'},
+      '1_8':{name:'Standstill',keyword:'Blockage',meaning:'Heaven and Earth are out of communion — circumstances are obstructed; stay still and wait.'},
+      '2_1':{name:'Breakthrough',keyword:'Decisive resolution',meaning:'Break through with determination. Seize the moment to resolve lingering issues decisively.'},
+      '2_2':{name:'The Joyous',keyword:'Joy & pleasure',meaning:'Delight and good cheer — social bonds strengthen, emotional life flourishes, affairs proceed smoothly.'},
+      '2_3':{name:'Revolution',keyword:'Change & renewal',meaning:'Out with the old, in with the new — embrace transformation; riding the tide brings great benefit.'},
+      '2_4':{name:'Following',keyword:'Adapt & follow',meaning:'Align with the times and follow trustworthy guides — flexibility doubles your results.'},
+      '2_5':{name:'Great Excess',keyword:'Overextension',meaning:'The ridgepole bows — reduce excess load promptly; extremes invite reversal, seek the middle path.'},
+      '2_6':{name:'Oppression',keyword:'Adversity & trials',meaning:'Trapped in difficulty, yet trials forge virtue — stay calm, maintain integrity, await the turn.'},
+      '2_7':{name:'Influence',keyword:'Mutual attraction',meaning:'Hearts resonate — romance and partnerships are highly favoured; yield with grace.'},
+      '2_8':{name:'Gathering Together',keyword:'Assembly & union',meaning:'People and resources converge — collective effort and broad alliances generate prosperity.'},
+      '3_1':{name:'Great Possession',keyword:'Abundance',meaning:'Sun at zenith — great wealth and recognition. Career and finances both shine brilliantly.'},
+      '3_2':{name:'Opposition',keyword:'Estrangement',meaning:'Opposing forces pull apart — avoid confrontation on major matters; minor tasks can proceed.'},
+      '3_3':{name:'The Clinging',keyword:'Clarity & brilliance',meaning:'Radiant fire needs a foundation — talent shines when properly anchored; creative work flourishes.'},
+      '3_4':{name:'Biting Through',keyword:'Decisive action',meaning:'An obstacle must be removed forcefully — take decisive legal or physical action to clear the path.'},
+      '3_5':{name:'The Cauldron',keyword:'Transformation',meaning:'The ritual cauldron symbolises cultural achievement and stable foundations — great success through reform.'},
+      '3_6':{name:'Before Completion',keyword:'Unfinished work',meaning:'Yin and yang not yet aligned — persevere; success is near though the final step requires care.'},
+      '3_7':{name:'The Wanderer',keyword:'Travel & transience',meaning:'A stranger in a foreign land — remain humble and courteous; rash action brings trouble.'},
+      '3_8':{name:'Progress',keyword:'Advancement',meaning:'The sun rises — career advancement, recognition, and prosperity emerge steadily.'},
+      '4_1':{name:'Great Power',keyword:'Mighty yang force',meaning:'Thunder in the sky — vigorous yang energy; active and assertive initiative succeeds brilliantly.'},
+      '4_2':{name:'The Marrying Maiden',keyword:'Hasty commitment',meaning:'Proceeding impulsively without solid foundations — exercise caution in relationships and decisions.'},
+      '4_3':{name:'Abundance',keyword:'Fullness & brilliance',meaning:'Thunder and lightning combine in glory — things are at their peak; be mindful of decline after zenith.'},
+      '4_4':{name:'The Arousing',keyword:'Shock & awakening',meaning:'Thunder startles and awakens — initial fear gives way to determined revival; ultimately auspicious.'},
+      '4_5':{name:'Duration',keyword:'Constancy',meaning:'Thunder and wind in unison — perseverance and steadfast loyalty yield enduring results.'},
+      '4_6':{name:'Deliverance',keyword:'Release from tension',meaning:'The storm breaks and obstacles dissolve — troubles clear away; act now to resolve backlogged matters.'},
+      '4_7':{name:'Small Excess',keyword:'Minor overreach',meaning:'Act on small matters, not grand ones — a modest approach avoids needless missteps.'},
+      '4_8':{name:'Enthusiasm',keyword:'Joy & momentum',meaning:'Joyful movement uplifts everyone — artistic and cultural pursuits thrive; plan ahead wisely.'},
+      '5_1':{name:'Small Taming',keyword:'Accumulate & wait',meaning:'Build quietly and accumulate virtue — the time is not yet ripe; patient preparation brings small gains.'},
+      '5_2':{name:'Inner Truth',keyword:'Sincerity',meaning:'Genuine sincerity resonates outward — trust-based dealings succeed; avoid manipulation.'},
+      '5_3':{name:'The Family',keyword:'Domestic harmony',meaning:'Family roles properly fulfilled — domestic peace supports all other endeavours.'},
+      '5_4':{name:'Increase',keyword:'Growth & benefit',meaning:'Upper decreases to benefit lower — investment and generosity return amplified rewards.'},
+      '5_5':{name:'The Gentle',keyword:'Subtle influence',meaning:'Wind penetrates everywhere softly — steady gentle effort and humility open doors.'},
+      '5_6':{name:'Dispersion',keyword:'Dissolution',meaning:'Wind over water scatters — unify effort; prevent fragmentation before it sets in.'},
+      '5_7':{name:'Development',keyword:'Gradual progress',meaning:'The wild goose advances step by step — do not rush; steady methodical progress ensures success.'},
+      '5_8':{name:'Contemplation',keyword:'Observe & assess',meaning:'Survey the landscape before acting — gather information and wait for the optimal moment.'},
+      '6_1':{name:'Waiting',keyword:'Patient waiting',meaning:'Rain gathers in the clouds — the time is not yet ripe; hold your position and await the right moment.'},
+      '6_2':{name:'Limitation',keyword:'Moderation',meaning:'Regulate and set boundaries — neither too much nor too little; discipline and measure bring stability.'},
+      '6_3':{name:'After Completion',keyword:'Accomplished',meaning:'Yin and yang in perfect balance — goals achieved; now guard against complacency and prepare for change.'},
+      '6_4':{name:'Difficulty at the Beginning',keyword:'Initial hardship',meaning:'The seed struggles to break ground — persist through early obstacles; breakthrough follows.'},
+      '6_5':{name:'The Well',keyword:'Nourishing depth',meaning:'The well nourishes all tirelessly — honest hard work and accumulated knowledge support lasting growth.'},
+      '6_6':{name:'The Abysmal',keyword:'Danger & depths',meaning:'Layer upon layer of pitfalls — stay centred and truthful; integrity is the only path through danger.'},
+      '6_7':{name:'Obstruction',keyword:'Impassable path',meaning:'The road ahead is blocked — seek helpers and consider retreating; the southeast favours you.'},
+      '6_8':{name:'Holding Together',keyword:'Unity & alliance',meaning:'All gather in friendship — solidarity and mutual aid bring great fortune; isolation brings the opposite.'},
+      '7_1':{name:'Great Taming',keyword:'Accumulate strength',meaning:'Great reservoir of stored energy — broad learning and patient accumulation prepare you for a grand release.'},
+      '7_2':{name:'Decrease',keyword:'Reduce to gain',meaning:'Sacrifice the lesser to gain the greater — sincere, considered sacrifice yields long-term benefit.'},
+      '7_3':{name:'Grace',keyword:'Adornment',meaning:'Elegant form with inner substance — arts, diplomacy, and presentation excel; substance must back the style.'},
+      '7_4':{name:'Nourishment',keyword:'Cultivate wisely',meaning:'Nourish body and mind carefully — what you consume in thought and food shapes your fortune.'},
+      '7_5':{name:'Work on the Decayed',keyword:'Reform & repair',meaning:'Corruption has set in — bold reform is needed; take responsibility and renew from the roots.'},
+      '7_6':{name:'Youthful Folly',keyword:'Seek guidance',meaning:'The student needs a teacher — approach learning with sincerity; a good mentor transforms your path.'},
+      '7_7':{name:'Keeping Still',keyword:'Stillness',meaning:'Know when to stop — stillness and restraint are strength; guard your position and observe.'},
+      '7_8':{name:'Splitting Apart',keyword:'Decay & loss',meaning:'Petty forces erode foundations — do not act; hold your virtue and wait for the cycle to reverse.'},
+      '8_1':{name:'Peace',keyword:'Harmony & prosperity',meaning:'Heaven and Earth in communion — all things flourish. The most auspicious hexagram; pursue goals boldly.'},
+      '8_2':{name:'Approach',keyword:'Drawing near',meaning:'Rising energy approaches its peak — step forward confidently; leadership and expansion are favoured.'},
+      '8_3':{name:'Darkening of the Light',keyword:'Concealment',meaning:'Brilliance buried underground — endure and conceal your talents; the time to emerge will come.'},
+      '8_4':{name:'Return',keyword:'Renewal',meaning:'One yang returns — winter ends, spring arrives. After the low point, fresh energy and new beginnings emerge.'},
+      '8_5':{name:'Pushing Upward',keyword:'Steady ascent',meaning:'Earth steadily rises — consistent, grounded effort lifts you higher; a gradual but assured climb.'},
+      '8_6':{name:'The Army',keyword:'Discipline & strategy',meaning:'Deploy resources with strict discipline and a clear plan — organised effort prevails; disarray leads to defeat.'},
+      '8_7':{name:'Modesty',keyword:'Humble virtue',meaning:'The modest person is honoured by all — sincere humility attracts respect and lasting good fortune.'},
+      '8_8':{name:'Earth',keyword:'Receptive strength',meaning:'The earth yields and nourishes all — follow rather than lead; patient receptivity brings enduring success.'}
+    },
+  },
+  zh: {
+    nav_luckPortal:'运势门户', nav_totoLuck:'TOTO 运气', nav_baZi:'八字分析', nav_dailyRituals:'日常仪式',
+    sidebar_navigation:'导航', sidebar_language:'语言',
+    sidebar_dashboard:'总览', sidebar_bazi:'个人八字', sidebar_fengShui:'风水',
+    fs_badge:'风水分析', fs_heroTitle:'感知空间能量', fs_heroDesc:'上传您的家居、办公室或房间照片，玉大师将为您解读气场流动、找出财位，并给出精准的布局建议。', fs_uploadTitle:'上传照片', fs_uploadDesc:'支持 JPG、PNG、HEIC', fs_cameraTitle:'拍照分析', fs_cameraDesc:'直接使用摄像头拍摄', fs_questionLabel:'您想了解什么？', fs_questionPlaceholder:'例如：财位是否激活？如何改善卧室气场？', fs_analyzeBtn:'开始风水分析', fs_analyzing:'玉大师正在感知您的空间…', fs_analyzingDesc:'正在读取气场流动与能量格局', fs_capture:'拍摄', fs_cancel:'取消', fs_overallScore:'整体气场评分', fs_resultSubtitle:'AI驱动空间能量分析', fs_reAnalyze:'重新分析', fs_disclaimer:'仅供参考',
+    sidebar_bookConsult:'预约咨询', sidebar_settings:'⚙ 设置', sidebar_support:'? 支持',
+    sidebar_masterName:'林大师', sidebar_phase:'木龙运程',
+    hero_badge:'天象对齐',
+    hero_title:'寻您<span class="italic text-[#ffe088]">翠玉<br/>福气</span>',
+    hero_subtitle:'将个人五行与宇宙能量融合，揭示吉祥数字序列。',
+    form_title:'学者录入', form_nameLabel:'全名', form_namePlaceholder:'请输入姓名',
+    form_dateLabel:'出生日期', form_timeLabel:'出生时间', form_optional:'(可选)',
+    form_calcBtn:'推算显化', form_errorDate:'请输入出生日期以开始推算。',
+    attr_luckyColor:'幸运颜色', attr_goldenHour:'黄金时段', attr_direction:'旺财方位',
+    reading_title:'大师解读',
+    bazi_title:'八字：四柱', bazi_dayMasterDash:'日元：— ',
+    manifest_title:'神圣显化', manifest_subtitle:'源自五行的数字序列',
+    manifest_subtitleDynamic:'{yy}{el}日元 · 五行和谐数字序列',
+    manifest_realign:'重新对齐五行', manifest_bonusLabel:'特别号码',
+    elements_title:'五行平衡', dynamics_title:'五行互动',
+    dynamics_dayMaster:'日元', dynamics_favorable:'★ 旺',
+    pillar_year:'年', pillar_month:'月', pillar_day:'日', pillar_hour:'时',
+    el_Wood:'木', el_Fire:'火', el_Earth:'土', el_Metal:'金', el_Water:'水',
+    el_label_Wood:'翠玉绿', el_label_Fire:'凤凰红', el_label_Earth:'皇家金', el_label_Metal:'珍珠银', el_label_Water:'蓝宝石蓝',
+    dir_East:'东', dir_South:'南', dir_NE:'东北', dir_West:'西', dir_North:'北',
+    animal_Rat:'鼠', animal_Ox:'牛', animal_Tiger:'虎', animal_Rabbit:'兔',
+    animal_Dragon:'龙', animal_Snake:'蛇', animal_Horse:'马', animal_Goat:'羊',
+    animal_Monkey:'猴', animal_Rooster:'鸡', animal_Dog:'狗', animal_Pig:'猪',
+    yy_Yang:'阳', yy_Yin:'阴',
+    strength_Strong:'旺', strength_Weak:'弱', strength_Balanced:'平衡',
+    ft_sentence:'生于{animal}年，您的{yy}{el}日元让您天生{desc}。{strength} 培养{favEls}五行能量以招财纳福。',
+    ft_strengthLabel:'日元：{yy}{el} · {strength}命局',
+    ft_and:'和',
+    ft_desc_Wood:'富有创意、慈悲且注重成长',
+    ft_desc_Fire:'热情、鼓舞人心且光芒四射',
+    ft_desc_Earth:'稳重、养育他人且值得信赖',
+    ft_desc_Metal:'有纪律、原则性强且果断',
+    ft_desc_Water:'睿智、直觉敏锐且适应力强',
+    ft_strong_Wood:'您的木气充盛——将其引导至创意表达。',
+    ft_balanced_Wood:'您的木气稳定流动，带来自然成长。',
+    ft_weak_Wood:'用水系活动和静心冥想滋养您的木气本质。',
+    ft_strong_Fire:'您的火焰熊熊燃烧——以土和水系活动加以调和。',
+    ft_balanced_Fire:'您的火焰充满目标与清晰。',
+    ft_weak_Fire:'用木气点燃您的火焰：阅读、学习、建立连接。',
+    ft_strong_Earth:'您的土气丰厚肥沃——让金气帮您精炼专注。',
+    ft_balanced_Earth:'您的土气稳固——是他人自然依靠的支柱。',
+    ft_weak_Earth:'用火系能量为自己接地：温暖、社群、庆祝。',
+    ft_strong_Metal:'您的金气锐利果断——以水系智慧加以柔化。',
+    ft_balanced_Metal:'您的金气以原则行动清晰地穿越迷惑。',
+    ft_weak_Metal:'以土系支撑调养您的金气：耐心、积累。',
+    ft_strong_Water:'您的水气深邃流动——以木系志向和方向引导它。',
+    ft_balanced_Water:'您的水系智慧以优雅和流动驾驭人生。',
+    ft_weak_Water:'以金系纪律和规律休息补充您的水气。',
+    phase_template:'{el}{animal}年 · {yy}{dayEl}',
+    footer_scholarPath:'学者之路', footer_privacy:'隐私政策',
+    footer_lunar:'农历日历', footer_terms:'服务条款',
+    footer_copyright:'© 2024 翠玉兴旺玄学。版权所有。',
+    // ── 梅花易数 UI (zh) ──
+    mh_banner_badge:'宋朝易数', mh_banner_desc:'邵康节先生所创，以先天易数起卦，通过体用生克关系，洞察事物发展脉络，预测吉凶祸福。',
+    mh_heaven_earth:'天 · 地',
+    mh_heroTitleHTML:'梅花易数<br/><span class="text-[#bcedda] text-2xl font-normal italic">梅花占卜</span>',
+    mh_methodTitle:'起卦方式', mh_method_time:'时间起卦', mh_method_number:'数字起卦', mh_method_object:'万物起卦',
+    mh_timeAutoLabel:'当前时间自动取数', mh_timeNumbersLabel:'年数 + 月数 + 日数 + 时数',
+    mh_questionLabel:'所问之事', mh_questionPh:'请输入所求问的事项...',
+    mh_upperNumLabel:'上卦数', mh_lowerNumLabel:'下卦数', mh_lineNumLabel:'动爻数',
+    mh_anyPosInt:'(任意正整数)',
+    mh_objectMethodTitle:'万物类象起卦法', mh_objectMethodDesc:'观察眼前之物，数其数量取上卦，再数动态之物取下卦，两数相加除以6取余为动爻。',
+    mh_staticCountLabel:'静物数量 (上卦)', mh_dynamicCountLabel:'动态数量 (下卦)',
+    mh_castBtn:'占卜起卦',
+    mh_trigramRef:'先天八卦数',
+    mh_tri_1:'1・天', mh_tri_2:'2・泽', mh_tri_3:'3・火', mh_tri_4:'4・雷',
+    mh_tri_5:'5・风', mh_tri_6:'6・水', mh_tri_7:'7・山', mh_tri_8:'8・地',
+    mh_trigramFormula:'上卦 = 总数 ÷ 8 取余（余0用8）\n动爻 = 总数 ÷ 6 取余（余0用6）',
+    mh_placeholderText:'起卦后，卦象与解析将在此处显示', mh_placeholderSub:'Cast a hexagram to reveal the oracle reading',
+    mh_castTimeLabel:'起卦时间',
+    mh_benHexLabel:'本 卦', mh_changingLineLabel:'动爻', mh_nuHexLabel:'互 卦', mh_bianHexLabel:'变 卦',
+    mh_nuHexDesc:'事物内部\n隐含动向', mh_bianHexDesc:'事物发展\n最终走向',
+    mh_tiyongTitle:'体用生克分析', mh_tiLabel:'体卦（代表问卜者）', mh_yongLabel:'用卦（代表所问之事）',
+    mh_hexDetailTitle:'卦象详解', mh_benHexInterpLabel:'本卦解读', mh_bianHexTrendLabel:'变卦走向',
+    mh_summaryLabel:'综合断语', mh_yaoAnalysisLabel:'爻位卦气分析', mh_domainsTitle:'各领域指引',
+    mh_errorInputs:'请填写上卦数、下卦数，以及1-6之间的动爻数。',
+    mh_errorObjects:'请填写静物数量和动态数量。',
+    mh_errorQuestion:'请输入所问所求之事。',
+    mh_defaultQuestion:'综合运势',
+    mh_changingLineTpl:'第{n}爻',
+    mh_hexFullNameTpl:'第{num}卦 · {name}（{upper}上{lower}下）',
+    nav_meihua:'梅花易数',
+    mh_triName:{1:'乾',2:'兑',3:'离',4:'震',5:'巽',6:'坎',7:'艮',8:'坤'},
+    mh_yaoLabels:['初爻','二爻','三爻','四爻','五爻','上爻'],
+    mh_yaoRoles:['初生基础','成长蓄力','内外交界','外事变动','主事核心','极端转化'],
+    mh_domLabels:{wealth:'财运',career:'事业',love:'感情',health:'健康',year:'流年',advice:'综合建议'},
+    mh_relHarmony:'比和', mh_relHarmonyFortune:'中吉',
+    mh_relHarmonyDesc:'体卦与用卦同属相同五行，力量相当，相互扶助，事情发展平稳，但缺乏突破动力，宜守成。',
+    mh_relTiProdYong:'体生用', mh_relTiProdYongFortune:'中',
+    mh_relTiProdYongDesc:'体卦生用卦，问卜者主动付出，对所求之事有利，但自身耗损，需量力而行。',
+    mh_relYongProdTi:'用生体', mh_relYongProdTiFortune:'大吉',
+    mh_relYongProdTiDesc:'用卦生体卦，所求之事对问卜者有利，外部助力涌现，事业感情皆有贵人扶持，大吉。',
+    mh_relTiOverYong:'体克用', mh_relTiOverYongFortune:'吉',
+    mh_relTiOverYongDesc:'体卦克用卦，问卜者占据主动，能够掌控局面，所求之事可如愿，宜积极行动。',
+    mh_relYongOverTi:'用克体', mh_relYongOverTiFortune:'凶',
+    mh_relYongOverTiDesc:'用卦克体卦，所求之事对问卜者不利，外部压力较大，宜退守观望，谨慎应对。',
+    mh_summaryTemplate:'本卦「{ben}」，{benKw}，{benF}。体用{rel}，{relF}。变卦「{bian}」示未来走向：{bianKw}，{bianF}。互卦「{nu}」揭示内在：{nuKw}。综合研判：{verdict}',
+    mh_verdictGood:'时机有利，宜积极把握，顺势而为。',
+    mh_verdictBad:'宜谨慎观望，守正待时，切勿冒进。',
+    mh_dom:{
+      金:{wealth:'利于理财投资，金融行业有利',career:'决断果敢，利于竞争',love:'感情需更多柔情',health:'注意呼吸系统'},
+      木:{wealth:'财运渐升，稳步积累',career:'创意旺盛，适合规划',love:'情感自然生长，勿急',health:'注意肝脏与筋骨'},
+      火:{wealth:'偏财运旺，把握机遇',career:'名声事业俱旺，宜展示',love:'热情如火，但防闪光后暗淡',health:'注意心脏血压'},
+      土:{wealth:'财运稳健，宜稳健理财',career:'稳扎稳打，积累有成',love:'感情踏实，利于长久',health:'注意脾胃消化'},
+      水:{wealth:'财来财去，把握流动',career:'智谋得力，柔中带刚',love:'情感细腻，需要沟通',health:'注意肾脏与泌尿'}
+    },
+    mh_triNature:{1:'天',2:'泽',3:'火',4:'雷',5:'风',6:'水',7:'山',8:'地'},
+    mh_triElement:{1:'金',2:'金',3:'火',4:'木',5:'木',6:'水',7:'土',8:'土'},
+    mh_triFortune:{大吉:'大吉',吉:'吉',中吉:'中吉',小吉:'小吉',中:'中',小凶:'小凶',凶:'凶',大凶:'大凶'},
+    mh_hex:{
+      '1_1':{name:'乾为天',keyword:'刚健自强',meaning:'龙行天下，阳刚纯粹，宜进取创业，诸事可成。'},
+      '1_2':{name:'天泽履',keyword:'谨慎行事',meaning:'履虎尾而不咬，凡事谨慎则吉，忌莽撞行事。'},
+      '1_3':{name:'天火同人',keyword:'同心合力',meaning:'志同道合，合作共赢，贵人相助，诸事可成。'},
+      '1_4':{name:'天雷无妄',keyword:'顺应自然',meaning:'顺天应命勿强求，静待良机方为上，妄动则凶。'},
+      '1_5':{name:'天风姤',keyword:'邂逅相遇',meaning:'防小人阴险，女性缘分起，感情婚姻需审慎。'},
+      '1_6':{name:'天水讼',keyword:'争讼纠纷',meaning:'争讼不利，宜和解止讼，慎防口舌是非。'},
+      '1_7':{name:'天山遁',keyword:'适时退隐',meaning:'识时务者为俊杰，韬光养晦待时机，退守则吉。'},
+      '1_8':{name:'天地否',keyword:'阴阳阻塞',meaning:'天地不交，万物不通，时运不济，宜守静待变。'},
+      '2_1':{name:'泽天夬',keyword:'果断决断',meaning:'宜果断行事，当机立断则成，优柔寡断则失。'},
+      '2_2':{name:'兑为泽',keyword:'喜悦和乐',meaning:'喜悦欢欣，口才出众，感情顺遂，财运良好。'},
+      '2_3':{name:'泽火革',keyword:'变革更新',meaning:'革故鼎新，变化带来机遇，顺势而为则大利。'},
+      '2_4':{name:'泽雷随',keyword:'随机应变',meaning:'顺应时势，跟随贵人则事半功倍，切勿固执己见。'},
+      '2_5':{name:'泽风大过',keyword:'过犹不及',meaning:'超负荷运转，需及时减负，防物极必反，中庸为宜。'},
+      '2_6':{name:'泽水困',keyword:'困境磨砺',meaning:'陷于困境，困中求通，君子处困修德，静待转机。'},
+      '2_7':{name:'泽山咸',keyword:'感应相通',meaning:'男女相感，心意相通，感情婚姻大吉，合作顺畅。'},
+      '2_8':{name:'泽地萃',keyword:'聚集汇合',meaning:'万物聚集，人心归附，财运亨通，宜凝聚力量。'},
+      '3_1':{name:'火天大有',keyword:'大有所获',meaning:'居高临下，光明在上，大有所获，名利双收。'},
+      '3_2':{name:'火泽睽',keyword:'乖违分离',meaning:'阴阳背离，意见相左，防合作破裂，小事可行大事难成。'},
+      '3_3':{name:'离为火',keyword:'光明附丽',meaning:'双火相映，光明灿烂，才华出众，需有所依附方能发挥。'},
+      '3_4':{name:'火雷噬嗑',keyword:'咬合决断',meaning:'中有障碍，需果断清除，强行突破则成，拖延则凶。'},
+      '3_5':{name:'火风鼎',keyword:'鼎新革故',meaning:'鼎象立业，稳固根基，事业大成，改革创新大利。'},
+      '3_6':{name:'火水未济',keyword:'未竟之业',meaning:'阴阳错位，诸事未成，继续努力，终将成功。'},
+      '3_7':{name:'火山旅',keyword:'旅途奔波',meaning:'客居他乡，漂泊不定，宜谦逊守礼，贸然行事有险。'},
+      '3_8':{name:'火地晋',keyword:'晋升进步',meaning:'旭日东升，仕途光明，晋升有望，名利双收。'},
+      '4_1':{name:'雷天大壮',keyword:'阳刚强盛',meaning:'雷动天上，阳气旺盛，行事强劲有力，进取则成。'},
+      '4_2':{name:'雷泽归妹',keyword:'轻率出行',meaning:'草率行事，婚姻需慎重，勿轻率决定，防感情冲动。'},
+      '4_3':{name:'雷火丰',keyword:'丰盛盛大',meaning:'事业鼎盛，但盛极必衰，居安思危方为智。'},
+      '4_4':{name:'震为雷',keyword:'震动奋发',meaning:'经历惊吓后奋发图强，知惧而后安，终获吉。'},
+      '4_5':{name:'雷风恒',keyword:'恒久坚持',meaning:'雷风并行，持之以恒，婚姻稳固，事业长久。'},
+      '4_6':{name:'雷水解',keyword:'解除险阻',meaning:'雷雨解困，险阻消除，否极泰来，宜行动解决积压。'},
+      '4_7':{name:'雷山小过',keyword:'小有过失',meaning:'可行小事，不宜大动，谨慎行事免小过，守中为上。'},
+      '4_8':{name:'雷地豫',keyword:'欢乐豫悦',meaning:'和乐顺动，众心归附，利于筹谋大事，预则立不预则废。'},
+      '5_1':{name:'风天小畜',keyword:'蓄势待发',meaning:'蓄积力量，待时而动则吉，积德积善，小有收获。'},
+      '5_2':{name:'风泽中孚',keyword:'诚信守中',meaning:'内外诚信，守诚则吉，宜以诚相待，官讼宜和解。'},
+      '5_3':{name:'风火家人',keyword:'家庭和睦',meaning:'家道兴旺，夫妻和谐，各守其位，家和万事兴。'},
+      '5_4':{name:'风雷益',keyword:'增益获利',meaning:'上损下益，投资经营大利，广结善缘，诸事增益。'},
+      '5_5':{name:'巽为风',keyword:'谦逊顺从',meaning:'随风潜入，顺势而为，谦逊低调，利于商旅外交。'},
+      '5_6':{name:'风水涣',keyword:'涣散消融',meaning:'宜团结一致，防离散瓦解，涣然冰释可期。'},
+      '5_7':{name:'风山渐',keyword:'渐进有序',meaning:'鸿雁循序渐进，不可操之过急，按部就班则成。'},
+      '5_8':{name:'风地观',keyword:'观察审时',meaning:'审时度势，宜观察不宜轻动，等待时机，以静制动。'},
+      '6_1':{name:'水天需',keyword:'等待时机',meaning:'云行雨施，时机未到，需耐心等待，守正则吉。'},
+      '6_2':{name:'水泽节',keyword:'节制适度',meaning:'节制有度，不可过分，量入为出，守中则吉。'},
+      '6_3':{name:'水火既济',keyword:'既成完备',meaning:'阴阳交泰，诸事已成，需防患未然，居安思危。'},
+      '6_4':{name:'水雷屯',keyword:'初创艰难',meaning:'万物初生，艰难创业，坚持不懈，终将出头。'},
+      '6_5':{name:'水风井',keyword:'滋养不竭',meaning:'井养无穷，诚实勤劳，利于长久发展，养人利己。'},
+      '6_6':{name:'坎为水',keyword:'重重险阻',meaning:'险坑重重，前途艰难，需诚信守正，逐步克服险阻。'},
+      '6_7':{name:'水山蹇',keyword:'行路艰难',meaning:'前路艰险，举步维艰，需借助贵人，退守待援。'},
+      '6_8':{name:'水地比',keyword:'亲近协助',meaning:'众皆亲附，上下一心，合群互助则大吉，孤立则凶。'},
+      '7_1':{name:'山天大畜',keyword:'厚积薄发',meaning:'积聚力量，厚积薄发，时机成熟则大展身手。'},
+      '7_2':{name:'山泽损',keyword:'损减以益',meaning:'有损有益，减损自身以益他人，牺牲小利获长远利益。'},
+      '7_3':{name:'山火贲',keyword:'文采装饰',meaning:'文质彬彬，外表光鲜，宜从事文艺工作，外交有利。'},
+      '7_4':{name:'山雷颐',keyword:'颐养蓄育',meaning:'颐养身心，饮食起居需注意，养正则吉。'},
+      '7_5':{name:'山风蛊',keyword:'整治弊病',meaning:'腐败滋生，需整治革新，浴火重生，拨乱反正。'},
+      '7_6':{name:'山水蒙',keyword:'启蒙求知',meaning:'蒙昧初开，求知学习，诚心求教则得良师，进步可期。'},
+      '7_7':{name:'艮为山',keyword:'静止止步',meaning:'适时停止，知止而止，保守稳健，宜守不宜进。'},
+      '7_8':{name:'山地剥',keyword:'剥落衰退',meaning:'小人当道，事业剥落，宜守正不妄为，等待时机。'},
+      '8_1':{name:'地天泰',keyword:'通泰顺畅',meaning:'天地交泰，万象更新，诸事顺利，财运亨通，大吉大利。'},
+      '8_2':{name:'地泽临',keyword:'临近亲近',meaning:'居高临下，亲近百姓，事业向好，仕途光明。'},
+      '8_3':{name:'地火明夷',keyword:'才华受损',meaning:'光明入地，才华被压，宜隐忍蛰伏，待时而出。'},
+      '8_4':{name:'地雷复',keyword:'复归返本',meaning:'一阳来复，冬去春来，否极泰来，重新出发大吉。'},
+      '8_5':{name:'地风升',keyword:'上升进步',meaning:'积土成山，循序上升，事业稳步提升，前途光明。'},
+      '8_6':{name:'地水师',keyword:'统帅行师',meaning:'领兵出征，纪律严明，凡事需谋后动，团结则胜。'},
+      '8_7':{name:'地山谦',keyword:'谦逊有德',meaning:'谦虚处世，厚德积善，谦谦君子，终获众人尊重。'},
+      '8_8':{name:'坤为地',keyword:'厚德载物',meaning:'大地包容，厚德承载，宜柔顺处世，顺势而为则大吉。'}
+    },
+  },
+  ms: {
+    nav_luckPortal:'Portal Nasib', nav_totoLuck:'Tuah TOTO', nav_baZi:'Analisis Ba Zi', nav_dailyRituals:'Ritual Harian',
+    sidebar_navigation:'Navigasi', sidebar_language:'Bahasa',
+    sidebar_dashboard:'Papan Pemuka', sidebar_bazi:'Ba Zi Peribadi', sidebar_fengShui:'Feng Shui',
+    fs_badge:'Analisis Feng Shui', fs_heroTitle:'Baca Tenaga Ruang Anda', fs_heroDesc:'Muat naik foto rumah, pejabat atau bilik anda — Tuan Jade akan mendedahkan aliran qi, mengenal pasti sudut kekayaan dan memberikan pelarasan tepat.', fs_uploadTitle:'Muat Naik Foto', fs_uploadDesc:'Sokong JPG, PNG, HEIC', fs_cameraTitle:'Ambil Foto', fs_cameraDesc:'Gunakan kamera secara langsung', fs_questionLabel:'Apa yang ingin anda ketahui?', fs_questionPlaceholder:'Cth: Adakah sudut kekayaan diaktifkan? Bagaimana meningkatkan tenaga bilik tidur?', fs_analyzeBtn:'Analisis Feng Shui', fs_analyzing:'Tuan Jade sedang membaca ruang anda…', fs_analyzingDesc:'Mengesan aliran qi dan corak tenaga', fs_capture:'Tangkap', fs_cancel:'Batal', fs_overallScore:'Skor Qi Keseluruhan', fs_resultSubtitle:'Analisis tenaga ruang berkuasa AI', fs_reAnalyze:'Analisis Semula', fs_disclaimer:'Untuk rujukan sahaja',
+    sidebar_bookConsult:'Tempah Perundingan', sidebar_settings:'⚙ Tetapan', sidebar_support:'? Sokongan',
+    sidebar_masterName:'Guru Lin', sidebar_phase:'Fasa Naga Kayu',
+    hero_badge:'Penjajaran Cakerawala',
+    hero_title:'Cari <span class="italic text-[#ffe088]">Tuah Jade<br/>Anda</span>',
+    hero_subtitle:'Menyelaraskan elemen peribadi anda dengan aliran alam semesta untuk mendedahkan jujukan yang makmur.',
+    form_title:'Input Sarjana', form_nameLabel:'Nama Penuh', form_namePlaceholder:'Masukkan nama',
+    form_dateLabel:'Tarikh Lahir', form_timeLabel:'Masa Lahir', form_optional:'(pilihan)',
+    form_calcBtn:'Kira Manifestasi', form_errorDate:'Sila masukkan tarikh lahir anda untuk memulakan pengiraan.',
+    attr_luckyColor:'Warna Bertuah', attr_goldenHour:'Waktu Emas', attr_direction:'Arah Makmur',
+    reading_title:'Bacaan Guru',
+    bazi_title:'Ba Zi: Empat Tiang', bazi_dayMasterDash:'Hari Utama: — ',
+    manifest_title:'Manifestasi Suci', manifest_subtitle:'Urutan nombor dari Lima Elemen',
+    manifest_subtitleDynamic:'Hari Utama {yy} {el} · Urutan nombor Lima Elemen',
+    manifest_realign:'Jajarkan Semula Elemen', manifest_bonusLabel:'Nombor Bonus',
+    elements_title:'Keseimbangan Elemen', dynamics_title:'Dinamik Elemen',
+    dynamics_dayMaster:'Hari Utama', dynamics_favorable:'★ Baik',
+    pillar_year:'TAHUN', pillar_month:'BULAN', pillar_day:'HARI', pillar_hour:'JAM',
+    el_Wood:'Kayu', el_Fire:'Api', el_Earth:'Tanah', el_Metal:'Logam', el_Water:'Air',
+    el_label_Wood:'Jade Hijau', el_label_Fire:'Merah Phoenix', el_label_Earth:'Emas Imperial', el_label_Metal:'Perak Mutiara', el_label_Water:'Biru Safir',
+    dir_East:'Timur', dir_South:'Selatan', dir_NE:'Timur Laut', dir_West:'Barat', dir_North:'Utara',
+    animal_Rat:'Tikus', animal_Ox:'Lembu', animal_Tiger:'Harimau', animal_Rabbit:'Arnab',
+    animal_Dragon:'Naga', animal_Snake:'Ular', animal_Horse:'Kuda', animal_Goat:'Kambing',
+    animal_Monkey:'Monyet', animal_Rooster:'Ayam', animal_Dog:'Anjing', animal_Pig:'Babi',
+    yy_Yang:'Yang', yy_Yin:'Yin',
+    strength_Strong:'Kuat', strength_Weak:'Lemah', strength_Balanced:'Seimbang',
+    ft_sentence:'Dilahirkan pada tahun {animal}, Hari Utama {yy} {el} anda menjadikan anda secara semula jadi {desc}. {strength} Pupuk {favEls} tenaga untuk tuah.',
+    ft_strengthLabel:'Hari Utama: {yy} {el} · Carta {strength}',
+    ft_and:' dan ',
+    ft_desc_Wood:'kreatif, penyayang, dan berorientasikan pertumbuhan',
+    ft_desc_Fire:'bersemangat, memberi inspirasi, dan bersinar',
+    ft_desc_Earth:'stabil, memelihara, dan boleh dipercayai',
+    ft_desc_Metal:'berdisiplin, berprinsipal, dan tegas',
+    ft_desc_Water:'bijak, intuitif, dan mudah menyesuaikan diri',
+    ft_strong_Wood:'Tenaga Kayu anda melimpah — salurkan ke ekspresi kreatif.',
+    ft_balanced_Wood:'Tenaga Kayu anda mengalir dengan stabil, membawa pertumbuhan semula jadi.',
+    ft_weak_Wood:'Pupuk intipati Kayu anda dengan aktiviti Air dan refleksi tenang.',
+    ft_strong_Fire:'Api anda menyala terang — padamkan dengan aktiviti Tanah dan Air.',
+    ft_balanced_Fire:'Api anda memancar dengan tujuan dan kejernihan.',
+    ft_weak_Fire:'Nyalakan Api anda dengan tenaga Kayu: baca, belajar, dan berhubung.',
+    ft_strong_Earth:'Tanah anda kaya dan subur — biarkan Logam memperhalus fokus anda.',
+    ft_balanced_Earth:'Tanah anda stabil — tiang yang orang lain bergantung secara semula jadi.',
+    ft_weak_Earth:'Bumi diri anda dengan tenaga Api: kehangatan, komuniti, perayaan.',
+    ft_strong_Metal:'Logam anda tajam dan tegas — lembutkan dengan kebijaksanaan Air.',
+    ft_balanced_Metal:'Logam anda memotong kebingungan dengan tindakan berprinsipal.',
+    ft_weak_Metal:'Tempa Logam anda dengan sokongan Tanah: kesabaran, pengumpulan.',
+    ft_strong_Water:'Air anda mengalir dalam — pandu dengan cita-cita dan arah Kayu.',
+    ft_balanced_Water:'Kecerdasan Air anda mengemudi kehidupan dengan anggun dan lancar.',
+    ft_weak_Water:'Isi semula Air anda dengan disiplin Logam dan rehat berstruktur.',
+    phase_template:'{el} {animal} · {yy} {dayEl}',
+    footer_scholarPath:'Laluan Sarjana', footer_privacy:'Dasar Privasi',
+    footer_lunar:'Kalendar Lunar', footer_terms:'Syarat Perkhidmatan',
+    footer_copyright:'© 2024 Jade & Prosperity Metaphysics. Hak Cipta Terpelihara.',
+    // ── Meihua UI (ms) ──
+    mh_banner_badge:'Oracle Dinasti Song', mh_banner_desc:'Dicipta oleh Shao Kangjie, oracle ini menerbit heksagram dari nombor primordial, mendedahkan nasib melalui kitaran elemen.',
+    mh_heaven_earth:'Langit & Bumi',
+    mh_heroTitleHTML:'梅花易数<br/><span class="text-[#bcedda] text-2xl font-normal italic">Ramalan Bunga Plum</span>',
+    mh_methodTitle:'Kaedah Divinas', mh_method_time:'Ikut Masa', mh_method_number:'Ikut Nombor', mh_method_object:'Ikut Objek',
+    mh_timeAutoLabel:'Masa semasa (auto)', mh_timeNumbersLabel:'Thn + Bln + Hari + Jam',
+    mh_questionLabel:'Soalan / Niat', mh_questionPh:'Apa yang ingin anda tanya?',
+    mh_upperNumLabel:'No. Trigram Atas', mh_lowerNumLabel:'No. Trigram Bawah', mh_lineNumLabel:'Garisan Berubah (1–6)',
+    mh_anyPosInt:'(sebarang integer positif)',
+    mh_objectMethodTitle:'Kaedah Pemerhatian', mh_objectMethodDesc:'Kira objek pegun (trigram atas), kira objek bergerak (trigram bawah). Jumlah ÷ 6 baki = garisan berubah.',
+    mh_staticCountLabel:'Objek pegun (atas)', mh_dynamicCountLabel:'Objek bergerak (bawah)',
+    mh_castBtn:'Buka Heksagram',
+    mh_trigramRef:'Nombor Trigram Primordial',
+    mh_tri_1:'1·Langit', mh_tri_2:'2·Tasik', mh_tri_3:'3·Api', mh_tri_4:'4·Guruh',
+    mh_tri_5:'5·Angin', mh_tri_6:'6·Air', mh_tri_7:'7·Gunung', mh_tri_8:'8·Bumi',
+    mh_trigramFormula:'Atas = Jumlah ÷ 8 baki (0→8)\nGarisan berubah = Jumlah ÷ 6 baki (0→6)',
+    mh_placeholderText:'Buka heksagram — bacaan anda akan muncul di sini.',
+    mh_placeholderSub:'Pilih kaedah dan klik Buka Heksagram untuk mulai.',
+    mh_castTimeLabel:'Masa Ramalan',
+    mh_benHexLabel:'Asal', mh_changingLineLabel:'Berubah', mh_nuHexLabel:'Nuklear', mh_bianHexLabel:'Transformed',
+    mh_nuHexDesc:'Dinamik dalaman tersembunyi', mh_bianHexDesc:'Hasil akhir & hala tuju',
+    mh_tiyongTitle:'Analisis Elemen Ti–Yong',
+    mh_tiLabel:'Ti Gua — Mewakili penanya',
+    mh_yongLabel:'Yong Gua — Mewakili perkara yang ditanya',
+    mh_hexDetailTitle:'Bacaan Heksagram',
+    mh_benHexInterpLabel:'Heksagram Asal', mh_bianHexTrendLabel:'Trend Heksagram Berubah',
+    mh_summaryLabel:'Keputusan Keseluruhan', mh_yaoAnalysisLabel:'Analisis Kedudukan Garisan',
+    mh_domainsTitle:'Panduan Domain',
+    mh_errorInputs:'Sila isi nombor atas, nombor bawah, dan garisan berubah antara 1–6.',
+    mh_errorObjects:'Sila isi bilangan objek pegun dan objek bergerak.',
+    mh_errorQuestion:'Sila masukkan perkara atau soalan yang ingin ditanya.',
+    mh_defaultQuestion:'Nasib Umum',
+    mh_changingLineTpl:'Garisan {n}',
+    mh_hexFullNameTpl:'Heksagram {num} · {name} ({upper} atas {lower})',
+    nav_meihua:'Bunga Plum',
+    mh_triName:{1:'Qian',2:'Dui',3:'Li',4:'Zhen',5:'Xun',6:'Kan',7:'Gen',8:'Kun'},
+    mh_yaoLabels:['Garisan 1','Garisan 2','Garisan 3','Garisan 4','Garisan 5','Garisan 6'],
+    mh_yaoRoles:['Asas','Pertumbuhan','Ambang','Anjakan luar','Peristiwa inti','Titik ekstrem'],
+    mh_domLabels:{wealth:'Kekayaan',career:'Kerjaya',love:'Percintaan',health:'Kesihatan',year:'Nasib Tahunan',advice:'Nasihat'},
+    mh_relHarmony:'Keserasian (比和)', mh_relHarmonyFortune:'Cukup Baik',
+    mh_relHarmonyDesc:'Ti dan Yong berkongsi elemen yang sama — seimbang dan stabil. Perkara berjalan lancar tanpa perubahan mendadak. Kekalkan laluan semasa.',
+    mh_relTiProdYong:'Ti Jana Yong (体生用)', mh_relTiProdYongFortune:'Sederhana',
+    mh_relTiProdYongDesc:'Penanya memberi secara aktif kepada perkara — bermanfaat kepada subjek tetapi mengurangkan tenaga penanya. Bertindak mengikut kemampuan.',
+    mh_relYongProdTi:'Yong Jana Ti (用生体)', mh_relYongProdTiFortune:'Sangat Baik',
+    mh_relYongProdTiDesc:'Perkara memberi manfaat kepada penanya — bantuan luar mengalir masuk. Penderma dan peluang tiba secara semula jadi. Sangat baik.',
+    mh_relTiOverYong:'Ti Mengatasi Yong (体克用)', mh_relTiOverYongFortune:'Baik',
+    mh_relTiOverYongDesc:'Penanya menguasai situasi — anda memegang inisiatif. Perkara boleh diselesaikan seperti dikehendaki. Bertindak dengan yakin.',
+    mh_relYongOverTi:'Yong Mengatasi Ti (用克体)', mh_relYongOverTiFortune:'Tidak Baik',
+    mh_relYongOverTiDesc:'Perkara memberi tekanan kepada penanya — kuasa luar tidak menguntungkan. Berundur, berhati-hati, dan tunggu masa yang lebih baik.',
+    mh_summaryTemplate:'Heksagram asal "{ben}" — {benKw}, {benF}. Ti–Yong: {rel}, {relF}. Heksagram berubah "{bian}" menunjukkan: {bianKw}, {bianF}. Nuklear "{nu}" mendedahkan: {nuKw}. Keseluruhan: {verdict}',
+    mh_verdictGood:'Masa sesuai — rebut peluang dan bertindak.',
+    mh_verdictBad:'Berhati-hati — teguh dan tunggu masa yang tepat.',
+    mh_dom:{
+      金:{wealth:'Sesuai untuk kewangan & pelaburan.',career:'Tindakan tegas menghasilkan keputusan.',love:'Tunjukkan lebih kelembutan.',health:'Jaga kesihatan pernafasan.'},
+      木:{wealth:'Kekayaan berkembang perlahan-lahan.',career:'Tenaga kreatif tinggi — rancang dengan berani.',love:'Biarkan perasaan berkembang secara semula jadi.',health:'Jaga hati dan tendon.'},
+      火:{wealth:'Tuah wang tunai aktif — rebut peluang.',career:'Reputasi dan kerjaya berkembang.',love:'Semangat kuat; kekalkannya.',health:'Pantau jantung dan tekanan darah.'},
+      土:{wealth:'Kekayaan stabil — pilih pendekatan konservatif.',career:'Usaha metodikal mengumpul kejayaan.',love:'Ikatan yang stabil dan berkekalan.',health:'Jaga penghadaman dan limpa.'},
+      水:{wealth:'Wang masuk dan keluar — jejak aliran tunai.',career:'Strategi dan penyesuaian adalah kekuatan anda.',love:'Emosi mendalam; berkomunikasi secara terbuka.',health:'Sokong kesihatan buah pinggang.'}
+    },
+    mh_triNature:{1:'Langit',2:'Tasik',3:'Api',4:'Guruh',5:'Angin',6:'Air',7:'Gunung',8:'Bumi'},
+    mh_triElement:{1:'Logam',2:'Logam',3:'Api',4:'Kayu',5:'Kayu',6:'Air',7:'Tanah',8:'Tanah'},
+    mh_triFortune:{大吉:'Sangat Baik',吉:'Baik',中吉:'Cukup Baik',小吉:'Sedikit Baik',中:'Neutral',小凶:'Sedikit Buruk',凶:'Kurang Baik',大凶:'Sangat Buruk'},
+    mh_hex:{
+      '1_1':{name:'Langit Atas Langit',keyword:'Kekuatan Kreatif',meaning:'Tenaga yang murni — inisiatif berani membawa kejayaan besar. Sesuai untuk usaha baru dan kepimpinan.'},
+      '1_2':{name:'Berjalan Berhati-hati',keyword:'Kelakuan berhati-hati',meaning:'Melangkah dengan penuh perhatian — kesopanan dan kewaspadaan memastikan kemajuan yang selamat.'},
+      '1_3':{name:'Persahabatan',keyword:'Tujuan bersatu',meaning:'Rakan seperjuangan berkumpul — kerjasama dan komunikasi terbuka membawa kejayaan bersama.'},
+      '1_4':{name:'Tanpa Tipu Daya',keyword:'Bertindak ikhlas',meaning:'Ikuti undang-undang semula jadi tanpa motif tersembunyi. Penyelewengan mendatangkan kemalangan.'},
+      '1_5':{name:'Perjumpaan',keyword:'Pertemuan tidak dijangka',meaning:'Satu yin bertemu lima yang — awasi individu yang licik; hubungan memerlukan penilaian yang teliti.'},
+      '1_6':{name:'Konflik',keyword:'Pertikaian',meaning:'Konflik tidak menguntungkan — cari pengantaraan; jangan menekan ke hadapan secara agresif.'},
+      '1_7':{name:'Berundur',keyword:'Pengunduran strategik',meaning:'Yang bijak tahu bila hendak berundur. Simpan kekuatan dan tunggu masa yang tepat.'},
+      '1_8':{name:'Kecetatan',keyword:'Halangan',meaning:'Langit dan Bumi tidak berkomunikasi — keadaan tersekat; diam dan tunggu.'},
+      '2_1':{name:'Terobosan',keyword:'Resolusi tegas',meaning:'Terobos dengan penuh tekad. Selesaikan isu-isu yang tertangguh secara tegas.'},
+      '2_2':{name:'Suka Cita',keyword:'Kegembiraan',meaning:'Kegembiraan — hubungan sosial menguat, kehidupan emosi berkembang, urusan berjalan lancar.'},
+      '2_3':{name:'Revolusi',keyword:'Perubahan & pembaruan',meaning:'Buang yang lama, sambut yang baru — perubahan membawa manfaat besar.'},
+      '2_4':{name:'Mengikut',keyword:'Sesuaikan & ikut',meaning:'Selaraskan dengan masa dan ikuti panduan yang dipercayai — fleksibiliti menggandakan hasil.'},
+      '2_5':{name:'Berlebihan',keyword:'Terlebih',meaning:'Galas bahu melengkok — kurangkan beban dengan segera; elak ekstrem, cari jalan tengah.'},
+      '2_6':{name:'Penindasan',keyword:'Kesusahan',meaning:'Terperangkap dalam kesukaran namun ujian membentuk kebajikan — tenang, tunggu giliran.'},
+      '2_7':{name:'Pengaruh',keyword:'Tarikan bersama',meaning:'Hati beresonansi — percintaan dan perkongsian amat digalakkan; beri dengan anggun.'},
+      '2_8':{name:'Berkumpul',keyword:'Penyatuan',meaning:'Orang dan sumber bertemu — usaha kolektif dan pakatan luas menjana kemakmuran.'},
+      '3_1':{name:'Milik Besar',keyword:'Kelimpahan',meaning:'Matahari di zenith — kekayaan dan pengiktirafan besar. Kerjaya dan kewangan bersinar.'},
+      '3_2':{name:'Pertentangan',keyword:'Keterasingan',meaning:'Daya yang bertentangan — elakkan konfrontasi dalam perkara besar; tugas kecil boleh diteruskan.'},
+      '3_3':{name:'Api Menyala',keyword:'Kejelasan & kecemerlangan',meaning:'Api yang cemerlang memerlukan asas — bakat bersinar apabila tertambat; kerja kreatif maju.'},
+      '3_4':{name:'Menggigit',keyword:'Tindakan tegas',meaning:'Halangan mesti disingkirkan dengan kuat — ambil tindakan tegas untuk membuka jalan.'},
+      '3_5':{name:'Periuk Besar',keyword:'Transformasi',meaning:'Periuk ritual melambangkan pencapaian budaya dan asas kukuh — kejayaan besar melalui reformasi.'},
+      '3_6':{name:'Sebelum Lengkap',keyword:'Kerja belum siap',meaning:'Yin dan yang belum sejajar — gigih; kejayaan hampir walaupun langkah terakhir memerlukan perhatian.'},
+      '3_7':{name:'Pengembara',keyword:'Perjalanan & sementara',meaning:'Orang asing di tanah asing — kekal rendah hati dan sopan; tindakan terburu-buru mendatangkan masalah.'},
+      '3_8':{name:'Kemajuan',keyword:'Peningkatan',meaning:'Matahari terbit — kemajuan kerjaya, pengiktirafan, dan kemakmuran muncul perlahan-lahan.'},
+      '4_1':{name:'Kuasa Besar',keyword:'Kuasa yang kuat',meaning:'Guruh di langit — tenaga yang kuat; inisiatif aktif dan tegas berjaya dengan cemerlang.'},
+      '4_2':{name:'Anak Dara',keyword:'Komitmen terburu-buru',meaning:'Meneruskan tanpa asas kukuh — berhati-hati dalam hubungan dan keputusan.'},
+      '4_3':{name:'Kelimpahan',keyword:'Kepenuhan & kecemerlangan',meaning:'Guruh dan kilat bergabung dalam kemuliaan — di puncak; sedar tentang kemerosotan selepas zenith.'},
+      '4_4':{name:'Guruh',keyword:'Kejutan & kebangkitan',meaning:'Guruh mengejut dan membangkitkan — ketakutan awal memberi jalan kepada kebangkitan yang tekun.'},
+      '4_5':{name:'Jangka Masa',keyword:'Ketekalan',meaning:'Guruh dan angin selaras — ketekunan dan kesetiaan teguh menghasilkan keputusan yang berkekalan.'},
+      '4_6':{name:'Pembebasan',keyword:'Melepaskan ketegangan',meaning:'Ribut reda dan halangan hilang — masalah terselesai; bertindak sekarang.'},
+      '4_7':{name:'Lebihan Kecil',keyword:'Terlebih sedikit',meaning:'Bertindak dalam perkara kecil, bukan perkara besar — pendekatan sederhana mengelakkan kesilapan.'},
+      '4_8':{name:'Keghairahan',keyword:'Kegembiraan & momentum',meaning:'Pergerakan yang gembira mengangkat semua — seni dan budaya berkembang; rancang dengan bijak.'},
+      '5_1':{name:'Menjinakkan Kecil',keyword:'Kumpul & tunggu',meaning:'Bina secara senyap dan kumpulkan kebajikan — masa belum masak; persiapan sabar membawa hasil kecil.'},
+      '5_2':{name:'Kebenaran Dalam',keyword:'Keikhlasan',meaning:'Keikhlasan tulen bergema ke luar — urusan berdasarkan kepercayaan berjaya; elakkan manipulasi.'},
+      '5_3':{name:'Keluarga',keyword:'Keharmonian rumah tangga',meaning:'Peranan keluarga dipenuhi dengan betul — keamanan domestik menyokong semua usaha lain.'},
+      '5_4':{name:'Peningkatan',keyword:'Pertumbuhan & faedah',meaning:'Atas berkurangan untuk manfaat bawah — pelaburan dan kemurahan hati menghasilkan ganjaran berlipat ganda.'},
+      '5_5':{name:'Lembut',keyword:'Pengaruh halus',meaning:'Angin menembusi ke mana-mana dengan perlahan — usaha lembut yang berterusan dan kerendahan hati membuka pintu.'},
+      '5_6':{name:'Penyebaran',keyword:'Pelarutan',meaning:'Angin di atas air menyebarkan — satukan usaha; elakkan perpecahan sebelum ia berlaku.'},
+      '5_7':{name:'Perkembangan',keyword:'Kemajuan berperingkat',meaning:'Angsa liar maju selangkah demi selangkah — jangan tergesa-gesa; kemajuan metodikal memastikan kejayaan.'},
+      '5_8':{name:'Pemerhatian',keyword:'Perhatikan & nilai',meaning:'Tinjau landskap sebelum bertindak — kumpulkan maklumat dan tunggu masa yang optimum.'},
+      '6_1':{name:'Menunggu',keyword:'Menunggu dengan sabar',meaning:'Hujan berkumpul di awan — masa belum masak; kekalkan kedudukan dan tunggu masa yang tepat.'},
+      '6_2':{name:'Batasan',keyword:'Kesederhanaan',meaning:'Kawal dan tetapkan sempadan — tidak terlalu banyak atau terlalu sedikit; disiplin membawa kestabilan.'},
+      '6_3':{name:'Selepas Lengkap',keyword:'Tercapai',meaning:'Yin dan yang seimbang sempurna — matlamat dicapai; jaga kealpaan dan bersedia untuk perubahan.'},
+      '6_4':{name:'Kesukaran Awal',keyword:'Kesusahan awal',meaning:'Benih berjuang untuk tumbuh — bertahan melalui halangan awal; kejayaan mengikuti.'},
+      '6_5':{name:'Perigi',keyword:'Kedalaman yang menghidup',meaning:'Perigi menghirup semua tanpa jemu — kerja keras dan pengetahuan terkumpul menyokong pertumbuhan berkekalan.'},
+      '6_6':{name:'Jurang Berbahaya',keyword:'Bahaya & kedalaman',meaning:'Lapisan demi lapisan perangkap — kekal berpusat dan jujur; integriti adalah satu-satunya jalan melalui bahaya.'},
+      '6_7':{name:'Halangan',keyword:'Jalan yang tidak dapat dilalui',meaning:'Jalan ke hadapan disekat — cari pembantu dan pertimbangkan untuk berundur.'},
+      '6_8':{name:'Perpaduan',keyword:'Perpaduan & perikatan',meaning:'Semua berkumpul dalam persahabatan — perpaduan dan bantuan bersama membawa nasib besar.'},
+      '7_1':{name:'Menjinakkan Besar',keyword:'Kumpulkan kekuatan',meaning:'Reserv besar tenaga tersimpan — pembelajaran luas dan akumulasi sabar menyediakan anda untuk pelepasan besar.'},
+      '7_2':{name:'Pengurangan',keyword:'Kurangkan untuk untung',meaning:'Korbankan yang lebih kecil untuk mendapat yang lebih besar — pengorbanan yang tulus menghasilkan faedah jangka panjang.'},
+      '7_3':{name:'Keanggunan',keyword:'Hiasan',meaning:'Bentuk elegan dengan bahan dalaman — seni, diplomasi, dan persembahan unggul; substans mesti menyokong gaya.'},
+      '7_4':{name:'Pemakanan',keyword:'Menjaga dengan bijak',meaning:'Jaga badan dan minda dengan teliti — apa yang anda konsumsi dalam fikiran dan makanan membentuk nasib anda.'},
+      '7_5':{name:'Bekerja pada Kerosakan',keyword:'Reformasi & pembaikan',meaning:'Rasuah telah berlaku — reformasi berani diperlukan; ambil tanggungjawab dan perbaharui dari akar.'},
+      '7_6':{name:'Kebodohan Muda',keyword:'Cari panduan',meaning:'Pelajar memerlukan guru — dekati pembelajaran dengan keikhlasan; mentor yang baik mengubah laluan anda.'},
+      '7_7':{name:'Diam',keyword:'Ketenangan',meaning:'Tahu bila hendak berhenti — diam dan pengekangan adalah kekuatan; jaga kedudukan anda dan perhatikan.'},
+      '7_8':{name:'Pecah',keyword:'Kerosakan & kehilangan',meaning:'Kuasa remeh melemahkan asas — jangan bertindak; pegang kebajikan anda dan tunggu kitaran terbalik.'},
+      '8_1':{name:'Keamanan',keyword:'Harmoni & kemakmuran',meaning:'Langit dan Bumi dalam komunikasi — semua perkara berkembang. Paling baik; kejar matlamat dengan berani.'},
+      '8_2':{name:'Pendekatan',keyword:'Menghampiri',meaning:'Tenaga yang meningkat menghampiri puncaknya — melangkah ke hadapan dengan yakin; kepimpinan digalakkan.'},
+      '8_3':{name:'Pemadaman Cahaya',keyword:'Penyembunyian',meaning:'Kecemerlangan terkubur di bawah tanah — tahan dan sembunyikan bakat anda; masa untuk muncul akan tiba.'},
+      '8_4':{name:'Kembali',keyword:'Pembaharuan',meaning:'Satu yang kembali — musim sejuk berakhir, musim bunga tiba. Selepas titik terendah, tenaga segar muncul.'},
+      '8_5':{name:'Mendorong ke Atas',keyword:'Pendakian yang stabil',meaning:'Bumi naik dengan stabil — usaha yang konsisten dan berasas mengangkat anda lebih tinggi.'},
+      '8_6':{name:'Tentera',keyword:'Disiplin & strategi',meaning:'Gunakan sumber dengan disiplin ketat dan rancangan yang jelas — usaha teratur menang.'},
+      '8_7':{name:'Kerendahan Hati',keyword:'Kebajikan rendah hati',meaning:'Orang yang rendah hati dihormati oleh semua — kerendahan hati yang tulus menarik nasib baik yang berkekalan.'},
+      '8_8':{name:'Bumi',keyword:'Kekuatan reseptif',meaning:'Bumi menghasilkan dan memupuk semua — ikut daripada memimpin; reseptiviti yang sabar membawa kejayaan berkekalan.'}
+    },
+  }
+};
+
+let currentLang = 'en';
+let currentUserName = null;
+let currentMeihuaData = null;
+
+function t(key) {
+  return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || TRANSLATIONS.en[key] || key;
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+  ['en','zh','ms'].forEach(l => {
+    document.getElementById('lang-'+l).classList.toggle('active', l === lang);
+    document.getElementById('mlang-'+l).classList.toggle('active', l === lang);
+  });
+  applyLang();
+}
+
+function applyLang() {
+  // Static text elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.getAttribute('data-i18n'));
+  });
+  // Placeholder
+  document.getElementById('nameInput').placeholder = t('form_namePlaceholder');
+  // Hero titles (contain HTML)
+  document.getElementById('heroTitle').innerHTML    = t('hero_title');
+  document.getElementById('mh-hero-title').innerHTML = t('mh_heroTitleHTML');
+
+  // Sidebar: only update if user hasn't entered a name
+  if (!currentUserName) {
+    document.getElementById('drawerName').textContent  = t('sidebar_masterName');
+    document.getElementById('drawerPhase').textContent = t('sidebar_phase');
+  }
+
+  // Re-render dynamic content if calculation exists
+  if (currentPillars) {
+    renderPillars(currentPillars);
+    renderElements(currentElements);
+    renderNumbers(luckyNumbers(currentPillars, currentElements));
+    renderLuckyAttributes(currentPillars, currentElements);
+    updateSubtitle(currentPillars);
+    const { desc, strengthLabel } = fortuneText(currentPillars, currentElements);
+    document.getElementById('readingText').textContent = desc;
+    document.getElementById('readingStrength').textContent = strengthLabel;
+    const dm = currentPillars[2];
+    const dCount = currentElements[dm.element];
+    const s = dCount >= 3 ? 'Strong' : dCount <= 1 ? 'Weak' : 'Balanced';
+    document.getElementById('dayMasterLabel').textContent = t('ft_strengthLabel')
+      .replace('{yy}', t('yy_'+dm.yinYang)).replace('{el}', t('el_'+dm.element)).replace('{strength}', t('strength_'+s));
+    const yp = currentPillars[0];
+    const _phaseText = t('phase_template')
+      .replace('{el}', t('el_'+yp.element)).replace('{animal}', t('animal_'+yp.animal))
+      .replace('{yy}', t('yy_'+dm.yinYang)).replace('{dayEl}', t('el_'+dm.element));
+    document.getElementById('drawerPhase').textContent  = _phaseText;
+    if (!document.getElementById('elementInteraction').classList.contains('hidden')) {
+      renderElementDynamics(currentElements, dm.element);
+    }
+  } else {
+    renderInitial();
+    document.getElementById('dayMasterLabel').textContent = t('bazi_dayMasterDash');
+    document.getElementById('manifestSubtitle').textContent = t('manifest_subtitle');
+  }
+
+  // Refresh AI chat language if open
+  if (typeof applyAiLang === 'function' && !document.getElementById('aiChatPanel').classList.contains('translate-x-full')) applyAiLang();
+
+  // Re-render meihua result if visible
+  if (currentMeihuaData && !document.getElementById('mh-result').classList.contains('hidden')) {
+    // Recalculate relation so labels use new language
+    currentMeihuaData.relation = mhRelation(currentMeihuaData.tiEl, currentMeihuaData.yongEl);
+    renderMeihuaResult(currentMeihuaData);
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  BA ZI CALCULATION ENGINE
+// ═══════════════════════════════════════════════════════
+
+const STEMS   = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const BRANCHES= ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+const ANIMALS = ['Rat','Ox','Tiger','Rabbit','Dragon','Snake','Horse','Goat','Monkey','Rooster','Dog','Pig'];
+const STEM_EL = ['Wood','Wood','Fire','Fire','Earth','Earth','Metal','Metal','Water','Water'];
+const STEM_YY = ['Yang','Yin','Yang','Yin','Yang','Yin','Yang','Yin','Yang','Yin'];
+const BRANCH_EL=['Water','Earth','Wood','Wood','Earth','Fire','Fire','Earth','Metal','Metal','Earth','Water'];
+
+const STEM_PIN  = ['Jiǎ','Yǐ','Bǐng','Dīng','Wù','Jǐ','Gēng','Xīn','Rén','Guǐ'];
+const BRANCH_PIN= ['Zǐ','Chǒu','Yín','Mǎo','Chén','Sì','Wǔ','Wèi','Shēn','Yǒu','Xū','Hài'];
+
+const SOLAR_TERM_DAY = [6, 4, 6, 5, 6, 6, 7, 7, 8, 8, 7, 7];
+const MONTH_BRANCH_AFTER  = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0];
+const MONTH_BRANCH_BEFORE = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+const EL_THEME = {
+  Wood:  { bg: '#dcf5ec', border: '#86d7ac', text: '#00321f', icon: '#004b31', barColor: '#86d7ac' },
+  Fire:  { bg: '#ffdad6', border: '#ffb4ab', text: '#93000a', icon: '#ba1a1a', barColor: '#ffb4ab' },
+  Earth: { bg: '#fff3c4', border: '#ffe088', text: '#241a00', icon: '#735c00', barColor: '#ffe088' },
+  Metal: { bg: '#e8e8f8', border: '#c4c4e8', text: '#1a1a6e', icon: '#4040a0', barColor: '#c4c4e8' },
+  Water: { bg: '#dbeafe', border: '#93c5fd', text: '#1e3a5f', icon: '#1d4ed8', barColor: '#93c5fd' }
+};
+
+const EL_DIRECTION_KEYS = { Wood:'dir_East', Fire:'dir_South', Earth:'dir_NE', Metal:'dir_West', Water:'dir_North' };
+const EL_HOURS = { Wood:'03:00 – 07:00', Fire:'11:00 – 15:00', Earth:'07:00 – 09:00', Metal:'17:00 – 19:00', Water:'23:00 – 01:00' };
+
+const EL_PRODUCES     = { Wood:'Fire', Fire:'Earth', Earth:'Metal', Metal:'Water', Water:'Wood' };
+const EL_CONTROLLED_BY= { Wood:'Metal', Fire:'Water', Earth:'Wood', Metal:'Fire', Water:'Earth' };
+
+const EL_NUMBERS = {
+  Water: [1,6,11,16,21,26,31,36,41,46],
+  Fire:  [2,7,12,17,22,27,32,37,42,47],
+  Wood:  [3,8,13,18,23,28,33,38,43,48],
+  Metal: [4,9,14,19,24,29,34,39,44,49],
+  Earth: [5,10,15,20,25,30,35,40,45]
+};
+
+function getJDN(year, month, day) {
+  const a = Math.floor((14 - month) / 12);
+  const y = year + 4800 - a;
+  const m = month + 12 * a - 3;
+  return day + Math.floor((153 * m + 2) / 5) + 365 * y +
+         Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+}
+
+function chineseYear(y, m, d) {
+  return (m < 2 || (m === 2 && d < SOLAR_TERM_DAY[1])) ? y - 1 : y;
+}
+
+function yearPillar(y, m, d) {
+  const cy = chineseYear(y, m, d);
+  const si = ((cy - 4) % 10 + 10) % 10;
+  const bi = ((cy - 4) % 12 + 12) % 12;
+  return pillar(si, bi);
+}
+
+function monthPillar(y, m, d, yearStemIdx) {
+  const idx = m - 1;
+  const bi = d >= SOLAR_TERM_DAY[idx] ? MONTH_BRANCH_AFTER[idx] : MONTH_BRANCH_BEFORE[idx];
+  const stemBase = ((yearStemIdx % 5) * 2 + 2) % 10;
+  const offset   = (bi - 2 + 12) % 12;
+  const si       = (stemBase + offset) % 10;
+  return pillar(si, bi);
+}
+
+function dayPillar(y, m, d) {
+  const jdn  = getJDN(y, m, d);
+  const ref  = getJDN(1900, 1, 1);
+  const cycle= ((jdn - ref + 10) % 60 + 60) % 60;
+  return pillar(cycle % 10, cycle % 12);
+}
+
+function hourPillar(hour, minute, dayStemIdx) {
+  const total = hour * 60 + minute;
+  let bi;
+  if (total >= 23 * 60 || total < 60) bi = 0;
+  else bi = Math.floor((total - 60) / 120) + 1;
+  const stemBase = (dayStemIdx % 5) * 2;
+  const si = (stemBase + bi) % 10;
+  return pillar(si, bi);
+}
+
+function pillar(si, bi) {
+  return {
+    stem: STEMS[si], stemIdx: si, stemPin: STEM_PIN[si],
+    branch: BRANCHES[bi], branchIdx: bi, branchPin: BRANCH_PIN[bi],
+    element: STEM_EL[si], yinYang: STEM_YY[si],
+    branchElement: BRANCH_EL[bi], animal: ANIMALS[bi]
+  };
+}
+
+function countElements(pillars) {
+  const c = { Wood:0, Fire:0, Earth:0, Metal:0, Water:0 };
+  pillars.forEach(p => { c[p.element]++; c[p.branchElement]++; });
+  return c;
+}
+
+function favorableElements(elemCounts, dayEl) {
+  const dayCount = elemCounts[dayEl];
+  if (dayCount >= 3) {
+    return [EL_PRODUCES[dayEl], EL_CONTROLLED_BY[dayEl]];
+  } else if (dayCount <= 1) {
+    const producer = Object.entries(EL_PRODUCES).find(([k,v]) => v === dayEl)?.[0];
+    return [producer, dayEl];
+  } else {
+    const producer = Object.entries(EL_PRODUCES).find(([k,v]) => v === dayEl)?.[0];
+    return [producer, EL_PRODUCES[dayEl]];
+  }
+}
+
+let realignSeed = 0;
+function luckyNumbers(pillars, elemCounts) {
+  const dayEl  = pillars[2].element;
+  const favEls = favorableElements(elemCounts, dayEl);
+  const seed   = pillars.reduce((a, p) => a + p.stemIdx * 7 + p.branchIdx * 13, realignSeed * 37);
+  const pool = [];
+  const weights = { Wood:1, Fire:1, Earth:1, Metal:1, Water:1 };
+  favEls.forEach(el => { if (el) weights[el] = 4; });
+  weights[dayEl] = 2;
+  const unFav = [EL_CONTROLLED_BY[dayEl]];
+  unFav.forEach(el => { weights[el] = Math.max(0.5, weights[el] * 0.5); });
+  Object.entries(EL_NUMBERS).forEach(([el, nums]) => {
+    const w = Math.round(weights[el] * 3);
+    for (let i = 0; i < w; i++) pool.push(...nums);
+  });
+  const shuffled = shuffle(pool, seed);
+  const picked = new Set();
+  for (const n of shuffled) {
+    if (n >= 1 && n <= 49) picked.add(n);
+    if (picked.size === 7) break;
+  }
+  for (let i = 1; i <= 49 && picked.size < 7; i++) picked.add(i);
+  const arr = [...picked].slice(0, 7).sort((a, b) => a - b);
+  return { main: arr.slice(0, 6), bonus: arr[6] };
+}
+
+function shuffle(arr, seed) {
+  const a = [...arr]; let s = seed >>> 0;
+  for (let i = a.length - 1; i > 0; i--) {
+    s = (Math.imul(s, 1664525) + 1013904223) >>> 0;
+    const j = s % (i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function fortuneText(pillars, elemCounts) {
+  const dayEl    = pillars[2].element;
+  const dayYY    = pillars[2].yinYang;
+  const yearAnimal = pillars[0].animal;
+  const dayCount = elemCounts[dayEl];
+  const strength = dayCount >= 3 ? 'strong' : dayCount <= 1 ? 'weak' : 'balanced';
+  const favEls   = favorableElements(elemCounts, dayEl);
+
+  const desc        = t('ft_desc_' + dayEl);
+  const strengthTxt = t('ft_' + strength + '_' + dayEl);
+  const favElsStr   = favEls.filter(Boolean).map(el => t('el_' + el)).join(t('ft_and'));
+  const capStr      = strength.charAt(0).toUpperCase() + strength.slice(1);
+
+  const sentence = t('ft_sentence')
+    .replace('{animal}',  t('animal_' + yearAnimal))
+    .replace('{yy}',      t('yy_' + dayYY))
+    .replace('{el}',      t('el_' + dayEl))
+    .replace('{desc}',    desc)
+    .replace('{strength}',strengthTxt)
+    .replace('{favEls}',  favElsStr);
+
+  const strengthLabel = t('ft_strengthLabel')
+    .replace('{yy}',      t('yy_' + dayYY))
+    .replace('{el}',      t('el_' + dayEl))
+    .replace('{strength}',t('strength_' + capStr));
+
+  return { desc: sentence, strengthLabel };
+}
+
+// ═══════════════════════════════════════════════════════
+//  UI RENDERING
+// ═══════════════════════════════════════════════════════
+
+let currentPillars  = null;
+let currentElements = null;
+
+function renderPillars(pillars) {
+  const labels = [t('pillar_year'), t('pillar_month'), t('pillar_day'), t('pillar_hour')];
+  const stemBg = [
+    { bg:'#f2f4ef', border:'rgba(0,50,31,0.05)', textEl:'#404944' },
+    { bg:'#bcedda', border:'rgba(0,50,31,0.05)', textEl:'#214f41' },
+    { bg:'#ffe088', border:'rgba(0,50,31,0.05)', textEl:'#574500' },
+    { bg:'#f2f4ef', border:'rgba(0,50,31,0.05)', textEl:'#404944' },
+  ];
+  const elBadge = {
+    Wood:'bg-[#004b31] text-[#bcedda]', Fire:'bg-[#ba1a1a] text-white',
+    Earth:'bg-[#735c00] text-[#ffe088]', Metal:'bg-[#4040a0] text-white', Water:'bg-[#1d4ed8] text-white'
+  };
+  const grid = document.getElementById('pillarsGrid');
+  grid.innerHTML = pillars.map((p, i) => `
+    <div class="flex flex-col gap-3 pillar-anim" style="animation-delay:${i * 0.12}s">
+      <p class="text-[10px] font-extrabold uppercase tracking-[1px] text-[#404944] text-center">${labels[i]}</p>
+      <div class="rounded-2xl py-5 px-1 flex flex-col items-center gap-2 border"
+           style="background:${stemBg[i].bg}; border-color:${stemBg[i].border}">
+        <div class="chinese-char text-[#00321f] leading-none" style="font-size:2rem; color:${stemBg[i].textEl}">${p.stem}</div>
+        <span class="text-[9px] font-bold uppercase text-center" style="color:${stemBg[i].textEl}; opacity:0.7">${p.stemPin}</span>
+        <span class="text-[10px] font-bold rounded-full px-2 py-0.5 ${elBadge[p.element]}">${t('el_'+p.element)}</span>
+      </div>
+      <div class="bg-[#ecefea] rounded-2xl py-5 px-1 flex flex-col items-center gap-2">
+        <div class="chinese-char text-[#00321f] leading-none" style="font-size:2rem">${p.branch}</div>
+        <span class="text-[9px] font-bold uppercase text-[#404944] opacity-70 text-center">${p.branchPin}</span>
+        <span class="text-[10px] font-bold text-[#404944]">${t('animal_'+p.animal)}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderNumbers(nums) {
+  const mainDiv  = document.getElementById('mainNumbers');
+  const bonusDiv = document.getElementById('bonusRow');
+  const main5 = nums.main.slice(0, 5);
+  const main6 = nums.main[5];
+  mainDiv.innerHTML = main5.map((n, i) => `
+    <div class="w-20 h-20 rounded-full border-2 border-[#ffe088] flex items-center justify-center
+                relative overflow-hidden group cursor-default num-reveal" style="animation-delay:${i * 0.1}s">
+      <div class="absolute inset-0 bg-[rgba(115,92,0,0.2)] group-hover:bg-[rgba(115,92,0,0.35)] transition-colors"></div>
+      <span class="relative font-headline text-3xl font-bold text-[#ffe088]">${String(n).padStart(2,'0')}</span>
+    </div>
+  `).join('');
+  bonusDiv.innerHTML = `
+    <div class="w-20 h-20 rounded-full border-2 border-[#ffe088] flex items-center justify-center
+                relative overflow-hidden group cursor-default num-reveal" style="animation-delay:0.5s">
+      <div class="absolute inset-0 bg-[rgba(115,92,0,0.2)] group-hover:bg-[rgba(115,92,0,0.35)] transition-colors"></div>
+      <span class="relative font-headline text-3xl font-bold text-[#ffe088]">${String(main6).padStart(2,'0')}</span>
+    </div>
+    <div class="relative flex flex-col items-center num-reveal" style="animation-delay:0.6s">
+      <p class="font-body text-[9px] font-bold text-[#ffe088] uppercase tracking-[0.9px] mb-2 whitespace-nowrap">${t('manifest_bonusLabel')}</p>
+      <div class="w-20 h-20 rounded-full bg-[#ffe088] flex items-center justify-center shadow-[0_0_20px_rgba(255,224,136,0.35)]">
+        <span class="font-headline text-3xl font-black text-[#00321f]">${String(nums.bonus).padStart(2,'0')}</span>
+      </div>
+    </div>
+  `;
+}
+
+const EL_ORDER = ['Wood','Fire','Earth','Metal','Water'];
+const EL_EMOJI = { Wood:'🌿', Fire:'🔥', Earth:'⛰', Metal:'⚙', Water:'💧' };
+
+function renderElements(counts) {
+  const total = Object.values(counts).reduce((a, b) => a + b, 0) || 8;
+  const bars  = document.getElementById('elementBars');
+  bars.innerHTML = EL_ORDER.map(el => {
+    const pct   = Math.round((counts[el] / total) * 100);
+    const theme = EL_THEME[el];
+    return `
+      <div class="flex flex-col gap-2">
+        <div class="flex justify-between text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]">
+          <span>${EL_EMOJI[el]} ${t('el_'+el)}</span><span>${pct}%</span>
+        </div>
+        <div class="h-3 w-full bg-white rounded-full overflow-hidden">
+          <div class="h-full rounded-full bar-anim" style="background:${theme.barColor}; width:${pct}%"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderElementDynamics(counts, dayEl) {
+  const grid    = document.getElementById('elementDynamicsGrid');
+  const favEls  = favorableElements(counts, dayEl);
+  grid.innerHTML = EL_ORDER.map(el => {
+    const theme      = EL_THEME[el];
+    const isFav      = favEls.includes(el);
+    const isDayMaster= el === dayEl;
+    const role       = isDayMaster ? t('dynamics_dayMaster') : isFav ? t('dynamics_favorable') : '';
+    return `
+      <div class="flex flex-col items-center gap-2 p-3 rounded-2xl border transition-all"
+           style="background:${theme.bg}; border-color:${isFav||isDayMaster ? theme.border : 'transparent'}">
+        <div class="text-2xl">${EL_EMOJI[el]}</div>
+        <div class="text-[11px] font-bold" style="color:${theme.text}">${t('el_'+el)}</div>
+        <div class="text-[18px] font-bold font-headline" style="color:${theme.icon}">${counts[el] || 0}</div>
+        ${role ? `<div class="text-[8px] font-bold uppercase tracking-wider" style="color:${theme.icon}">${role}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderLuckyAttributes(pillars, counts) {
+  const dayEl  = pillars[2].element;
+  const favEls = favorableElements(counts, dayEl);
+  const primEl = favEls[0] || dayEl;
+  const theme  = EL_THEME[primEl];
+
+  const card = document.getElementById('colorCard');
+  card.style.background = theme.bg;
+  document.getElementById('colorLabel').style.color   = theme.text;
+  document.getElementById('colorLabel').style.opacity = '0.8';
+  document.getElementById('colorValue').textContent   = t('el_label_' + primEl);
+  document.getElementById('colorValue').style.color   = theme.text;
+  document.getElementById('colorIcon').style.background = theme.icon;
+
+  document.getElementById('goldenHour').textContent = EL_HOURS[primEl];
+  document.getElementById('luckyDir').textContent   = t(EL_DIRECTION_KEYS[primEl]);
+}
+
+function updateSubtitle(pillars) {
+  const p = pillars[2];
+  document.getElementById('manifestSubtitle').textContent = t('manifest_subtitleDynamic')
+    .replace('{yy}', t('yy_' + p.yinYang))
+    .replace('{el}', t('el_' + p.element));
+}
+
+function renderInitial() {
+  const p0 = pillar(8, 4); const p1 = pillar(0, 4);
+  const p2 = pillar(4, 6); const p3 = pillar(6, 8);
+  const pils = [p0, p1, p2, p3];
+  const counts = countElements(pils);
+  renderPillars(pils);
+  renderElements(counts);
+  renderNumbers(luckyNumbers(pils, counts));
+  renderLuckyAttributes(pils, counts);
+}
+
+function calculate() {
+  const dateStr = document.getElementById('birthDate').value;
+  const timeStr = document.getElementById('birthTime').value;
+  const name    = document.getElementById('nameInput').value.trim();
+  const errDiv  = document.getElementById('formError');
+
+  if (!dateStr) {
+    document.getElementById('birthDate').classList.add('input-error');
+    errDiv.textContent = t('form_errorDate');
+    errDiv.classList.remove('hidden');
+    return;
+  }
+  errDiv.classList.add('hidden');
+
+  const [y, m, d] = dateStr.split('-').map(Number);
+  let hr = 0, min = 0;
+  if (timeStr) { [hr, min] = timeStr.split(':').map(Number); }
+
+  const yp = yearPillar(y, m, d);
+  const mp = monthPillar(y, m, d, yp.stemIdx);
+  const dp = dayPillar(y, m, d);
+  const hp = hourPillar(hr, min, dp.stemIdx);
+  const pillars = [yp, mp, dp, hp];
+  const counts  = countElements(pillars);
+
+  currentPillars  = pillars;
+  currentElements = counts;
+  realignSeed     = 0;
+
+  if (name) {
+    currentUserName = name;
+    const initials = name.charAt(0).toUpperCase();
+    document.getElementById('drawerName').textContent    = name;
+  }
+
+  const _calcPhase = t('phase_template')
+    .replace('{el}', t('el_'+yp.element)).replace('{animal}', t('animal_'+yp.animal))
+    .replace('{yy}', t('yy_'+dp.yinYang)).replace('{dayEl}', t('el_'+dp.element));
+  document.getElementById('drawerPhase').textContent  = _calcPhase;
+
+  renderPillars(pillars);
+  renderElements(counts);
+  renderNumbers(luckyNumbers(pillars, counts));
+  renderLuckyAttributes(pillars, counts);
+  updateSubtitle(pillars);
+
+  const dCount   = counts[dp.element];
+  const strength = dCount >= 3 ? 'Strong' : dCount <= 1 ? 'Weak' : 'Balanced';
+  document.getElementById('dayMasterLabel').textContent = t('ft_strengthLabel')
+    .replace('{yy}', t('yy_'+dp.yinYang)).replace('{el}', t('el_'+dp.element)).replace('{strength}', t('strength_'+strength));
+
+  const { desc, strengthLabel } = fortuneText(pillars, counts);
+  document.getElementById('readingText').textContent    = desc;
+  document.getElementById('readingStrength').textContent = strengthLabel;
+  document.getElementById('masterReading').classList.remove('hidden');
+  document.getElementById('masterReading').classList.add('flex');
+
+  renderElementDynamics(counts, dp.element);
+  document.getElementById('elementInteraction').classList.remove('hidden');
+
+  document.querySelector('section.lg\\:col-span-8').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function realign() {
+  if (!currentPillars) { calculate(); return; }
+  realignSeed++;
+  renderNumbers(luckyNumbers(currentPillars, currentElements));
+}
+
+// Boot
+setLang('en');
+
+// ═══════════════════════════════════════════════════════
+//  TAB SWITCHING
+// ═══════════════════════════════════════════════════════
+function showTab(tab) {
+  document.getElementById('totoSection').classList.toggle('hidden', tab !== 'toto');
+  document.getElementById('meihuaSection').classList.toggle('hidden', tab !== 'meihua');
+  document.getElementById('fengShuiSection').classList.toggle('hidden', tab !== 'fengshui');
+  // Top nav tabs
+  document.getElementById('tab-toto').classList.toggle('active', tab === 'toto');
+  document.getElementById('tab-meihua').classList.toggle('active', tab === 'meihua');
+  // Desktop sidebar tabs
+  ['toto','meihua','fengshui'].forEach(k => {
+    const el = document.getElementById('stab-' + k);
+    if (el) el.classList.toggle('active', tab === k);
+  });
+  // Mobile drawer tabs
+  ['toto','meihua','fengshui'].forEach(k => {
+    const el = document.getElementById('mtab-' + k);
+    if (el) el.classList.toggle('active', tab === k);
+  });
+  if (tab === 'meihua') updateMeihuaClock();
+}
+
+let mobileMenuOpen = false;
+function toggleMobileMenu() {
+  mobileMenuOpen = !mobileMenuOpen;
+  document.getElementById('mobileDrawer').classList.toggle('open', mobileMenuOpen);
+  document.getElementById('drawerBackdrop').classList.toggle('open', mobileMenuOpen);
+  document.getElementById('closeOverlay').classList.toggle('hidden', !mobileMenuOpen);
+  document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+}
+
+// Anime avatar on load (DiceBear avataaars) — shared seed for both nav & drawer
+(function() {
+  const seed = Math.random().toString(36).slice(2, 10);
+  const src  = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&skin=pale,light,tanned,yellow`;
+  document.getElementById('avatarImg').src = src;
+  document.getElementById('drawerAvatarImg').src = src;
+})();
+
+// ═══════════════════════════════════════════════════════
+//  梅花易数 ENGINE
+// ═══════════════════════════════════════════════════════
+
+// 先天八卦: 乾1 兑2 离3 震4 巽5 坎6 艮7 坤8
+// lines: [bottom, middle, top], 1=yang 0=yin
+const MH_TRIGRAMS = {
+  1:{name:'乾',nature:'天',symbol:'☰',element:'金',lines:[1,1,1],yinYang:'阳',family:'父',body:'头'},
+  2:{name:'兑',nature:'泽',symbol:'☱',element:'金',lines:[0,1,1],yinYang:'阴',family:'少女',body:'口'},
+  3:{name:'离',nature:'火',symbol:'☲',element:'火',lines:[1,0,1],yinYang:'阴',family:'中女',body:'目'},
+  4:{name:'震',nature:'雷',symbol:'☳',element:'木',lines:[0,0,1],yinYang:'阳',family:'长男',body:'足'},
+  5:{name:'巽',nature:'风',symbol:'☴',element:'木',lines:[1,1,0],yinYang:'阴',family:'长女',body:'股'},
+  6:{name:'坎',nature:'水',symbol:'☵',element:'水',lines:[0,1,0],yinYang:'阳',family:'中男',body:'耳'},
+  7:{name:'艮',nature:'山',symbol:'☶',element:'土',lines:[1,0,0],yinYang:'阳',family:'少男',body:'手'},
+  8:{name:'坤',nature:'地',symbol:'☷',element:'土',lines:[0,0,0],yinYang:'阴',family:'母',body:'腹'}
+};
+
+// 五行生克
+const MH_PRODUCES   = {金:'水',水:'木',木:'火',火:'土',土:'金'};
+const MH_OVERCOMES  = {金:'木',木:'土',土:'水',水:'火',火:'金'};
+
+// 64卦数据 key:'upper_lower'
+const MH_HEXAGRAMS = {
+  '1_1':{name:'乾为天',num:1,fortune:'大吉',keyword:'刚健自强',meaning:'龙行天下，阳刚纯粹，宜进取创业，诸事可成，大吉大利。'},
+  '1_2':{name:'天泽履',num:10,fortune:'吉',keyword:'谨慎行事',meaning:'履虎尾而不咬，凡事谨慎则吉，礼仪周全方可行，忌莽撞行事。'},
+  '1_3':{name:'天火同人',num:13,fortune:'吉',keyword:'同心合力',meaning:'志同道合，合作共赢，宽阔胸怀聚贤才，贵人相助，诸事可成。'},
+  '1_4':{name:'天雷无妄',num:25,fortune:'中',keyword:'顺应自然',meaning:'无妄之灾须谨防，顺天应命勿强求，静待良机方为上，妄动则凶。'},
+  '1_5':{name:'天风姤',num:44,fortune:'中',keyword:'邂逅相遇',meaning:'一阴初遇五阳，防小人阴险，女性缘分起，婚姻感情需审慎。'},
+  '1_6':{name:'天水讼',num:6,fortune:'凶',keyword:'争讼纠纷',meaning:'争讼不利，宜和解止讼，不宜冒进，慎防口舌是非，中途宜止。'},
+  '1_7':{name:'天山遁',num:33,fortune:'中',keyword:'适时退隐',meaning:'识时务者为俊杰，暂退以保存实力，韬光养晦待时机，退守则吉。'},
+  '1_8':{name:'天地否',num:12,fortune:'凶',keyword:'阴阳阻塞',meaning:'天地不交，万物不通，时运不济，宜守静待变，切勿强进。'},
+  '2_1':{name:'泽天夬',num:43,fortune:'吉',keyword:'果断决断',meaning:'决而去之，阳气盛行，宜果断行事，当机立断则成，优柔寡断则失。'},
+  '2_2':{name:'兑为泽',num:58,fortune:'吉',keyword:'喜悦和乐',meaning:'喜悦欢欣，口才出众，社交活跃，感情顺遂，财运良好。'},
+  '2_3':{name:'泽火革',num:49,fortune:'吉',keyword:'变革更新',meaning:'革故鼎新，去旧迎新，变化带来机遇，顺势而为则大利，保守则失机。'},
+  '2_4':{name:'泽雷随',num:17,fortune:'吉',keyword:'随机应变',meaning:'随时应变，顺应时势，跟随贵人则事半功倍，切勿固执己见。'},
+  '2_5':{name:'泽风大过',num:28,fortune:'小凶',keyword:'过犹不及',meaning:'栋梁弯曲，超负荷运转，需及时减负，切防物极必反，中庸为宜。'},
+  '2_6':{name:'泽水困',num:47,fortune:'凶',keyword:'困境磨砺',meaning:'陷于困境，但困中求通，君子处困修德，冷静应对，静待转机。'},
+  '2_7':{name:'泽山咸',num:31,fortune:'吉',keyword:'感应相通',meaning:'男女相感，心意相通，感情婚姻大吉，合作事业顺畅，以柔克刚。'},
+  '2_8':{name:'泽地萃',num:45,fortune:'吉',keyword:'聚集汇合',meaning:'万物聚集，人心归附，合群共进，财运亨通，宜凝聚力量谋大事。'},
+  '3_1':{name:'火天大有',num:14,fortune:'大吉',keyword:'大有所获',meaning:'居高临下，光明在上，大有所获，事业财运皆旺，名利双收。'},
+  '3_2':{name:'火泽睽',num:38,fortune:'凶',keyword:'乖违分离',meaning:'阴阳背离，意见相左，防合作破裂，小事可行大事难成，须化解矛盾。'},
+  '3_3':{name:'离为火',num:30,fortune:'中吉',keyword:'光明附丽',meaning:'双火相映，光明灿烂，才华出众，需有所依附方能发挥，文采事业旺。'},
+  '3_4':{name:'火雷噬嗑',num:21,fortune:'中',keyword:'咬合决断',meaning:'中有障碍，需果断清除，官司诉讼之象，强行突破则成，拖延则凶。'},
+  '3_5':{name:'火风鼎',num:50,fortune:'大吉',keyword:'鼎新革故',meaning:'鼎象立业，稳固根基，事业大成，文化艺术皆旺，改革创新大利。'},
+  '3_6':{name:'火水未济',num:64,fortune:'中',keyword:'未竟之业',meaning:'阴阳错位，诸事未成，需继续努力，有志者事竟成，终将成功。'},
+  '3_7':{name:'火山旅',num:56,fortune:'中',keyword:'旅途奔波',meaning:'客居他乡，漂泊不定，宜谦逊守礼，贸然行事有险，利于外出求职。'},
+  '3_8':{name:'火地晋',num:35,fortune:'大吉',keyword:'晋升进步',meaning:'旭日东升，仕途光明，晋升有望，名利双收，事业蒸蒸日上。'},
+  '4_1':{name:'雷天大壮',num:34,fortune:'大吉',keyword:'阳刚强盛',meaning:'雷动天上，阳气旺盛，行事强劲有力，进取则成，宜积极主动。'},
+  '4_2':{name:'雷泽归妹',num:54,fortune:'凶',keyword:'轻率出行',meaning:'少女出嫁，草率行事，婚姻需慎重，勿轻率决定，防感情冲动。'},
+  '4_3':{name:'雷火丰',num:55,fortune:'吉',keyword:'丰盛盛大',meaning:'雷火交加，气象宏大，事业鼎盛，但盛极必衰，居安思危方为智。'},
+  '4_4':{name:'震为雷',num:51,fortune:'中',keyword:'震动奋发',meaning:'双雷震动，警醒惕惧，经历惊吓后奋发图强，知惧而后安，终获吉。'},
+  '4_5':{name:'雷风恒',num:32,fortune:'吉',keyword:'恒久坚持',meaning:'雷风并行，持之以恒，婚姻稳固，事业长久，坚守正道必有成。'},
+  '4_6':{name:'雷水解',num:40,fortune:'吉',keyword:'解除险阻',meaning:'雷雨解困，险阻消除，烦恼化解，否极泰来，宜行动解决积压问题。'},
+  '4_7':{name:'雷山小过',num:62,fortune:'小凶',keyword:'小有过失',meaning:'可行小事，不宜大动，谨慎行事免小过，飞鸟不可高翔，守中为上。'},
+  '4_8':{name:'雷地豫',num:16,fortune:'吉',keyword:'欢乐豫悦',meaning:'和乐顺动，众心归附，音乐文艺旺，利于筹谋大事，预则立不预则废。'},
+  '5_1':{name:'风天小畜',num:9,fortune:'小吉',keyword:'蓄势待发',meaning:'蓄积力量，暂时受阻，宜积德积善，待时而动则吉，小有收获。'},
+  '5_2':{name:'风泽中孚',num:61,fortune:'吉',keyword:'诚信守中',meaning:'内外诚信，孚信于人，守诚则吉，宜以诚相待，官讼宜和解。'},
+  '5_3':{name:'风火家人',num:37,fortune:'吉',keyword:'家庭和睦',meaning:'家道兴旺，夫妻和谐，各守其位，家和万事兴，利于家庭内部事务。'},
+  '5_4':{name:'风雷益',num:42,fortune:'大吉',keyword:'增益获利',meaning:'上损下益，利于民众，投资经营大利，广结善缘，诸事增益。'},
+  '5_5':{name:'巽为风',num:57,fortune:'中',keyword:'谦逊顺从',meaning:'随风潜入，顺势而为，谦逊低调，利于商旅外交，宜进退适度。'},
+  '5_6':{name:'风水涣',num:59,fortune:'中',keyword:'涣散消融',meaning:'风行水上，聚散离合，宜团结一致，防离散瓦解，涣然冰释可期。'},
+  '5_7':{name:'风山渐',num:53,fortune:'吉',keyword:'渐进有序',meaning:'鸿雁循序渐进，不可操之过急，按部就班则成，功到自然成。'},
+  '5_8':{name:'风地观',num:20,fortune:'中',keyword:'观察审时',meaning:'观风察势，审时度势，宜观察不宜轻动，等待时机，以静制动。'},
+  '6_1':{name:'水天需',num:5,fortune:'中',keyword:'等待时机',meaning:'云行雨施，时机未到，需耐心等待，守正则吉，强行则凶。'},
+  '6_2':{name:'水泽节',num:60,fortune:'中',keyword:'节制适度',meaning:'节制有度，不可过分，量入为出，守中则吉，过节则苦。'},
+  '6_3':{name:'水火既济',num:63,fortune:'中吉',keyword:'既成完备',meaning:'阴阳交泰，诸事已成，需防患未然，居安思危，防止成就后的松懈。'},
+  '6_4':{name:'水雷屯',num:3,fortune:'中',keyword:'初创艰难',meaning:'万物初生，艰难创业，坚持不懈，终将出头，初难后易。'},
+  '6_5':{name:'水风井',num:48,fortune:'中吉',keyword:'滋养不竭',meaning:'井养无穷，诚实勤劳，学问德行深厚，利于长久发展，养人利己。'},
+  '6_6':{name:'坎为水',num:29,fortune:'凶',keyword:'重重险阻',meaning:'险坑重重，前途艰难，需诚信守正，逐步克服险阻，坚持正道终可脱险。'},
+  '6_7':{name:'水山蹇',num:39,fortune:'凶',keyword:'行路艰难',meaning:'前路艰险，举步维艰，需借助贵人，退守待援，利西南不利东北。'},
+  '6_8':{name:'水地比',num:8,fortune:'吉',keyword:'亲近协助',meaning:'众皆亲附，上下一心，合群互助则大吉，孤立则凶，宜广结善缘。'},
+  '7_1':{name:'山天大畜',num:26,fortune:'吉',keyword:'厚积薄发',meaning:'积聚力量，厚积薄发，学识渊博，时机成熟则大展身手，积德行善。'},
+  '7_2':{name:'山泽损',num:41,fortune:'中',keyword:'损减以益',meaning:'有损有益，减损自身以益他人，牺牲小利获长远利益，诚意奉献。'},
+  '7_3':{name:'山火贲',num:22,fortune:'中吉',keyword:'文采装饰',meaning:'文质彬彬，外表光鲜，宜从事文艺工作，外交有利，勿重形而忘实。'},
+  '7_4':{name:'山雷颐',num:27,fortune:'中',keyword:'颐养蓄育',meaning:'颐养身心，饮食起居需注意，言行举止影响运势，养正则吉。'},
+  '7_5':{name:'山风蛊',num:18,fortune:'中',keyword:'整治弊病',meaning:'腐败滋生，需整治革新，勇于担当改革，浴火重生，拨乱反正。'},
+  '7_6':{name:'山水蒙',num:4,fortune:'中',keyword:'启蒙求知',meaning:'蒙昧初开，求知学习，诚心求教则得良师，进步可期，宜虚心学习。'},
+  '7_7':{name:'艮为山',num:52,fortune:'中',keyword:'静止止步',meaning:'适时停止，知止而止，保守稳健，宜守不宜进，静观其变。'},
+  '7_8':{name:'山地剥',num:23,fortune:'凶',keyword:'剥落衰退',meaning:'小人当道，事业剥落，宜守正不妄为，等待时机，防止损失蔓延。'},
+  '8_1':{name:'地天泰',num:11,fortune:'大吉',keyword:'通泰顺畅',meaning:'天地交泰，万象更新，诸事顺利，财运亨通，大吉大利，万物生长。'},
+  '8_2':{name:'地泽临',num:19,fortune:'吉',keyword:'临近亲近',meaning:'居高临下，亲近百姓，事业向好，仕途光明，宜主动接触事务。'},
+  '8_3':{name:'地火明夷',num:36,fortune:'凶',keyword:'才华受损',meaning:'光明入地，才华被压，宜隐忍蛰伏，藏锋待时，不可张扬。'},
+  '8_4':{name:'地雷复',num:24,fortune:'吉',keyword:'复归返本',meaning:'一阳来复，冬去春来，否极泰来，重新出发大吉，万象更新。'},
+  '8_5':{name:'地风升',num:46,fortune:'吉',keyword:'上升进步',meaning:'积土成山，循序上升，事业稳步提升，前途光明，积累终成就。'},
+  '8_6':{name:'地水师',num:7,fortune:'中',keyword:'统帅行师',meaning:'领兵出征，纪律严明，需有统帅之才，凡事需谋后动，团结则胜。'},
+  '8_7':{name:'地山谦',num:15,fortune:'吉',keyword:'谦逊有德',meaning:'谦虚处世，厚德积善，谦谦君子，终获众人尊重，运势持续向好。'},
+  '8_8':{name:'坤为地',num:2,fortune:'吉',keyword:'厚德载物',meaning:'大地包容，厚德承载，宜柔顺处世，顺势而为则大吉，利于长远。'}
+};
+
+// 各领域指引 — retrieved from t() at render time
+
+// 线转卦号
+function mhLinesToTrigram(l) {
+  const map = {'111':1,'011':2,'101':3,'001':4,'110':5,'010':6,'100':7,'000':8};
+  return map[l.join('')];
+}
+
+// 获取数字起卦
+function mhNumToTrigram(n) {
+  const r = n % 8; return r === 0 ? 8 : r;
+}
+function mhNumToLine(n) {
+  const r = n % 6; return r === 0 ? 6 : r;
+}
+
+// 互卦（取二三四爻为下，三四五爻为上）
+function mhNuclear(lines) {
+  const nuLower = [lines[1], lines[2], lines[3]];
+  const nuUpper = [lines[2], lines[3], lines[4]];
+  return { upper: mhLinesToTrigram(nuUpper), lower: mhLinesToTrigram(nuLower) };
+}
+
+// 变卦（翻转动爻）
+function mhChanged(lines, changingLine) {
+  const cl = [...lines];
+  const idx = changingLine - 1;
+  cl[idx] = cl[idx] === 1 ? 0 : 1;
+  const lower = cl.slice(0, 3);
+  const upper = cl.slice(3, 6);
+  return { upper: mhLinesToTrigram(upper), lower: mhLinesToTrigram(lower) };
+}
+
+// 体卦判定: 阳卦(奇数阳爻)为乾1震4坎6艮7，取上卦为体
+// 规则：上卦为体，下卦为用（此为简化通行规则）
+function mhTiYong(upperNum) {
+  const yangTri = [1, 4, 6, 7]; // 阳卦
+  const isTiYang = yangTri.includes(upperNum);
+  return isTiYang;
+}
+
+// 五行生克断语
+function mhRelation(tiEl, yongEl) {
+  if (tiEl === yongEl) return {label:t('mh_relHarmony'),      icon:'⚖️', fortune:t('mh_relHarmonyFortune'),      fortuneKey:'中吉', isGood:true,  desc:t('mh_relHarmonyDesc')};
+  if (MH_PRODUCES[tiEl]  === yongEl) return {label:t('mh_relTiProdYong'), icon:'🌿', fortune:t('mh_relTiProdYongFortune'), fortuneKey:'吉',  isGood:true,  desc:t('mh_relTiProdYongDesc')};
+  if (MH_PRODUCES[yongEl]=== tiEl)   return {label:t('mh_relYongProdTi'), icon:'✨', fortune:t('mh_relYongProdTiFortune'), fortuneKey:'大吉', isGood:true,  desc:t('mh_relYongProdTiDesc')};
+  if (MH_OVERCOMES[tiEl] === yongEl) return {label:t('mh_relTiOverYong'), icon:'⚔️', fortune:t('mh_relTiOverYongFortune'), fortuneKey:'吉',  isGood:true,  desc:t('mh_relTiOverYongDesc')};
+  if (MH_OVERCOMES[yongEl]=== tiEl)  return {label:t('mh_relYongOverTi'), icon:'⚠️', fortune:t('mh_relYongOverTiFortune'), fortuneKey:'凶',  isGood:false, desc:t('mh_relYongOverTiDesc')};
+  return {label:'—', icon:'◯', fortune:'—', fortuneKey:'中', isGood:null, desc:'—'};
+}
+
+// 爻位五行（简化：以卦的五行为基础，六爻对应六亲）
+// Yao labels/roles fetched via t() at render time
+
+// 当前选中的起卦方法
+let mhCurrentMethod = 'time';
+
+function setMeihuaMethod(method) {
+  mhCurrentMethod = method;
+  ['time','number','object'].forEach(m => {
+    const btn = document.getElementById('mh-method-' + m);
+    const inp = document.getElementById('mh-input-' + m);
+    if (m === method) {
+      btn.style.background = '#004b31'; btn.style.color = 'white'; btn.style.borderColor = '#004b31';
+      inp.classList.remove('hidden'); inp.classList.add('flex');
+    } else {
+      btn.style.background = '#ecefea'; btn.style.color = '#404943'; btn.style.borderColor = '#ecefea';
+      inp.classList.add('hidden'); inp.classList.remove('flex');
+    }
+  });
+}
+
+function updateMeihuaClock() {
+  const now = new Date();
+  const y = now.getFullYear() % 100;
+  const mo = now.getMonth() + 1;
+  const d  = now.getDate();
+  const h  = now.getHours() === 0 ? 12 : Math.ceil(now.getHours() / 2); // 时辰
+  const sum = y + mo + d + h;
+  document.getElementById('mh-time-display').textContent =
+    `${now.getFullYear()}年${mo}月${d}日 ${now.getHours().toString().padStart(2,'0')}时`;
+  document.getElementById('mh-time-numbers').textContent =
+    `${y} + ${mo} + ${d} + ${h} = ${sum}`;
+}
+
+function clearInputError(el) {
+  el.classList.remove('input-error');
+}
+
+function castMeihua() {
+  const errDiv = document.getElementById('mh-error');
+  errDiv.classList.add('hidden');
+  // Reset all field error states on each attempt
+  ['mh-upper-num','mh-lower-num','mh-line-num','mh-obj-upper','mh-obj-lower',
+   'mh-question-time','mh-question-number','mh-question-object']
+    .forEach(id => document.getElementById(id).classList.remove('input-error'));
+
+  let upperNum, lowerNum, changingLineNum, question;
+
+  if (mhCurrentMethod === 'time') {
+    const now = new Date();
+    const y = now.getFullYear() % 100;
+    const mo = now.getMonth() + 1;
+    const d  = now.getDate();
+    const h  = now.getHours() === 0 ? 12 : Math.ceil(now.getHours() / 2);
+    upperNum = mhNumToTrigram(y + mo + d);
+    lowerNum = mhNumToTrigram(y + mo + d + h);
+    changingLineNum = mhNumToLine(y + mo + d + h);
+    question = document.getElementById('mh-question-time').value.trim();
+    if (!question) { document.getElementById('mh-question-time').classList.add('input-error'); errDiv.textContent = t('mh_errorQuestion'); errDiv.classList.remove('hidden'); return; }
+  } else if (mhCurrentMethod === 'number') {
+    const u = parseInt(document.getElementById('mh-upper-num').value);
+    const l = parseInt(document.getElementById('mh-lower-num').value);
+    const li = parseInt(document.getElementById('mh-line-num').value);
+    if (!u || !l || !li || li < 1 || li > 6) {
+      if (!u)  document.getElementById('mh-upper-num').classList.add('input-error');
+      if (!l)  document.getElementById('mh-lower-num').classList.add('input-error');
+      if (!li || li < 1 || li > 6) document.getElementById('mh-line-num').classList.add('input-error');
+      errDiv.textContent = t('mh_errorInputs'); errDiv.classList.remove('hidden'); return;
+    }
+    upperNum = mhNumToTrigram(u);
+    lowerNum = mhNumToTrigram(l);
+    changingLineNum = li;
+    question = document.getElementById('mh-question-number').value.trim();
+    if (!question) { document.getElementById('mh-question-number').classList.add('input-error'); errDiv.textContent = t('mh_errorQuestion'); errDiv.classList.remove('hidden'); return; }
+  } else {
+    const u = parseInt(document.getElementById('mh-obj-upper').value);
+    const l = parseInt(document.getElementById('mh-obj-lower').value);
+    if (!u || !l) {
+      if (!u) document.getElementById('mh-obj-upper').classList.add('input-error');
+      if (!l) document.getElementById('mh-obj-lower').classList.add('input-error');
+      errDiv.textContent = t('mh_errorObjects'); errDiv.classList.remove('hidden'); return;
+    }
+    upperNum = mhNumToTrigram(u);
+    lowerNum = mhNumToTrigram(l);
+    changingLineNum = mhNumToLine(u + l);
+    question = document.getElementById('mh-question-object').value.trim();
+    if (!question) { document.getElementById('mh-question-object').classList.add('input-error'); errDiv.textContent = t('mh_errorQuestion'); errDiv.classList.remove('hidden'); return; }
+  }
+
+  const benKey  = `${upperNum}_${lowerNum}`;
+  const benHex  = MH_HEXAGRAMS[benKey];
+  const upperTri= MH_TRIGRAMS[upperNum];
+  const lowerTri= MH_TRIGRAMS[lowerNum];
+
+  // All 6 lines [bottom→top]: lower[0..2] then upper[0..2]
+  const allLines = [...lowerTri.lines, ...upperTri.lines];
+
+  // 互卦
+  const nuIdx   = mhNuclear(allLines);
+  const nuKey   = `${nuIdx.upper}_${nuIdx.lower}`;
+  const nuHex   = MH_HEXAGRAMS[nuKey];
+  const nuUpper = MH_TRIGRAMS[nuIdx.upper];
+  const nuLower = MH_TRIGRAMS[nuIdx.lower];
+  const nuLines = [...nuLower.lines, ...nuUpper.lines];
+
+  // 变卦
+  const bianIdx  = mhChanged(allLines, changingLineNum);
+  const bianKey  = `${bianIdx.upper}_${bianIdx.lower}`;
+  const bianHex  = MH_HEXAGRAMS[bianKey];
+  const bianUpper= MH_TRIGRAMS[bianIdx.upper];
+  const bianLower= MH_TRIGRAMS[bianIdx.lower];
+  const bianLines= [...bianLower.lines, ...bianUpper.lines];
+
+  // 体用 (上卦为体卦，下卦为用卦)
+  const tiEl    = upperTri.element;
+  const yongEl  = lowerTri.element;
+  const relation= mhRelation(tiEl, yongEl);
+
+  currentMeihuaData = {
+    question, benHex, upperTri, lowerTri, allLines, changingLineNum,
+    nuHex, nuLines, nuUpper, nuLower,
+    bianHex, bianLines, bianUpper, bianLower,
+    tiEl, yongEl, relation,
+    benKey, nuKey, bianKey,
+    upperNum, lowerNum,
+    bianUpperNum: bianIdx.upper, bianLowerNum: bianIdx.lower
+  };
+  renderMeihuaResult(currentMeihuaData);
+}
+
+function renderMeihuaHexagram(containerId, lines, changingLine) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  // Display lines 6 to 1 (top to bottom), index 5 down to 0
+  for (let i = 5; i >= 0; i--) {
+    const isChanging = (i + 1) === changingLine;
+    const isYang = lines[i] === 1;
+    const sep = (i === 2) ? '<div style="height:6px"></div>' : '';
+    let html;
+    if (isYang) {
+      html = `<div class="hx-yang${isChanging ? ' hx-changing' : ''}" style="animation-delay:${(5-i)*0.06}s" class="hx-anim"></div>`;
+    } else {
+      html = `<div class="hx-yin${isChanging ? ' hx-changing' : ''}"><span></span><span></span></div>`;
+    }
+    el.innerHTML += sep + html;
+  }
+  // Add animated class properly
+  el.querySelectorAll('.hx-yang, .hx-yin').forEach((line, idx) => {
+    line.style.animation = `hexReveal 0.35s ease ${idx * 0.06}s forwards`;
+    line.style.opacity = '0';
+  });
+}
+
+function renderMeihuaResult(data) {
+  const { question, benHex, upperTri, lowerTri, allLines, changingLineNum,
+          nuHex, nuLines, nuUpper, nuLower,
+          bianHex, bianLines, bianUpper, bianLower,
+          tiEl, yongEl, relation,
+          benKey, nuKey, bianKey,
+          upperNum, lowerNum, bianUpperNum, bianLowerNum } = data;
+
+  const tBen  = (t('mh_hex')[benKey])  || benHex;
+  const tNu   = (t('mh_hex')[nuKey])   || nuHex;
+  const tBian = (t('mh_hex')[bianKey]) || bianHex;
+  const triN  = t('mh_triNature');
+  const triEl = t('mh_triElement');
+
+  const now = new Date();
+  document.getElementById('mh-question-display').textContent = question;
+  document.getElementById('mh-cast-time').textContent =
+    `${now.getMonth()+1}/${now.getDate()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+
+  renderMeihuaHexagram('mh-hex-benkua',  allLines,  changingLineNum);
+  renderMeihuaHexagram('mh-hex-hukua',   nuLines,   null);
+  renderMeihuaHexagram('mh-hex-biankua', bianLines, null);
+
+  // 本卦
+  document.getElementById('mh-benkua-name').textContent = tBen.name;
+  document.getElementById('mh-benkua-keyword').textContent = tBen.keyword;
+  document.getElementById('mh-benkua-full-name').textContent =
+    t('mh_hexFullNameTpl')
+      .replace('{num}', benHex.num).replace('{name}', tBen.name)
+      .replace('{upper}', triN[upperNum]).replace('{lower}', triN[lowerNum]);
+  document.getElementById('mh-benkua-meaning').textContent = tBen.meaning;
+  document.getElementById('mh-changing-line').textContent =
+    t('mh_changingLineTpl').replace('{n}', changingLineNum);
+
+  // 互卦
+  document.getElementById('mh-hukua-name').textContent = tNu.name;
+  document.getElementById('mh-hukua-keyword').textContent = tNu.keyword;
+
+  // 变卦
+  document.getElementById('mh-biankua-name').textContent = tBian.name;
+  document.getElementById('mh-biankua-keyword').textContent = tBian.keyword;
+  document.getElementById('mh-biankua-full-name').textContent =
+    t('mh_hexFullNameTpl')
+      .replace('{num}', bianHex.num).replace('{name}', tBian.name)
+      .replace('{upper}', triN[bianUpperNum]).replace('{lower}', triN[bianLowerNum]);
+  document.getElementById('mh-biankua-meaning').textContent = tBian.meaning;
+
+  // 体用
+  document.getElementById('mh-ti-icon').textContent = upperTri.name;
+  document.getElementById('mh-ti-name').textContent = `${upperTri.name} · ${triN[upperNum]}`;
+  document.getElementById('mh-ti-element').textContent = triEl[upperNum];
+  document.getElementById('mh-yong-icon').textContent = lowerTri.name;
+  document.getElementById('mh-yong-name').textContent = `${lowerTri.name} · ${triN[lowerNum]}`;
+  document.getElementById('mh-yong-element').textContent = triEl[lowerNum];
+
+  // 生克关系
+  document.getElementById('mh-relation-icon').textContent  = relation.icon;
+  document.getElementById('mh-relation-label').textContent = `${relation.label} — ${relation.fortune}`;
+  document.getElementById('mh-relation-desc').textContent  = relation.desc;
+
+  // 吉凶 badge — use fortuneKey for color, translated string for display
+  const badge = document.getElementById('mh-fortune-badge');
+  const fortuneColors = {'大吉':'#004b31,#ffe088','吉':'#004b31,#bcedda','小吉':'#735c00,#fff3c4','中吉':'#004b31,#bcedda','中':'#404943,#ecefea','小凶':'#93000a,#ffdad6','凶':'#ba1a1a,white','大凶':'#690005,white'};
+  const [bg, col] = (fortuneColors[relation.fortuneKey] || '#404943,#ecefea').split(',');
+  badge.style.background = bg; badge.style.color = col;
+  badge.textContent = relation.fortune;
+
+  // 综合断语
+  const benF  = t('mh_triFortune')[benHex.fortune]  || benHex.fortune;
+  const bianF = t('mh_triFortune')[bianHex.fortune] || bianHex.fortune;
+  const verdict = relation.isGood ? t('mh_verdictGood') : t('mh_verdictBad');
+  document.getElementById('mh-summary').textContent =
+    t('mh_summaryTemplate')
+      .replace('{ben}',   tBen.name)  .replace('{benKw}',  tBen.keyword)  .replace('{benF}',  benF)
+      .replace('{rel}',   relation.label).replace('{relF}', relation.fortune)
+      .replace('{bian}',  tBian.name) .replace('{bianKw}', tBian.keyword) .replace('{bianF}', bianF)
+      .replace('{nu}',    tNu.name)   .replace('{nuKw}',   tNu.keyword)
+      .replace('{verdict}', verdict);
+
+  // 爻位分析
+  const yaoGrid   = document.getElementById('mh-yao-grid');
+  const yaoLabels = t('mh_yaoLabels');
+  const yaoRoles  = t('mh_yaoRoles');
+  yaoGrid.innerHTML = '';
+  for (let i = 5; i >= 0; i--) {
+    const isChanging = (i + 1) === changingLineNum;
+    const triNum = i >= 3 ? upperNum : lowerNum;
+    yaoGrid.innerHTML += `
+      <div class="flex flex-col items-center gap-1.5 p-3 rounded-xl ${isChanging ? 'bg-[#fff3c4] border border-[#ffe088]' : 'bg-[#f2f4ef]'}">
+        <div class="text-[9px] font-bold uppercase tracking-wider ${isChanging ? 'text-[#735c00]' : 'text-[#404944]'}">${yaoLabels[i]}</div>
+        <div class="w-8 h-2 rounded" style="background:${allLines[i]===1?'#004b31':'transparent'};border:${allLines[i]===0?'2px solid #004b31':'none'}"></div>
+        <div class="text-[9px] text-[#404943] text-center leading-tight">${triEl[triNum]} · ${yaoRoles[i]}</div>
+        ${isChanging ? '<div class="text-[9px] text-[#735c00] font-bold">动</div>' : ''}
+      </div>`;
+  }
+
+  // 各领域指引
+  const domains   = document.getElementById('mh-domains');
+  const dData     = t('mh_dom')[tiEl] || t('mh_dom')['土'];
+  const domLabels = t('mh_domLabels');
+  const domainList = [
+    {icon:'💰', label:domLabels.wealth, text:dData.wealth},
+    {icon:'🏢', label:domLabels.career, text:dData.career},
+    {icon:'💕', label:domLabels.love,   text:dData.love},
+    {icon:'🌿', label:domLabels.health, text:dData.health},
+    {icon:'🌙', label:domLabels.year,   text:`${tBen.keyword} · ${benF}`},
+    {icon:'🧭', label:domLabels.advice, text:relation.isGood ? t('mh_verdictGood') : t('mh_verdictBad')}
+  ];
+  domains.innerHTML = domainList.map(d => `
+    <div class="bg-[rgba(188,237,218,0.1)] rounded-2xl p-4 flex flex-col gap-2">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">${d.icon}</span>
+        <span class="text-[10px] font-bold uppercase tracking-widest text-[#bcedda]">${d.label}</span>
+      </div>
+      <p class="text-[#bcedda] text-xs leading-relaxed">${d.text}</p>
+    </div>
+  `).join('');
+
+  // Show results
+  document.getElementById('mh-placeholder').classList.add('hidden');
+  document.getElementById('mh-result').classList.remove('hidden');
+  document.getElementById('mh-result').classList.add('flex');
+  document.getElementById('mh-result').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// Clock update
+setInterval(updateMeihuaClock, 1000);
+updateMeihuaClock();
+
+// ═══════════════════════════════════════════════════════
+//  AI CHAT ENGINE
+// ═══════════════════════════════════════════════════════
+const AI_META = {
+  en:{ name:'Master Jade', title:'Ba Zi · Plum Blossom · Feng Shui', status:'Online · Ready',
+       placeholder:'Ask Master Jade…', disclaimer:'For reference only',
+       chips:['Today\'s Fortune','Career Path','Love & Heart','Wealth Flow','Health Outlook'] },
+  zh:{ name:'玉大师', title:'八字 · 梅花易数 · 风水', status:'在线 · 随时为您解惑',
+       placeholder:'向玉大师提问…', disclaimer:'仅供参考',
+       chips:['今日运势','事业指引','感情运势','财运预测','健康运势'] },
+  ms:{ name:'Tuan Jade', title:'Ba Zi · Bunga Plum · Feng Shui', status:'Dalam talian · Bersedia',
+       placeholder:'Tanya Tuan Jade…', disclaimer:'Untuk rujukan sahaja',
+       chips:['Nasib Hari Ini','Laluan Kerjaya','Cinta & Hati','Aliran Kekayaan','Kesihatan'] }
+};
+
+const AI_RESP = {
+  en:{
+    love:['The waters of emotion run deep in your chart. Venus favours honest expression — speak what lives in your heart before the season turns.','Your Ba Zi reveals a wood-fire dynamic in the relationship palace. New connections carry strong karmic roots. Be open, but guard your boundaries with quiet strength.','The hexagram speaks of reciprocity. Love blossoms where effort meets sincerity. Ask yourself: are you giving freely, or keeping score?','A changing line in your reading suggests transformation — not an ending, but an evolution into something truer and deeper.'],
+    career:['Metal energy governs your career palace this season. Precision and decisive action open doors patience alone cannot. The time to act is now.','The stars align for leadership. Your Day Master carries authority — trust your instinct. A colleague\'s challenge is a hidden invitation.','Wood grows slowly but reaches the sky. Your career is in an accumulation phase — results are building beneath the surface. Stay consistent.','The Qian hexagram governs your professional sphere: creative force, self-reliance, forward movement. Propose that idea. Launch that project.'],
+    wealth:['Water flows to the lowest place yet nourishes all things. Your wealth energy peaks when you give generously — abundance follows gratitude.','Your indirect wealth star is activated this month. Unexpected income channels may open — stay alert to opportunities outside your usual path.','The Zhen trigram stirs your financial house: sudden movement, surprise gains. But beware — impulsive spending disrupts the flow you\'re building.','Gold is mined through patience. Your wealth palace is strong but delayed. A financial decision made now will compound significantly within 18 months.'],
+    health:['The fire element governs your vitality cycle. Protect your heart and circulation. More rest, less stimulation — stillness is the remedy this season.','Earth energy dominates your health palace — digestion and immune resilience are your allies. Eat warm, walk barefoot on grass, stay grounded.','Your energy is like a bow drawn too tight. Tension seeks release — through movement, breath, or creative expression. Neglect turns strain into pain.','Water imbalance signals rest. The kidneys are speaking. Sleep before midnight, hydrate deeply, and let silence be your medicine.'],
+    luck:['Today\'s celestial energy carries the vibration of new beginnings. An unexpected encounter may carry more significance than it first appears.','The morning holds your strongest Qi — use these hours for decisions and creative work. Afternoon for execution; evening for gratitude.','Your luck tide is turning. What felt stuck will begin to move within the next lunar month. The cycle of difficulty is releasing.','Fortune favours the prepared mind. Today, write down what you truly want. Clarity of intention amplifies cosmic alignment.'],
+    bazi:['Enter your birth date in the Ba Zi panel and I will reveal the hidden architecture of your destiny — four pillars, five elements, the cosmic blueprint of your life.','The four pillars hold the map of your entire lifetime — seasons of abundance, challenge, and transformation. Ask me to interpret any aspect.'],
+    meihua:['Cast a Plum Blossom reading in the divination panel. I will then interpret the hexagram energy in the context of your specific question.','The ancient oracle of Shao Kangjie holds answers in numbers and moments. Cast a reading and let the trigrams speak.'],
+    fallback:['The cosmos listens to every sincere question. Refine your inquiry — what is the one thing you most need to understand right now?','Ancient wisdom teaches: the answer already lives within the question. Let us explore what is truly being asked beneath the surface.','In the I Ching, every moment contains all possibilities. What you seek is already in motion — the art is in reading the signs clearly.','Patience is not passivity. It is the art of perfect timing. What you are asking about is ripening — trust the process.']
+  },
+  zh:{
+    love:['感情宫位水火交融，此时宜坦诚表达。压抑之情如积水，终将溢出。勇敢开口，方得真诚回应。','桃花运隐于木气之中，情缘自生机之处萌发。以真心灌溉，自然花开。','互卦揭示：感情之道在于双向流动。问自己是否真心付出，还是暗中计较？放下算计，缘分自通。','动爻示变化——非结束，而是蜕变。一段关系正从表面走向更深层的真实，接纳这种转化。'],
+    career:['事业宫金气主导，此季宜精准果断。当断不断，贻误良机。行动之时已至，莫再等待。','日主之力正旺，上天授你领导之气。同事的质疑不是阻碍，是隐藏的邀请——展示真正实力。','木生长缓慢，终究参天。你的事业正处于积累期，根基在地下扎深。保持一贯，拒绝捷径。','乾卦主事业宫——刚健自强，天行不息。那个尘封的计划，现在正是提出的时机。'],
+    wealth:['财如流水，趋下而利万物。慷慨者得丰盛，感恩者引财来。舍与得之间，正是财运的秘密。','本月偏财星动，意外财路可能开启。留意寻常路之外的机遇，意外之财往往来自意想不到之处。','震卦动财宫——突发之动，意外之得。但需谨慎，冲动消费会打乱正在积聚的财气。','黄金埋于土中，需耐心挖掘。财宫强但有延迟，今日之财务决策，18个月内将有数倍回报。'],
+    health:['火元素主你的生命力。心脏与循环系统需要关注，多休息，减少刺激，静养是这个季节的良药。','土气厚重于健康宫，脾胃与免疫力是关键。吃温热的食物，赤脚走草地，与大地建立连接。','你的精气如拉满的弓，需要释放——通过运动、呼吸或创造性表达。忽视紧张，终成痛苦。','水液失衡，肾与肾上腺在提醒你。子时前入睡，充足饮水，让静默成为你的药方。'],
+    luck:['今日天地气场携新生之振动。一次意想不到的相遇，或许比表面看来意义深远。','清晨是一天中气场最旺的时段，宜决策、沟通、创作。下午执行，傍晚休养感恩。','你的运势潮水正在转向。最近的困局将在下一个月历内逐渐松动，被卡住的事情将开始流动。','福气降临有准备的心灵。今日写下你真正渴望之事，意图的清晰放大与宇宙的共鸣。'],
+    bazi:['在八字面板输入出生日期，我将为您揭示命运的隐秘架构——四柱、五行、与生命的宇宙蓝图。','四柱承载着您整个生命的地图——丰收、挑战与蜕变的季节。请问您想深入解析哪个方面？'],
+    meihua:['请在卜卦面板起一卦，我将结合您的具体所问，为您解析卦象能量与指引。','邵康节先生的梅花易数，以数字与时机为桥，沟通天意。起一卦，让卦象开口说话。'],
+    fallback:['天地听得见每一个真诚的问题。请精炼您的疑问——此刻您最需要明白的，是哪一件事？','古人云：答案早已隐于问题之中。让我们一起探寻，问题表面之下真正被问询的是什么。','易经告诉我们：每一个当下都包含所有可能性。你所寻求的，已在运动之中——学会读懂征兆。','等待并非被动，而是掌握时机之艺术。你问询之事正在成熟——信任这个过程。']
+  },
+  ms:{
+    love:['Air emosi mengalir dalam di carta anda. Ekspresi jujur diperlukan — ucapkan isi hati sebelum musim berubah.','Ba Zi anda mendedahkan interaksi kayu-api dalam istana hubungan. Kenalan baru membawa akar karma yang kuat. Buka hati, jaga sempadan.','Heksagram bercakap tentang timbal balik. Cinta mekar di mana usaha bertemu keikhlasan. Adakah anda memberi dengan bebas, atau mengira-ngira?','Garisan berubah mencadangkan transformasi — bukan penamat, tetapi evolusi kepada sesuatu yang lebih benar.'],
+    career:['Tenaga logam mengawal istana kerjaya anda musim ini. Ketepatan dan tindakan tegas akan membuka pintu yang kesabaran sahaja tidak dapat.','Bintang-bintang sejajar untuk kepimpinan. Tuan hari anda membawa autoriti — percaya naluri anda. Cabaran rakan sekerja adalah jemputan tersembunyi.','Kayu tumbuh perlahan tetapi mencapai langit. Kerjaya anda dalam fasa pengumpulan — hasil sedang terbina di bawah permukaan.','Heksagram Qian mengawal bidang profesional anda — kuasa kreatif, berdikari, ke hadapan. Cadangkan idea itu sekarang.'],
+    wealth:['Air mengalir ke tempat paling rendah namun menyuburkan semua. Tenaga kekayaan anda memuncak apabila anda memberi dengan murah hati.','Bintang kekayaan tidak langsung anda diaktifkan bulan ini. Saluran pendapatan tidak dijangka mungkin terbuka — waspada terhadap peluang luar biasa.','Trigram Zhen menggerakkan rumah kewangan anda: pergerakan tiba-tiba, keuntungan mengejut. Tetapi elak perbelanjaan impulsif.','Emas dilombong melalui kesabaran. Keputusan kewangan yang dibuat sekarang akan berganda dalam 18 bulan.'],
+    health:['Elemen api mengawal kitaran vitaliti anda. Lindungi jantung dan sistem peredaran darah. Lebih rehat, kurang rangsangan.','Tenaga bumi menguasai istana kesihatan anda — pencernaan dan ketahanan imun adalah sekutu anda. Makan yang hangat, berjalan di atas rumput.','Tenaga anda seperti busur yang ditarik terlalu kencang. Ketegangan mencari pelepasan melalui pergerakan, nafas atau ekspresi kreatif.','Ketidakseimbangan air memberi isyarat rehat. Tidur sebelum tengah malam, minum banyak air, biarkan kesunyian menjadi ubat anda.'],
+    luck:['Tenaga hari ini membawa getaran permulaan baru. Pertemuan yang tidak dijangka mungkin membawa makna yang lebih besar dari yang kelihatan.','Pagi mengandungi Qi anda yang paling kuat — gunakan untuk keputusan dan kerja kreatif. Petang untuk pelaksanaan; malam untuk kesyukuran.','Air pasang nasib anda sedang bertukar. Apa yang terasa terkunci akan mula bergerak dalam bulan lunar seterusnya.','Tuah memihak kepada minda yang bersedia. Tulis apa yang benar-benar anda inginkan hari ini — kejelasan niat memperkuat keselarasan kosmik.'],
+    bazi:['Masukkan tarikh lahir anda dalam panel Ba Zi dan saya akan mendedahkan seni bina tersembunyi takdir anda — empat tiang, lima elemen.','Empat tiang memegang peta keseluruhan hayat anda — musim kemakmuran, cabaran dan transformasi. Tanya saya untuk mana-mana aspek.'],
+    meihua:['Lempar bacaan Bunga Plum dalam panel ramalan. Saya kemudian akan mentafsir tenaga heksagram dalam konteks soalan anda.','Oracle purba Shao Kangjie memegang jawapan dalam nombor dan saat. Lempar bacaan dan biarkan trigram bercakap.'],
+    fallback:['Kosmos mendengar setiap soalan yang ikhlas. Perhalusi pertanyaan anda — apakah satu perkara yang paling perlu anda fahami sekarang?','Kebijaksanaan purba mengajar: jawapan sudah hidup dalam soalan. Mari terokai apa yang benar-benar ditanya di bawah permukaan.','Dalam I Ching, setiap saat mengandungi semua kemungkinan. Apa yang anda cari sudah dalam gerakan — seninya dalam membaca tanda-tanda.','Kesabaran adalah seni penentuan masa yang sempurna. Apa yang anda tanya sedang masak — percayai prosesnya.']
+  }
+};
+
+let aiInitialized = false;
+
+function openAiChat() {
+  const overlay = document.getElementById('aiChatOverlay');
+  const backdrop = document.getElementById('aiChatBackdrop');
+  const panel = document.getElementById('aiChatPanel');
+  overlay.classList.remove('pointer-events-none');
+  backdrop.classList.remove('opacity-0','pointer-events-none');
+  backdrop.classList.add('opacity-100');
+  panel.classList.remove('translate-x-full');
+  document.body.style.overflow = 'hidden';
+  if (!aiInitialized) { aiInitialized = true; initAiChat(); }
+  applyAiLang();
+}
+
+function closeAiChat() {
+  const panel = document.getElementById('aiChatPanel');
+  const backdrop = document.getElementById('aiChatBackdrop');
+  panel.classList.add('translate-x-full');
+  backdrop.classList.remove('opacity-100');
+  backdrop.classList.add('opacity-0','pointer-events-none');
+  setTimeout(() => document.getElementById('aiChatOverlay').classList.add('pointer-events-none'), 300);
+  document.body.style.overflow = '';
+}
+
+function applyAiLang() {
+  const m = AI_META[currentLang] || AI_META.en;
+  document.getElementById('ai-master-name').textContent = m.name;
+  document.getElementById('ai-status').textContent = m.status;
+  document.getElementById('aiInput').placeholder = m.placeholder;
+  document.getElementById('ai-disclaimer').textContent = m.disclaimer;
+  const chips = document.getElementById('aiChips');
+  if (chips.children.length) {
+    Array.from(chips.children).forEach((btn, i) => { btn.textContent = m.chips[i]; btn.onclick = () => useAiChip(m.chips[i]); });
+  }
+  // Update initial message bubbles
+  document.querySelectorAll('[data-init-msg]').forEach(el => {
+    const key = el.dataset.initMsg;
+    const txt = AI_INIT_MSGS[key]?.[currentLang] || AI_INIT_MSGS[key]?.en;
+    if (txt) el.querySelector('div:last-child').textContent = txt;
+  });
+}
+
+const AI_INIT_MSGS = {
+  welcome: {
+    en: 'Welcome. I am Master Jade, versed in Ba Zi, Plum Blossom Divination, and Feng Shui. How may I illuminate your path today?',
+    zh: '您好，我是玉大师，通晓八字、梅花易数与风水之道。请问您今日有何所求？',
+    ms: 'Selamat datang. Saya Tuan Jade, pakar Ba Zi, Ramalan Bunga Plum dan Feng Shui. Apa yang ingin anda ketahui hari ini?'
+  }
+};
+
+function addInitMsg(id, text, delay = 0) {
+  setTimeout(() => {
+    const d = document.createElement('div');
+    d.className = 'flex items-end gap-2.5 chat-msg';
+    d.dataset.initMsg = id;
+    d.innerHTML = `
+      <div class="w-8 h-8 rounded-full bg-[#004b31] flex items-center justify-center text-sm shrink-0 mb-0.5">☯</div>
+      <div class="max-w-[78%] bg-white rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-[#191c1a] leading-relaxed shadow-sm border border-[#eef0ed]">${text}</div>`;
+    document.getElementById('aiMessages').appendChild(d);
+    scrollAiBottom();
+  }, delay);
+}
+
+function initAiChat() {
+  const m = AI_META[currentLang] || AI_META.en;
+  const chips = document.getElementById('aiChips');
+  chips.innerHTML = m.chips.map(c =>
+    `<button onclick="useAiChip('${c.replace(/'/g,"\\'")}')" class="ai-chip">${c}</button>`
+  ).join('');
+  addInitMsg('welcome', AI_INIT_MSGS.welcome[currentLang] || AI_INIT_MSGS.welcome.en, 400);
+  if (currentPillars) {
+    const el = currentPillars[2].element, yy = currentPillars[2].yinYang;
+    AI_INIT_MSGS.bazi = {
+      en: `I sense your Ba Zi — your Day Master is ${yy} ${el}. Ask me for a deeper reading of any pillar.`,
+      zh: `我已感知您的八字，日主为${yy}${el}。如需深度解析，随时可问。`,
+      ms: `Saya dapat merasakan Ba Zi anda — Tuan Hari anda adalah ${yy} ${el}. Tanya saya untuk analisis lebih mendalam.`
+    };
+    addInitMsg('bazi', AI_INIT_MSGS.bazi[currentLang], 1600);
+  }
+}
+
+function useAiChip(text) {
+  const inp = document.getElementById('aiInput');
+  inp.value = text; inp.style.height = 'auto';
+  sendAiMessage();
+}
+
+let chatHistory = [];
+
+function createAiBubble() {
+  document.getElementById('aiTyping').classList.add('hidden');
+  const wrap = document.createElement('div');
+  wrap.className = 'flex items-end gap-2.5 chat-msg';
+  const bubble = document.createElement('div');
+  bubble.className = 'max-w-[78%] bg-white rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-[#191c1a] leading-relaxed shadow-sm border border-[#eef0ed]';
+  wrap.innerHTML = `<div class="w-8 h-8 rounded-full bg-[#004b31] flex items-center justify-center text-sm shrink-0 mb-0.5">☯</div>`;
+  wrap.appendChild(bubble);
+  document.getElementById('aiMessages').appendChild(wrap);
+  return bubble;
+}
+
+async function typewriterInto(bubble, text) {
+  const safe = (text || '').slice(0, 1500);
+  let i = 0;
+  await new Promise(resolve => {
+    const tick = () => {
+      bubble.textContent = safe.slice(0, ++i);
+      scrollAiBottom();
+      const ch = safe[i - 1] || '';
+      const delay = /[。！？.!?]/.test(ch) ? 90 : /[，,、；;\n]/.test(ch) ? 45 : 20;
+      if (i <= safe.length) setTimeout(tick, delay);
+      else resolve();
+    };
+    tick();
+  });
+}
+
+function isValidReply(txt) {
+  if (!txt || txt.length < 4) return false;
+  // Reject raw SSE / JSON API metadata
+  if (/^data:\s*[{[]/.test(txt)) return false;
+  if (txt.includes('"choices":[') || txt.includes('"delta":{') || txt.includes('"object":"chat')) return false;
+  if (txt.includes('IMPORTANT NOTICE') || txt.includes('legacy text API')) return false;
+  // Reject if more than 20% of chars are non-printable / control chars (garbled)
+  const garbage = (txt.match(/[\x00-\x08\x0b\x0e-\x1f\x7f]/g) || []).length;
+  if (garbage / txt.length > 0.05) return false;
+  return true;
+}
+
+async function callAI(messages) {
+  const sys = (messages.find(m => m.role === 'system')?.content || '').slice(0, 600);
+  const lastUser = messages.filter(m => m.role === 'user').pop()?.content || '';
+
+  // Strategy 1 — Pollinations /openai (returns proper JSON)
+  try {
+    const ac = new AbortController();
+    const tid = setTimeout(() => ac.abort(), 32000);
+    const r = await fetch('https://text.pollinations.ai/openai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'openai',
+        messages: messages.map(m => ({ role: m.role, content: typeof m.content === 'string' ? m.content : String(m.content) }))
+      }),
+      signal: ac.signal
+    });
+    clearTimeout(tid);
+    if (!r.ok) throw new Error('status ' + r.status);
+    const j = await r.json();
+    const txt = (j.choices?.[0]?.message?.content || '').trim();
+    if (isValidReply(txt)) return txt.slice(0, 1800);
+    throw new Error('invalid');
+  } catch(e) { /* fall through */ }
+
+  // Strategy 2 — Pollinations GET plain text
+  try {
+    const ac = new AbortController();
+    const tid = setTimeout(() => ac.abort(), 32000);
+    const r = await fetch(
+      `https://text.pollinations.ai/${encodeURIComponent(lastUser)}?model=openai&system=${encodeURIComponent(sys.slice(0, 400))}&seed=${Math.floor(Math.random() * 99999)}`,
+      { signal: ac.signal }
+    );
+    clearTimeout(tid);
+    if (!r.ok) throw new Error('status ' + r.status);
+    const raw = (await r.text()).trim();
+    const clean = raw.includes('IMPORTANT NOTICE')
+      ? (raw.split('will continue to work normally').pop() || '').replace(/^[.\s*]+/, '').trim()
+      : raw;
+    if (isValidReply(clean)) return clean.slice(0, 1800);
+    throw new Error('empty');
+  } catch(e) { /* fall through */ }
+
+  throw new Error('all failed');
+}
+
+async function sendAiMessage() {
+  const inp = document.getElementById('aiInput');
+  const text = inp.value.trim(); if (!text) return;
+  inp.value = ''; inp.style.height = 'auto';
+  addUserMsg(text);
+  chatHistory.push({ role:'user', content:text });
+  document.getElementById('aiTyping').classList.remove('hidden');
+  document.getElementById('aiSendBtn').disabled = true;
+  scrollAiBottom();
+  let reply = '';
+  let isError = false;
+  try {
+    const msgs = [{ role:'system', content: buildSystemPrompt(text) }, ...chatHistory.slice(-14)];
+    reply = await callAI(msgs);
+  } catch(e) {
+    isError = true;
+    const lang = currentLang;
+    reply = lang === 'zh' ? '网络连接失败，请稍后再试。' : lang === 'ms' ? 'Sambungan gagal, cuba lagi.' : 'Connection failed, please try again.';
+  }
+  const bubble = createAiBubble();
+  if (isError) {
+    bubble.innerHTML = `<span style="color:#9eaa9e;font-style:italic">${reply}</span>`;
+  } else {
+    await typewriterInto(bubble, reply);
+    chatHistory.push({ role:'assistant', content:reply });
+  }
+  document.getElementById('aiSendBtn').disabled = false;
+}
+
+function buildSystemPrompt(currentQuestion) {
+  const lang = currentLang;
+  let p = lang === 'zh'
+    ? `你是玉大师——命理顾问，也是懂生活的聊天伙伴。
+
+【铁律】
+- 你必须针对用户这句话给出直接、具体的回应，绝不能给泛泛的通用答案。
+- 回复80-120字，简洁有力，不堆砌空话。
+- 结尾提一个紧扣刚才内容的追问（禁止用"还有什么想问？"之类的废话）。
+- 语气自然温暖，命理与日常都能聊。`
+    : lang === 'ms'
+    ? `Anda adalah Tuan Jade — pakar metafizik dan rakan perbualan.
+
+【Peraturan Mutlak】
+- Jawab TEPAT kepada apa yang pengguna tanya — tiada jawapan umum.
+- 80-120 patah perkataan, padat dan bermakna.
+- Akhiri dengan soalan susulan spesifik berdasarkan perbualan (bukan soalan umum).
+- Nada mesra, natural, sedikit mistik.`
+    : `You are Master Jade — metaphysics advisor and real conversation partner.
+
+[Hard Rules]
+- Address EXACTLY what the user just asked. No generic oracle speech.
+- 80-120 words, sharp and direct.
+- End with one specific follow-up question rooted in what they said (never "anything else?").
+- Warm, natural tone with a touch of mystique.`;
+
+  if (currentQuestion) {
+    p += lang === 'zh'
+      ? `\n\n用户刚才问的是：「${currentQuestion}」\n请直接针对这个问题回答，不要跑题。`
+      : lang === 'ms'
+      ? `\n\nSoalan terkini pengguna: 「${currentQuestion}」\nJawab terus soalan ini, jangan tersasar.`
+      : `\n\nThe user's current question is: "${currentQuestion}"\nAddress this directly — stay on point.`;
+  }
+  if (currentPillars) {
+    const [yp,mp,dp] = currentPillars;
+    p += `\n\n[User Ba Zi] Year: ${yp.stem}${yp.branch}(${yp.element}), Month: ${mp.stem}${mp.branch}(${mp.element}), Day Master: ${dp.yinYang} ${dp.element}, Hour: ${currentPillars[3]?.stem||'?'}${currentPillars[3]?.branch||''}(${currentPillars[3]?.element||'?'}).`;
+  }
+  if (currentMeihuaData) {
+    const bk = currentMeihuaData.benKey;
+    const bh = (t('mh_hex')[bk]||currentMeihuaData.benHex);
+    p += `\n\n[Meihua] Question: "${currentMeihuaData.question}", Hexagram: ${bh.name}(${bh.keyword}), Changing line: ${currentMeihuaData.changingLineNum}, Verdict: ${currentMeihuaData.relation.fortune}.`;
+  }
+  return p;
+}
+
+
+function addUserMsg(text) {
+  const d = document.createElement('div');
+  d.className = 'flex justify-end chat-msg';
+  d.innerHTML = `<div class="max-w-[78%] bg-[#004b31] text-[#ecfdf5] rounded-2xl rounded-tr-sm px-4 py-3 text-sm leading-relaxed shadow-sm">${esc(text)}</div>`;
+  document.getElementById('aiMessages').appendChild(d);
+  scrollAiBottom();
+}
+
+function addAiMsg(text, delay = 0) {
+  setTimeout(() => {
+    const d = document.createElement('div');
+    d.className = 'flex items-end gap-2.5 chat-msg';
+    d.innerHTML = `
+      <div class="w-8 h-8 rounded-full bg-[#004b31] flex items-center justify-center text-sm shrink-0 mb-0.5">☯</div>
+      <div class="max-w-[78%] bg-white rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-[#191c1a] leading-relaxed shadow-sm border border-[#eef0ed]">${text}</div>`;
+    document.getElementById('aiMessages').appendChild(d);
+    scrollAiBottom();
+  }, delay);
+}
+
+function scrollAiBottom() {
+  const el = document.getElementById('aiMessages');
+  setTimeout(() => el.scrollTop = el.scrollHeight, 60);
+}
+
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function genAiReply(input) {
+  const cats = AI_RESP[currentLang] || AI_RESP.en;
+  const lang = currentLang;
+  let pool, follow;
+  if (/love|heart|relation|romance|感情|爱情|婚姻|partner|cinta|hubungan/i.test(input)) {
+    pool = cats.love;
+    follow = lang==='zh' ? '你现在的关系是刚起步、在发展中，还是遇到了具体的困扰？' : lang==='ms' ? 'Hubungan anda sekarang baru bermula, sedang berkembang, atau ada cabaran tertentu?' : 'Is this a new connection, an ongoing relationship, or a specific challenge you\'re navigating?';
+  } else if (/career|job|work|business|事业|工作|职场|kerjaya|kerja|bisnes/i.test(input)) {
+    pool = cats.career;
+    follow = lang==='zh' ? '你现在面临的是选择方向、人际关系，还是想突破现有的瓶颈？' : lang==='ms' ? 'Adakah anda menghadapi pilihan hala tuju, hubungan kerja, atau mahu keluar dari halangan?' : 'Are you facing a choice of direction, workplace dynamics, or looking to break through a current ceiling?';
+  } else if (/money|wealth|finance|rich|财|钱|财运|kekayaan|wang|duit/i.test(input)) {
+    pool = cats.wealth;
+    follow = lang==='zh' ? '是关于开源、节流，还是某个具体的财务决策让你犹豫？' : lang==='ms' ? 'Adakah ini tentang mencari pendapatan, berjimat, atau keputusan kewangan tertentu?' : 'Is this about generating income, managing outflow, or a specific financial decision you\'re weighing?';
+  } else if (/health|sick|body|illness|健康|身体|病|kesihatan|sakit/i.test(input)) {
+    pool = cats.health;
+    follow = lang==='zh' ? '你感觉最消耗你精力的是身体上的疲惫，还是心理上的压力？' : lang==='ms' ? 'Adakah yang paling menguras tenaga anda adalah keletihan fizikal atau tekanan mental?' : 'What drains you more right now — physical fatigue or mental pressure?';
+  } else if (/luck|fortune|today|运|运势|今天|nasib|tuah|hari ini/i.test(input)) {
+    pool = cats.luck;
+    follow = lang==='zh' ? '今天有没有什么特别期待或担心的事情想聊聊？' : lang==='ms' ? 'Ada perkara tertentu hari ini yang anda nantikan atau bimbangkan?' : 'Is there something specific today you\'re looking forward to or concerned about?';
+  } else if (/bazi|八字|ba zi|pillar|四柱/i.test(input)) {
+    pool = cats.bazi;
+    follow = lang==='zh' ? '你对八字最想深入了解哪个方面——性格、运势走向，还是感情婚姻？' : lang==='ms' ? 'Aspek Ba Zi mana yang paling anda ingin terokai — personaliti, arah nasib, atau perkahwinan?' : 'Which aspect of your Ba Zi do you most want to explore — personality, fortune cycles, or relationships?';
+  } else if (/meihua|梅花|plum|hexagram|卦/i.test(input)) {
+    pool = cats.meihua;
+    follow = lang==='zh' ? '这次卦象的结果让你感到意外，还是和你内心的预感吻合？' : lang==='ms' ? 'Adakah keputusan bacaan ini mengejutkan anda, atau selaras dengan firasat anda?' : 'Did this reading surprise you, or did it confirm something you already sensed?';
+  } else {
+    pool = cats.fallback;
+    follow = lang==='zh' ? '你最近最想聊的是哪方面——感情、事业、还是别的什么？' : lang==='ms' ? 'Apa yang paling anda ingin bincangkan — cinta, kerjaya, atau perkara lain?' : 'What\'s been weighing on your mind most — love, work, or something else entirely?';
+  }
+  const base = pool[Math.floor(Math.random() * pool.length)];
+  return base + (lang==='zh' ? '\n\n' : '\n\n') + follow;
+}
+
+// ═══════════════════════════════════════════════════════
+//  FENG SHUI ANALYSIS
+// ═══════════════════════════════════════════════════════
+let fsImageDataUrl = null;
+let fsStream = null;
+
+function fsFIleSelected(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => fsSetImage(e.target.result);
+  reader.readAsDataURL(file);
+}
+
+function fsSetImage(dataUrl) {
+  fsImageDataUrl = dataUrl;
+  document.getElementById('fsPreviewImg').src = dataUrl;
+  document.getElementById('fsResultThumb').src = dataUrl;
+  document.getElementById('fsUploadCard').classList.add('hidden');
+  document.getElementById('fsCameraCard').classList.add('hidden');
+  document.getElementById('fsCameraView').classList.add('hidden');
+  document.getElementById('fsPreview').classList.remove('hidden');
+  document.getElementById('fsResult').classList.add('hidden');
+  // Set default question placeholder
+  const ph = t('fs_questionPlaceholder');
+  document.getElementById('fsQuestion').placeholder = ph;
+}
+
+function fsClearImage() {
+  fsImageDataUrl = null;
+  document.getElementById('fsPreview').classList.add('hidden');
+  document.getElementById('fsResult').classList.add('hidden');
+  document.getElementById('fsUploadCard').classList.remove('hidden');
+  document.getElementById('fsCameraCard').classList.remove('hidden');
+  document.getElementById('fsFileInput').value = '';
+}
+
+function fsClearResult() {
+  fsClearImage();
+}
+
+async function fsStartCamera() {
+  try {
+    fsStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+    document.getElementById('fsVideo').srcObject = fsStream;
+    document.getElementById('fsCameraView').classList.remove('hidden');
+    document.getElementById('fsUploadCard').classList.add('hidden');
+    document.getElementById('fsCameraCard').classList.add('hidden');
+  } catch(e) {
+    alert(currentLang === 'zh' ? '无法访问摄像头，请检查权限设置。' : currentLang === 'ms' ? 'Tidak dapat akses kamera. Semak tetapan kebenaran.' : 'Cannot access camera. Please check permissions.');
+  }
+}
+
+function fsStopCamera() {
+  if (fsStream) { fsStream.getTracks().forEach(t => t.stop()); fsStream = null; }
+  document.getElementById('fsCameraView').classList.add('hidden');
+  document.getElementById('fsUploadCard').classList.remove('hidden');
+  document.getElementById('fsCameraCard').classList.remove('hidden');
+}
+
+function fsCapture() {
+  const video = document.getElementById('fsVideo');
+  const canvas = document.getElementById('fsCanvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+  fsStopCamera();
+  fsSetImage(dataUrl);
+}
+
+async function fsAnalyze() {
+  if (!fsImageDataUrl) return;
+  const question = document.getElementById('fsQuestion').value.trim();
+  document.getElementById('fsPreview').classList.add('hidden');
+  document.getElementById('fsResult').classList.add('hidden');
+  document.getElementById('fsLoading').classList.remove('hidden');
+
+  const lang = currentLang;
+  const sysPrompt = lang === 'zh'
+    ? '你是玉大师，精通风水学。用户上传了一张空间照片。请根据传统风水理论分析该空间的气场布局，包括：①整体气场评分（0-100），②主要风水优势（财位、旺位），③存在的风水问题，④具体的改善建议。最后给出一个0-100的整体气场评分数字，格式为"整体评分：XX分"。回复用中文，结构清晰，专业且有洞察力。'
+    : lang === 'ms'
+    ? 'Anda adalah Tuan Jade, pakar Feng Shui. Pengguna telah memuat naik foto ruang. Analisis susun atur tenaga qi ruang berdasarkan teori Feng Shui tradisional: ①Skor qi keseluruhan (0-100), ②Kelebihan feng shui utama (sudut kekayaan), ③Isu feng shui yang ada, ④Cadangan penambahbaikan khusus. Akhirkan dengan "Skor Keseluruhan: XX". Jawab dalam bahasa Melayu.'
+    : 'You are Master Jade, a Feng Shui expert. The user has uploaded a photo of a space. Analyze the qi energy layout based on traditional Feng Shui theory: ①Overall qi score (0-100), ②Main Feng Shui strengths (wealth corners, auspicious spots), ③Existing Feng Shui issues, ④Specific improvement recommendations. End with "Overall Score: XX". Reply in English, structured and insightful.';
+
+  const userContent = [
+    { type: 'text', text: question
+        ? (lang === 'zh' ? `请分析这张空间照片的风水，并重点回答：${question}` : lang === 'ms' ? `Sila analisis feng shui foto ini dan fokus kepada: ${question}` : `Please analyze the feng shui of this space and focus on: ${question}`)
+        : (lang === 'zh' ? '请全面分析这张空间照片的风水布局。' : lang === 'ms' ? 'Sila analisis susun atur feng shui foto ruang ini secara menyeluruh.' : 'Please provide a comprehensive feng shui analysis of this space.')
+    },
+    { type: 'image_url', image_url: { url: fsImageDataUrl } }
+  ];
+
+  let reply = '';
+  try {
+    // Try Pollinations vision (supports image_url in messages)
+    const ac = new AbortController();
+    const t2 = setTimeout(() => ac.abort(), 45000);
+    const r = await fetch('https://text.pollinations.ai/openai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'openai',
+        messages: [
+          { role: 'system', content: sysPrompt },
+          { role: 'user', content: userContent }
+        ]
+      }),
+      signal: ac.signal
+    });
+    clearTimeout(t2);
+    if (r.ok) {
+      const j = await r.json();
+      const txt = j.choices?.[0]?.message?.content?.trim();
+      if (txt && txt.length > 10 && !txt.includes('IMPORTANT NOTICE')) reply = txt;
+    }
+  } catch(e) {}
+
+  if (!reply) {
+    // Fallback: text-only analysis
+    try {
+      const msgs = [
+        { role: 'system', content: sysPrompt },
+        { role: 'user', content: lang === 'zh' ? `用户上传了一张空间照片进行风水分析。${question ? '用户的问题：' + question : '请给出全面的风水分析，包括评分、优势、问题和建议。'}` : lang === 'ms' ? `Pengguna memuat naik foto ruang untuk analisis feng shui. ${question ? 'Soalan: ' + question : 'Berikan analisis feng shui menyeluruh termasuk skor, kelebihan, isu dan cadangan.'}` : `User uploaded a space photo for feng shui analysis. ${question ? 'Question: ' + question : 'Provide comprehensive feng shui analysis including score, strengths, issues and recommendations.'}` }
+      ];
+      reply = await callAI(msgs);
+    } catch(e) {}
+  }
+
+  document.getElementById('fsLoading').classList.add('hidden');
+
+  if (!reply) {
+    document.getElementById('fsPreview').classList.remove('hidden');
+    const lang2 = currentLang;
+    alert(lang2 === 'zh' ? '分析失败，请稍后再试。' : lang2 === 'ms' ? 'Analisis gagal. Cuba lagi.' : 'Analysis failed. Please try again.');
+    return;
+  }
+
+  fsRenderResult(reply);
+}
+
+function fsExtractScore(text) {
+  const patterns = [/整体评分[：:]\s*(\d+)/i, /Overall Score[：:]\s*(\d+)/i, /Skor Keseluruhan[：:]\s*(\d+)/i, /(\d+)\s*[\/／]\s*100/, /评分.*?(\d{2})\s*分/];
+  for (const p of patterns) {
+    const m = text.match(p);
+    if (m) { const n = parseInt(m[1]); if (n >= 0 && n <= 100) return n; }
+  }
+  return null;
+}
+
+function fsRenderResult(text) {
+  const score = fsExtractScore(text);
+
+  // Score display
+  if (score !== null) {
+    document.getElementById('fsScoreNum').textContent = score;
+    setTimeout(() => { document.getElementById('fsScoreBar').style.width = score + '%'; }, 100);
+    const color = score >= 75 ? '#004b31' : score >= 50 ? '#b58900' : '#ba1a1a';
+    document.getElementById('fsScoreBar').style.background = color;
+    document.getElementById('fsScoreNum').style.color = color;
+  } else {
+    document.getElementById('fsScoreNum').textContent = '—';
+  }
+
+  // Parse sections and render cards
+  const cards = document.getElementById('fsResultCards');
+  cards.innerHTML = '';
+
+  // Split text into paragraphs/sections
+  const sections = text.split(/\n(?=[①②③④⑤\d+\.|[A-Z][^a-z]{0,15}：|#{1,3}\s)/);
+  const sectionIcons = ['✦', '⬡', '▲', '◆', '★'];
+  const sectionColors = ['#004b31', '#2d6a4f', '#b58900', '#1d3557', '#6b4226'];
+
+  if (sections.length > 1) {
+    sections.forEach((sec, i) => {
+      if (!sec.trim()) return;
+      const lines = sec.trim().split('\n');
+      const title = lines[0].replace(/^[①②③④⑤\d+\.\s#*]+/, '').trim();
+      const body = lines.slice(1).join('\n').trim();
+      if (!title && !body) return;
+      const card = document.createElement('div');
+      card.className = 'bg-white rounded-2xl px-5 py-4 shadow-sm border border-[#eef0ed] flex flex-col gap-2 result-card';
+      card.style.animationDelay = (i * 0.08) + 's';
+      card.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style="background:${sectionColors[i % sectionColors.length]}">${sectionIcons[i % sectionIcons.length]}</span>
+          <p class="font-semibold text-[#004b31] text-sm">${esc(title || (body.slice(0, 30) + '…'))}</p>
+        </div>
+        ${body ? `<p class="text-[#404943] text-sm leading-relaxed pl-8">${esc(body).replace(/\n/g,'<br>')}</p>` : ''}
+      `;
+      cards.appendChild(card);
+    });
+  } else {
+    // Render as single card
+    const card = document.createElement('div');
+    card.className = 'bg-white rounded-2xl px-5 py-5 shadow-sm border border-[#eef0ed]';
+    card.innerHTML = `<p class="text-[#404943] text-sm leading-relaxed">${esc(text).replace(/\n/g,'<br>')}</p>`;
+    cards.appendChild(card);
+  }
+
+  // Update result title
+  const titles = { en: 'Feng Shui Reading', zh: '风水解读', ms: 'Bacaan Feng Shui' };
+  document.getElementById('fsResultTitle').textContent = titles[currentLang] || titles.en;
+
+  document.getElementById('fsResult').classList.remove('hidden');
+  document.getElementById('fsResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+</body>
+</html>
