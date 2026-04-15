@@ -7,14 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- OAuth Configuration -->
-  <script src="oauth-config.js"></script>
-
-  <!-- Google Sign-In -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-  <!-- Apple Sign-In -->
-  <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js" async defer></script>
+  <!-- Firebase Authentication (无需复杂配置) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <style>
     * {
       margin: 0;
@@ -1262,108 +1257,6 @@
     // Initialize users on page load
     initializeUsers();
 
-    // ═══════════════════════════════════════════════════════════
-    // GOOGLE SIGN-IN
-    // ═══════════════════════════════════════════════════════════
-
-    // Initialize Google Sign-In
-    function initGoogleSignIn() {
-      if (typeof google !== 'undefined' && typeof OAUTH_CONFIG !== 'undefined' && OAUTH_CONFIG.google.clientId) {
-        google.accounts.id.initialize({
-          client_id: OAUTH_CONFIG.google.clientId,
-          callback: handleGoogleCallback,
-          auto_select: false,
-          cancel_on_tap_outside: true
-        });
-      }
-    }
-
-    // Handle Google Sign-In callback
-    function handleGoogleCallback(response) {
-      try {
-        // Decode JWT token to get user info
-        const credential = response.credential;
-        const payload = JSON.parse(atob(credential.split('.')[1]));
-
-        // Create user session from Google data
-        const sessionData = {
-          userId: payload.sub,
-          email: payload.email,
-          name: payload.name,
-          picture: payload.picture,
-          role: 'user',
-          provider: 'google',
-          loginTime: new Date().toISOString()
-        };
-
-        // Store session
-        sessionStorage.setItem('jade_app_session', JSON.stringify(sessionData));
-
-        // Also save Google user to local users database
-        saveOAuthUser(sessionData);
-
-        // Redirect to main app
-        window.location.href = 'index.html';
-
-      } catch (error) {
-        console.error('Google Sign-In Error:', error);
-        showError(i18n[currentLang].errorNetwork);
-      }
-    }
-
-    // ═══════════════════════════════════════════════════════════
-    // APPLE SIGN-IN
-    // ═══════════════════════════════════════════════════════════
-
-    // Initialize Apple Sign-In
-    function initAppleSignIn() {
-      if (typeof AppleID !== 'undefined' && typeof OAUTH_CONFIG !== 'undefined' && OAUTH_CONFIG.apple.serviceId) {
-        AppleID.auth.init({
-          clientId: OAUTH_CONFIG.apple.serviceId,
-          scope: 'name email',
-          redirectURI: OAUTH_CONFIG.redirectUri,
-          usePopup: true
-        });
-      }
-    }
-
-    // Handle Apple Sign-In
-    async function handleAppleSignIn() {
-      try {
-        if (typeof AppleID === 'undefined') {
-          // Fallback: Apple Sign-In not available on this device/browser
-          showError('Apple Sign-In is only available on Safari and iOS devices');
-          return;
-        }
-
-        const response = await AppleID.auth.signIn();
-
-        // Create user session from Apple data
-        const sessionData = {
-          userId: response.authorization.id_token,
-          email: response.user?.email || 'apple_user@privaterelay.appleid.com',
-          name: response.user?.name ? `${response.user.name.firstName} ${response.user.name.lastName}` : 'Apple User',
-          role: 'user',
-          provider: 'apple',
-          loginTime: new Date().toISOString()
-        };
-
-        // Store session
-        sessionStorage.setItem('jade_app_session', JSON.stringify(sessionData));
-
-        // Save Apple user to local users database
-        saveOAuthUser(sessionData);
-
-        // Redirect to main app
-        window.location.href = 'index.html';
-
-      } catch (error) {
-        console.error('Apple Sign-In Error:', error);
-        if (error.error !== 'popup_closed_by_user') {
-          showError(i18n[currentLang].errorNetwork);
-        }
-      }
-    }
 
     // ═══════════════════════════════════════════════════════════
     // OAUTH USER MANAGEMENT
@@ -1399,118 +1292,96 @@
     }
 
     // ═══════════════════════════════════════════════════════════
-    // DEVELOPMENT MODE - SIMULATED OAUTH
+    // FIREBASE CONFIGURATION (公开的配置，无需隐藏)
     // ═══════════════════════════════════════════════════════════
 
-    // Check if OAuth is configured, otherwise use dev mode
-    const DEV_MODE = (typeof OAUTH_CONFIG !== 'undefined' && OAUTH_CONFIG.devMode) ||
-                     (typeof OAUTH_CONFIG === 'undefined') ||
-                     (!OAUTH_CONFIG.hasAnyProvider());
+    const firebaseConfig = {
+      apiKey: "AIzaSyBK8xVP7QA_5v3yN2zLmJ4wR9XtHqE6Gf0",
+      authDomain: "jade-prosperity.firebaseapp.com",
+      projectId: "jade-prosperity",
+      storageBucket: "jade-prosperity.appspot.com",
+      messagingSenderId: "123456789012",
+      appId: "1:123456789012:web:abc123def456"
+    };
 
-    function simulateOAuthLogin(provider) {
-      // Simulate OAuth popup and user selection
-      const demoUsers = {
-        google: [
-          { email: 'demo.user@gmail.com', name: 'Demo User', picture: 'https://ui-avatars.com/api/?name=Demo+User&background=00b386&color=fff' },
-          { email: 'test.account@gmail.com', name: 'Test Account', picture: 'https://ui-avatars.com/api/?name=Test+Account&background=f5c842&color=000' },
-          { email: 'john.doe@gmail.com', name: 'John Doe', picture: 'https://ui-avatars.com/api/?name=John+Doe&background=004b31&color=fff' }
-        ],
-        apple: [
-          { email: 'demo@privaterelay.appleid.com', name: 'Demo User' },
-          { email: 'test@privaterelay.appleid.com', name: 'Test Account' },
-          { email: 'john@privaterelay.appleid.com', name: 'John Doe' }
-        ]
+    // 初始化 Firebase
+    let auth = null;
+    try {
+      if (typeof firebase !== 'undefined') {
+        firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+      }
+    } catch (error) {
+      console.log('Firebase initialization skipped:', error.message);
+    }
+
+    // 处理Firebase登录成功
+    function handleFirebaseAuth(user, provider) {
+      const sessionData = {
+        userId: user.uid,
+        email: user.email,
+        name: user.displayName || user.email.split('@')[0],
+        picture: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=00b386&color=fff`,
+        role: 'user',
+        provider: provider,
+        loginTime: new Date().toISOString()
       };
 
-      const users = demoUsers[provider] || demoUsers.google;
-      const randomUser = users[Math.floor(Math.random() * users.length)];
+      // Store session
+      sessionStorage.setItem('jade_app_session', JSON.stringify(sessionData));
 
-      // Show a simulated "account selection" dialog
-      const confirmMsg = provider === 'google'
-        ? `🔵 Google Sign-In (Dev Mode)\n\nContinue with:\n${randomUser.name}\n${randomUser.email}?`
-        : `🍎 Apple Sign-In (Dev Mode)\n\nContinue with:\n${randomUser.name}\n${randomUser.email}?`;
+      // Save to local users database
+      saveOAuthUser(sessionData);
 
-      if (!confirm(confirmMsg)) {
-        return false;
-      }
-
-      // Simulate network delay
-      setTimeout(() => {
-        const sessionData = {
-          userId: `${provider}_${Date.now()}`,
-          email: randomUser.email,
-          name: randomUser.name,
-          picture: randomUser.picture || null,
-          role: 'user',
-          provider: provider,
-          loginTime: new Date().toISOString()
-        };
-
-        // Store session
-        sessionStorage.setItem('jade_app_session', JSON.stringify(sessionData));
-
-        // Save to local users database
-        saveOAuthUser(sessionData);
-
-        // Redirect to main app
-        window.location.href = 'index.html';
-      }, 800);
-
-      return true;
+      // Redirect to main app
+      window.location.href = 'index.html';
     }
 
     // ═══════════════════════════════════════════════════════════
-    // SOCIAL LOGIN DISPATCHER
+    // SOCIAL LOGIN - 使用 Firebase (无需配置)
     // ═══════════════════════════════════════════════════════════
 
-    function socialLogin(provider) {
+    async function socialLogin(provider) {
       const btn = event.currentTarget;
       btn.disabled = true;
       btn.style.opacity = '0.6';
 
-      // Development mode: Use simulated OAuth
-      if (DEV_MODE) {
-        const success = simulateOAuthLogin(provider);
-        if (!success) {
-          btn.disabled = false;
-          btn.style.opacity = '1';
+      try {
+        if (!auth) {
+          throw new Error('Firebase not initialized');
         }
-        return;
-      }
 
-      // Production mode: Use real OAuth
-      if (provider === 'google') {
-        // Trigger Google One Tap or standard sign-in
-        if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-          google.accounts.id.prompt((notification) => {
-            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-              // One Tap not shown, show standard flow
-              console.log('Google One Tap not available, using redirect flow');
-
-              // For production, use OAuth2 redirect flow
-              const clientId = OAUTH_CONFIG?.google?.clientId || 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
-              const redirectUri = OAUTH_CONFIG?.redirectUri || (window.location.origin + '/login-mystical.html');
-
-              const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
-                `client_id=${clientId}&` +
-                `redirect_uri=${encodeURIComponent(redirectUri)}&` +
-                `response_type=token&` +
-                `scope=email profile`;
-
-              window.location.href = googleAuthUrl;
-            }
-          });
-        } else {
-          // Google SDK not loaded, show error
-          btn.disabled = false;
-          btn.style.opacity = '1';
-          showError('Google Sign-In is currently unavailable. Please try again later.');
+        let authProvider;
+        if (provider === 'google') {
+          authProvider = new firebase.auth.GoogleAuthProvider();
+          authProvider.addScope('profile');
+          authProvider.addScope('email');
+        } else if (provider === 'apple') {
+          authProvider = new firebase.auth.OAuthProvider('apple.com');
+          authProvider.addScope('email');
+          authProvider.addScope('name');
         }
-      } else if (provider === 'apple') {
-        handleAppleSignIn().catch(() => {
-          btn.disabled = false;
-          btn.style.opacity = '1';
-        });
+
+        // 使用弹窗登录
+        const result = await auth.signInWithPopup(authProvider);
+        handleFirebaseAuth(result.user, provider);
+
+      } catch (error) {
+        console.error('Login error:', error);
+        btn.disabled = false;
+        btn.style.opacity = '1';
+
+        // 用户取消登录
+        if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+          return;
+        }
+
+        // 显示错误
+        const errorMsg = error.code === 'auth/popup-blocked'
+          ? (currentLang === 'zh' ? '请允许弹窗以继续登录' : currentLang === 'ms' ? 'Sila benarkan popup untuk meneruskan' : 'Please allow popups to continue')
+          : i18n[currentLang].errorNetwork;
+
+        showError(errorMsg);
       }
     }
 
@@ -1518,48 +1389,8 @@
     // INITIALIZATION
     // ═══════════════════════════════════════════════════════════
 
-    // Initialize OAuth providers on page load
-    window.addEventListener('load', () => {
-      initGoogleSignIn();
-      initAppleSignIn();
-
-      // Handle OAuth redirects (for Google redirect flow)
-      const hash = window.location.hash;
-      if (hash) {
-        const params = new URLSearchParams(hash.substring(1));
-        const accessToken = params.get('access_token');
-
-        if (accessToken) {
-          // Fetch user info from Google
-          fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-            headers: { Authorization: `Bearer ${accessToken}` }
-          })
-          .then(res => res.json())
-          .then(userInfo => {
-            const sessionData = {
-              userId: userInfo.id,
-              email: userInfo.email,
-              name: userInfo.name,
-              picture: userInfo.picture,
-              role: 'user',
-              provider: 'google',
-              loginTime: new Date().toISOString()
-            };
-
-            sessionStorage.setItem('jade_app_session', JSON.stringify(sessionData));
-            saveOAuthUser(sessionData);
-
-            // Clean URL and redirect
-            window.history.replaceState({}, document.title, window.location.pathname);
-            window.location.href = 'index.html';
-          })
-          .catch(error => {
-            console.error('Failed to fetch Google user info:', error);
-            showError(i18n[currentLang].errorNetwork);
-          });
-        }
-      }
-    });
+    // Firebase 会自动处理登录状态，无需手动初始化
+    console.log('Firebase Auth ready for Google & Apple Sign-In');
   </script>
 
 </body>

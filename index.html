@@ -2653,11 +2653,27 @@ function createAiBubble() {
 }
 
 async function typewriterInto(bubble, text) {
-  const safe = (text || '').slice(0, 1500);
+  // Clean and normalize text
+  const safe = (text || '')
+    .slice(0, 1500)
+    .replace(/\\n/g, '\n')           // Ensure newlines are proper
+    .replace(/\\t/g, ' ')            // Replace tabs with spaces
+    .replace(/\\/g, '')              // Remove remaining backslashes
+    .trim();
+
   let i = 0;
   await new Promise(resolve => {
     const tick = () => {
-      bubble.textContent = safe.slice(0, ++i);
+      // Use innerHTML to properly render newlines as <br>
+      const currentText = safe.slice(0, ++i);
+      bubble.innerHTML = currentText
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+        .replace(/\n/g, '<br>');
+
       scrollAiBottom();
       const ch = safe[i - 1] || '';
       const delay = /[。！？.!?]/.test(ch) ? 90 : /[，,、；;\n]/.test(ch) ? 45 : 20;
@@ -2699,9 +2715,29 @@ async function callAI(messages) {
     });
     clearTimeout(tid);
     if (!r.ok) throw new Error('status ' + r.status);
-    const j = await r.json();
-    const txt = (j.choices?.[0]?.message?.content || '').trim();
-    if (isValidReply(txt)) return txt.slice(0, 1800);
+
+    // Get response as text first to handle encoding issues
+    const rawText = await r.text();
+
+    try {
+      const j = JSON.parse(rawText);
+      let txt = (j.choices?.[0]?.message?.content || '').trim();
+
+      // Clean up escaped characters and JSON artifacts
+      txt = txt
+        .replace(/\\n/g, '\n')           // Fix newlines
+        .replace(/\\"/g, '"')            // Fix quotes
+        .replace(/\\'/g, "'")            // Fix single quotes
+        .replace(/\\\\/g, '\\')          // Fix backslashes
+        .replace(/\\t/g, '\t')           // Fix tabs
+        .replace(/\\r/g, '')             // Remove carriage returns
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, ''); // Remove control characters
+
+      if (isValidReply(txt)) return txt.slice(0, 1800);
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError);
+    }
+
     throw new Error('invalid');
   } catch(e) { /* fall through */ }
 
@@ -2716,9 +2752,22 @@ async function callAI(messages) {
     clearTimeout(tid);
     if (!r.ok) throw new Error('status ' + r.status);
     const raw = (await r.text()).trim();
-    const clean = raw.includes('IMPORTANT NOTICE')
+
+    // Remove API notices
+    let clean = raw.includes('IMPORTANT NOTICE')
       ? (raw.split('will continue to work normally').pop() || '').replace(/^[.\s*]+/, '').trim()
       : raw;
+
+    // Clean up escaped characters and encoding issues
+    clean = clean
+      .replace(/\\n/g, '\n')           // Fix newlines
+      .replace(/\\"/g, '"')            // Fix quotes
+      .replace(/\\'/g, "'")            // Fix single quotes
+      .replace(/\\\\/g, '\\')          // Fix backslashes
+      .replace(/\\t/g, '\t')           // Fix tabs
+      .replace(/\\r/g, '')             // Remove carriage returns
+      .replace(/[\u0000-\u001F\u007F-\u009F]/g, ''); // Remove control characters
+
     if (isValidReply(clean)) return clean.slice(0, 1800);
     throw new Error('empty');
   } catch(e) { /* fall through */ }
