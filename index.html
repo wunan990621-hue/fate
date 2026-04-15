@@ -55,9 +55,6 @@
     .sidebar-tab:not(.active):hover { background: #ecefea; }
     .sidebar-tab.active { background: white; color: #004b36 !important; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
     .sidebar-tab.active svg { stroke: #004b36; }
-    .drawer-tab { color: #404943; }
-    .drawer-tab.active { background: #ecefea; color: #004b36 !important; }
-    .drawer-tab.active svg { stroke: #004b36; }
     /* Hexagram line styles */
     .hx-yang { height:5px; background:#004b31; border-radius:3px; }
     .hx-yin  { display:flex; gap:6px; }
@@ -80,11 +77,44 @@
     #drawerBackdrop { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
     #drawerBackdrop.open { opacity: 1; pointer-events: auto; }
     .drawer-tab { display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:12px; color:#404943; transition:background 0.15s, color 0.15s; font-size:15px; font-weight:500; }
+    .drawer-tab svg { stroke:#404943; transition:stroke 0.15s; }
     .drawer-tab:hover { background:#ecefea; }
-    .drawer-tab.active { background:#004b31; color:white; }
-    .drawer-tab.active svg { stroke:white; }
+    .drawer-tab.active { background:#004b31; color:white !important; }
+    .drawer-tab.active svg { stroke:white !important; }
     .result-card { animation: resultFadeIn 0.4s ease forwards; opacity: 0; }
   </style>
+  <script>
+    // Session Authentication Check
+    (function() {
+      // Check if user is logged in
+      const sessionData = sessionStorage.getItem('jade_app_session') || localStorage.getItem('jade_app_session');
+
+      if (!sessionData) {
+        // No session found, redirect to login
+        window.location.href = 'login-mystical.html';
+        return;
+      }
+
+      try {
+        const session = JSON.parse(sessionData);
+
+        // Validate session data
+        if (!session.userId || !session.email) {
+          throw new Error('Invalid session');
+        }
+
+        // Store user info globally for use in the app
+        window.currentUser = session;
+
+        console.log('User logged in:', session.name || session.email);
+      } catch (error) {
+        // Invalid session data, redirect to login
+        sessionStorage.removeItem('jade_app_session');
+        localStorage.removeItem('jade_app_session');
+        window.location.href = 'login-mystical.html';
+      }
+    })();
+  </script>
 </head>
 <body>
 
@@ -200,7 +230,7 @@
   <div class="flex items-center justify-between mb-6 px-1">
     <span class="font-headline text-base font-bold italic text-[#004b36]">Jade &amp; Prosperity</span>
     <button onclick="toggleMobileMenu()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#ecefea] transition-colors">
-      <svg class="w-4 h-4" fill="none" stroke="#404943" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
 
@@ -219,23 +249,23 @@
   <p class="text-[10px] font-bold uppercase tracking-widest text-[#9eaa9e] px-2 mb-2" data-i18n="sidebar_navigation">Navigation</p>
   <nav class="flex flex-col gap-1">
     <a href="#" id="mtab-toto" onclick="showTab('toto');toggleMobileMenu();return false;" class="drawer-tab active">
-      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
       <span data-i18n="nav_totoLuck">TOTO Luck</span>
     </a>
     <a href="#" id="mtab-meihua" onclick="showTab('meihua');toggleMobileMenu();return false;" class="drawer-tab">
-      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 0 10A5 5 0 0 1 12 2z"/><path d="M12 12c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z"/></svg>
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 0 10A5 5 0 0 1 12 2z"/><path d="M12 12c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z"/></svg>
       <span data-i18n="nav_meihua">梅花易数</span>
     </a>
     <a href="#" id="mtab-fengshui" onclick="showTab('fengshui');toggleMobileMenu();return false;" class="drawer-tab">
-      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="sidebar_fengShui">Feng Shui</span>
     </a>
     <a href="#" class="drawer-tab">
-      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       <span data-i18n="nav_baZi">Ba Zi Analysis</span>
     </a>
     <a href="#" class="drawer-tab">
-      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span data-i18n="nav_dailyRituals">Daily Rituals</span>
     </a>
   </nav>
@@ -256,6 +286,17 @@
     <button onclick="openAiChat();toggleMobileMenu();" class="w-full bg-[#004b31] text-[#bcedda] py-3 rounded-xl font-semibold text-sm tracking-wide text-center hover:opacity-90 transition-opacity" data-i18n="sidebar_bookConsult">
       Book Consultation
     </button>
+
+    <!-- Logout Button -->
+    <button onclick="handleLogout()" class="w-full bg-transparent border-2 border-[#ba1a1a] text-[#ba1a1a] py-3 rounded-xl font-semibold text-sm tracking-wide text-center hover:bg-[#ba1a1a] hover:text-white transition-all flex items-center justify-center gap-2">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+      <span data-i18n="logout">Logout</span>
+    </button>
+
     <p class="text-[10px] text-[#9eaa9e] leading-relaxed px-1">Jade &amp; Prosperity · Fortune &amp; Destiny</p>
   </div>
 </div>
@@ -287,6 +328,14 @@
     <div class="flex flex-col gap-1">
       <a href="#" class="flex items-center gap-3 px-3 py-2 text-[#404943] hover:text-[#004b36] text-xs transition-colors" data-i18n="sidebar_settings">⚙ Settings</a>
       <a href="#" class="flex items-center gap-3 px-3 py-2 text-[#404943] hover:text-[#004b36] text-xs transition-colors" data-i18n="sidebar_support">? Support</a>
+      <button onclick="handleLogout()" class="flex items-center gap-3 px-3 py-2 text-[#ba1a1a] hover:text-[#9e0000] text-xs font-semibold transition-colors w-full text-left">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        <span data-i18n="logout">Logout</span>
+      </button>
     </div>
   </div>
 </aside>
@@ -895,6 +944,7 @@ const TRANSLATIONS = {
     sidebar_dashboard:'Dashboard', sidebar_bazi:'Personal Ba Zi', sidebar_fengShui:'Feng Shui',
     fs_badge:'Feng Shui Analysis', fs_heroTitle:'Read the Energy of Your Space', fs_heroDesc:'Upload a photo of your home, office, or room — Master Jade will reveal the qi flow, identify wealth corners, and offer precise adjustments.', fs_uploadTitle:'Upload a Photo', fs_uploadDesc:'JPG, PNG, HEIC supported', fs_cameraTitle:'Take a Photo', fs_cameraDesc:'Use your camera directly', fs_questionLabel:'What would you like to know?', fs_questionPlaceholder:'E.g. Is the wealth corner activated? How can I improve the bedroom energy?', fs_analyzeBtn:'Analyze Feng Shui', fs_analyzing:'Master Jade is reading your space…', fs_analyzingDesc:'Sensing the qi flow and energy patterns', fs_capture:'Capture', fs_cancel:'Cancel', fs_overallScore:'Overall Qi Score', fs_resultSubtitle:'AI-powered spatial energy analysis', fs_reAnalyze:'Re-analyse', fs_disclaimer:'仅供参考',
     sidebar_bookConsult:'Book Consultation', sidebar_settings:'⚙ Settings', sidebar_support:'? Support',
+    logout:'Logout',
     sidebar_masterName:'Master Lin', sidebar_phase:'Wood Dragon Phase',
     hero_badge:'Celestial Alignment',
     hero_title:'Seek Your <span class="italic text-[#ffe088]">Jade<br/>Fortune</span>',
@@ -1082,6 +1132,7 @@ const TRANSLATIONS = {
     sidebar_dashboard:'总览', sidebar_bazi:'个人八字', sidebar_fengShui:'风水',
     fs_badge:'风水分析', fs_heroTitle:'感知空间能量', fs_heroDesc:'上传您的家居、办公室或房间照片，玉大师将为您解读气场流动、找出财位，并给出精准的布局建议。', fs_uploadTitle:'上传照片', fs_uploadDesc:'支持 JPG、PNG、HEIC', fs_cameraTitle:'拍照分析', fs_cameraDesc:'直接使用摄像头拍摄', fs_questionLabel:'您想了解什么？', fs_questionPlaceholder:'例如：财位是否激活？如何改善卧室气场？', fs_analyzeBtn:'开始风水分析', fs_analyzing:'玉大师正在感知您的空间…', fs_analyzingDesc:'正在读取气场流动与能量格局', fs_capture:'拍摄', fs_cancel:'取消', fs_overallScore:'整体气场评分', fs_resultSubtitle:'AI驱动空间能量分析', fs_reAnalyze:'重新分析', fs_disclaimer:'仅供参考',
     sidebar_bookConsult:'预约咨询', sidebar_settings:'⚙ 设置', sidebar_support:'? 支持',
+    logout:'退出登录',
     sidebar_masterName:'林大师', sidebar_phase:'木龙运程',
     hero_badge:'天象对齐',
     hero_title:'寻您<span class="italic text-[#ffe088]">翠玉<br/>福气</span>',
@@ -1263,6 +1314,7 @@ const TRANSLATIONS = {
     sidebar_dashboard:'Papan Pemuka', sidebar_bazi:'Ba Zi Peribadi', sidebar_fengShui:'Feng Shui',
     fs_badge:'Analisis Feng Shui', fs_heroTitle:'Baca Tenaga Ruang Anda', fs_heroDesc:'Muat naik foto rumah, pejabat atau bilik anda — Tuan Jade akan mendedahkan aliran qi, mengenal pasti sudut kekayaan dan memberikan pelarasan tepat.', fs_uploadTitle:'Muat Naik Foto', fs_uploadDesc:'Sokong JPG, PNG, HEIC', fs_cameraTitle:'Ambil Foto', fs_cameraDesc:'Gunakan kamera secara langsung', fs_questionLabel:'Apa yang ingin anda ketahui?', fs_questionPlaceholder:'Cth: Adakah sudut kekayaan diaktifkan? Bagaimana meningkatkan tenaga bilik tidur?', fs_analyzeBtn:'Analisis Feng Shui', fs_analyzing:'Tuan Jade sedang membaca ruang anda…', fs_analyzingDesc:'Mengesan aliran qi dan corak tenaga', fs_capture:'Tangkap', fs_cancel:'Batal', fs_overallScore:'Skor Qi Keseluruhan', fs_resultSubtitle:'Analisis tenaga ruang berkuasa AI', fs_reAnalyze:'Analisis Semula', fs_disclaimer:'Untuk rujukan sahaja',
     sidebar_bookConsult:'Tempah Perundingan', sidebar_settings:'⚙ Tetapan', sidebar_support:'? Sokongan',
+    logout:'Log Keluar',
     sidebar_masterName:'Guru Lin', sidebar_phase:'Fasa Naga Kayu',
     hero_badge:'Penjajaran Cakerawala',
     hero_title:'Cari <span class="italic text-[#ffe088]">Tuah Jade<br/>Anda</span>',
@@ -1937,6 +1989,24 @@ function showTab(tab) {
 }
 
 let mobileMenuOpen = false;
+// Handle logout
+function handleLogout() {
+  const confirmLogout = confirm(
+    currentLang === 'en' ? 'Are you sure you want to logout?' :
+    currentLang === 'zh' ? '确定要退出登录吗？' :
+    'Adakah anda pasti mahu log keluar?'
+  );
+
+  if (confirmLogout) {
+    // Clear session data
+    sessionStorage.removeItem('jade_app_session');
+    localStorage.removeItem('jade_app_session');
+
+    // Redirect to login page
+    window.location.href = 'login-mystical.html';
+  }
+}
+
 function toggleMobileMenu() {
   mobileMenuOpen = !mobileMenuOpen;
   document.getElementById('mobileDrawer').classList.toggle('open', mobileMenuOpen);
