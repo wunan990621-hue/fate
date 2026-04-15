@@ -107,6 +107,63 @@
         window.currentUser = session;
 
         console.log('User logged in:', session.name || session.email);
+
+        // Update user profile in sidebar when DOM is ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', updateUserProfile);
+        } else {
+          updateUserProfile();
+        }
+
+        function updateUserProfile() {
+          // Update user name in drawer (mobile sidebar)
+          const drawerName = document.getElementById('drawerName');
+          if (drawerName && session.name) {
+            drawerName.textContent = session.name;
+          }
+
+          // Update user avatar if available (both desktop and mobile)
+          if (session.picture) {
+            // Desktop avatar (top nav)
+            const avatarImg = document.getElementById('avatarImg');
+            if (avatarImg) {
+              avatarImg.src = session.picture;
+              avatarImg.onerror = function() {
+                // Fallback to generated avatar if image fails to load
+                this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(session.name || session.email)}&background=00b386&color=fff&size=128`;
+              };
+            }
+
+            // Mobile drawer avatar
+            const drawerAvatarImg = document.getElementById('drawerAvatarImg');
+            if (drawerAvatarImg) {
+              drawerAvatarImg.src = session.picture;
+              drawerAvatarImg.onerror = function() {
+                // Fallback to generated avatar if image fails to load
+                this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(session.name || session.email)}&background=00b386&color=fff&size=128`;
+              };
+            }
+          } else {
+            // No picture provided, use generated avatar
+            const generatedAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(session.name || session.email)}&background=00b386&color=fff&size=128`;
+            const avatarImg = document.getElementById('avatarImg');
+            const drawerAvatarImg = document.getElementById('drawerAvatarImg');
+            if (avatarImg) avatarImg.src = generatedAvatar;
+            if (drawerAvatarImg) drawerAvatarImg.src = generatedAvatar;
+          }
+
+          // Update name input field with user's name if empty
+          const nameInput = document.getElementById('nameInput');
+          if (nameInput && session.name && !nameInput.value) {
+            nameInput.value = session.name;
+          }
+
+          // Update drawer phase text to show email or role
+          const drawerPhase = document.getElementById('drawerPhase');
+          if (drawerPhase && session.email) {
+            drawerPhase.textContent = session.email;
+          }
+        }
       } catch (error) {
         // Invalid session data, redirect to login
         sessionStorage.removeItem('jade_app_session');
