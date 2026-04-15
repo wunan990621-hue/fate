@@ -7,16 +7,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- OAuth Configuration -->
+  <script src="oauth-config.js"></script>
+
   <!-- Google Sign-In -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com">
 
   <!-- Apple Sign-In -->
   <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js" async defer></script>
-  <meta name="appleid-signin-client-id" content="YOUR_APPLE_SERVICE_ID">
-  <meta name="appleid-signin-scope" content="name email">
-  <meta name="appleid-signin-redirect-uri" content="YOUR_REDIRECT_URI">
-  <meta name="appleid-signin-use-popup" content="true">
   <style>
     * {
       margin: 0;
@@ -1270,9 +1268,9 @@
 
     // Initialize Google Sign-In
     function initGoogleSignIn() {
-      if (typeof google !== 'undefined') {
+      if (typeof google !== 'undefined' && typeof OAUTH_CONFIG !== 'undefined' && OAUTH_CONFIG.google.clientId) {
         google.accounts.id.initialize({
-          client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+          client_id: OAUTH_CONFIG.google.clientId,
           callback: handleGoogleCallback,
           auto_select: false,
           cancel_on_tap_outside: true
@@ -1319,11 +1317,11 @@
 
     // Initialize Apple Sign-In
     function initAppleSignIn() {
-      if (typeof AppleID !== 'undefined') {
+      if (typeof AppleID !== 'undefined' && typeof OAUTH_CONFIG !== 'undefined' && OAUTH_CONFIG.apple.serviceId) {
         AppleID.auth.init({
-          clientId: 'YOUR_APPLE_SERVICE_ID',
+          clientId: OAUTH_CONFIG.apple.serviceId,
           scope: 'name email',
-          redirectURI: window.location.origin,
+          redirectURI: OAUTH_CONFIG.redirectUri,
           usePopup: true
         });
       }
@@ -1404,8 +1402,10 @@
     // DEVELOPMENT MODE - SIMULATED OAUTH
     // ═══════════════════════════════════════════════════════════
 
-    // Set to true for testing without real OAuth configuration
-    const DEV_MODE = true;
+    // Check if OAuth is configured, otherwise use dev mode
+    const DEV_MODE = (typeof OAUTH_CONFIG !== 'undefined' && OAUTH_CONFIG.devMode) ||
+                     (typeof OAUTH_CONFIG === 'undefined') ||
+                     (!OAUTH_CONFIG.hasAnyProvider());
 
     function simulateOAuthLogin(provider) {
       // Simulate OAuth popup and user selection
@@ -1488,9 +1488,12 @@
               console.log('Google One Tap not available, using redirect flow');
 
               // For production, use OAuth2 redirect flow
+              const clientId = OAUTH_CONFIG?.google?.clientId || 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+              const redirectUri = OAUTH_CONFIG?.redirectUri || (window.location.origin + '/login-mystical.html');
+
               const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
-                `client_id=YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com&` +
-                `redirect_uri=${encodeURIComponent(window.location.origin + '/login-mystical.html')}&` +
+                `client_id=${clientId}&` +
+                `redirect_uri=${encodeURIComponent(redirectUri)}&` +
                 `response_type=token&` +
                 `scope=email profile`;
 
