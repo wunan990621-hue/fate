@@ -7,8 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Hello.js - 简单的OAuth库 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/hellojs/1.18.6/hello.all.min.js"></script>
+  <!-- 无需外部OAuth库 - 使用内置模拟登录 -->
   <style>
     * {
       margin: 0;
@@ -1328,28 +1327,8 @@
       btn.disabled = true;
       btn.style.opacity = '0.6';
 
-      // 使用 Hello.js 库进行OAuth登录（已加载）
-      if (typeof hello !== 'undefined') {
-        hello(provider).login({ scope: 'email,profile' })
-          .then(response => {
-            return hello(provider).api('me');
-          })
-          .then(user => {
-            handleSocialAuthSuccess(user, provider);
-          })
-          .catch(error => {
-            console.error('Login error:', error);
-            btn.disabled = false;
-            btn.style.opacity = '1';
-
-            if (error.error !== 'popup_blocked' && error.error !== 'cancelled') {
-              showError(i18n[currentLang].errorNetwork);
-            }
-          });
-      } else {
-        // Fallback: 使用模拟登录进行演示
-        simulateSocialLogin(provider, btn);
-      }
+      // 直接使用模拟登录进行演示
+      simulateSocialLogin(provider, btn);
     }
 
     // 模拟社交登录（用于演示）
@@ -1357,11 +1336,12 @@
       const demoUsers = {
         google: [
           { id: 'g1', email: 'demo.user@gmail.com', name: 'Demo User', picture: 'https://ui-avatars.com/api/?name=Demo+User&background=00b386&color=fff' },
-          { id: 'g2', email: 'test.account@gmail.com', name: 'Test Account', picture: 'https://ui-avatars.com/api/?name=Test+Account&background=f5c842&color=000' }
+          { id: 'g2', email: 'test.account@gmail.com', name: 'Test Account', picture: 'https://ui-avatars.com/api/?name=Test+Account&background=f5c842&color=000' },
+          { id: 'g3', email: 'john.doe@gmail.com', name: 'John Doe', picture: 'https://ui-avatars.com/api/?name=John+Doe&background=004b31&color=fff' }
         ],
         apple: [
-          { id: 'a1', email: 'demo@privaterelay.appleid.com', name: 'Demo User' },
-          { id: 'a2', email: 'test@privaterelay.appleid.com', name: 'Test Account' }
+          { id: 'a1', email: 'demo@privaterelay.appleid.com', name: 'Demo User', picture: 'https://ui-avatars.com/api/?name=Demo+User&background=000000&color=fff' },
+          { id: 'a2', email: 'test@privaterelay.appleid.com', name: 'Test Account', picture: 'https://ui-avatars.com/api/?name=Test+Account&background=000000&color=fff' }
         ]
       };
 
@@ -1369,16 +1349,37 @@
       const user = users[Math.floor(Math.random() * users.length)];
 
       const providerName = provider === 'google' ? 'Google' : 'Apple';
-      const confirmMsg = currentLang === 'zh'
-        ? `使用 ${providerName} 账号登录\n\n${user.name}\n${user.email}`
-        : currentLang === 'ms'
-        ? `Log masuk dengan ${providerName}\n\n${user.name}\n${user.email}`
-        : `Sign in with ${providerName}\n\n${user.name}\n${user.email}`;
+      const icon = provider === 'google' ? '🔵' : '🍎';
+
+      const messages = {
+        zh: {
+          title: `${icon} ${providerName} 登录 (演示模式)`,
+          message: `继续以下账号登录：\n\n👤 ${user.name}\n📧 ${user.email}\n\n这是演示模式，无需真实账号。`,
+          confirm: '继续',
+          cancel: '取消'
+        },
+        ms: {
+          title: `${icon} Log Masuk ${providerName} (Mod Demo)`,
+          message: `Teruskan dengan:\n\n👤 ${user.name}\n📧 ${user.email}\n\nIni adalah mod demo.`,
+          confirm: 'Teruskan',
+          cancel: 'Batal'
+        },
+        en: {
+          title: `${icon} ${providerName} Sign-In (Demo Mode)`,
+          message: `Continue with:\n\n👤 ${user.name}\n📧 ${user.email}\n\nThis is demo mode, no real account needed.`,
+          confirm: 'Continue',
+          cancel: 'Cancel'
+        }
+      };
+
+      const lang = messages[currentLang] || messages.en;
+      const confirmMsg = `${lang.title}\n\n${lang.message}`;
 
       if (confirm(confirmMsg)) {
+        // 显示加载状态
         setTimeout(() => {
           handleSocialAuthSuccess(user, provider);
-        }, 500);
+        }, 800);
       } else {
         btn.disabled = false;
         btn.style.opacity = '1';
@@ -1389,16 +1390,8 @@
     // INITIALIZATION
     // ═══════════════════════════════════════════════════════════
 
-    // 初始化 Hello.js OAuth
-    if (typeof hello !== 'undefined') {
-      hello.init({
-        google: 'YOUR_GOOGLE_CLIENT_ID', // 将被忽略，使用演示模式
-        // 实际上会fallback到模拟登录
-      });
-      console.log('Hello.js initialized (demo mode)');
-    } else {
-      console.log('Using simulated social login for demo');
-    }
+    // 使用模拟社交登录 - 无需配置
+    console.log('Social login ready (demo mode)');
   </script>
 
 </body>
