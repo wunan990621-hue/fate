@@ -1294,21 +1294,57 @@
     // SUPABASE 配置（真实的OAuth登录）
     // ═══════════════════════════════════════════════════════════
 
-    // Supabase 项目配置（公开的，可以直接使用）
+    // Supabase 项目配置
     const SUPABASE_URL = 'https://your-project.supabase.co';
     const SUPABASE_ANON_KEY = 'your-anon-key';
+
+    // 检查是否已配置 Supabase
+    const isSupabaseConfigured =
+      SUPABASE_URL !== 'https://your-project.supabase.co' &&
+      SUPABASE_ANON_KEY !== 'your-anon-key';
 
     // 初始化 Supabase 客户端
     let supabase = null;
 
-    if (typeof window.supabase !== 'undefined') {
-      try {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        console.log('✅ Supabase initialized');
-      } catch (error) {
-        console.error('Supabase init error:', error);
+    // 等待 Supabase 库加载完成
+    window.addEventListener('load', () => {
+      if (isSupabaseConfigured && typeof window.supabase !== 'undefined') {
+        try {
+          supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          console.log('✅ Supabase initialized - Real OAuth enabled');
+
+          // 监听 Supabase 认证状态变化
+          supabase.auth.onAuthStateChange((event, session) => {
+            console.log('Auth event:', event);
+
+            if (event === 'SIGNED_IN' && session) {
+              const user = session.user;
+              const provider = user.app_metadata?.provider || 'email';
+              handleSupabaseAuth(user, provider);
+            }
+          });
+
+          // 检查是否有OAuth回调
+          supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+              const user = session.user;
+              const provider = user.app_metadata?.provider || 'email';
+              handleSupabaseAuth(user, provider);
+            }
+          });
+
+        } catch (error) {
+          console.error('Supabase init error:', error);
+        }
       }
-    }
+
+      if (!isSupabaseConfigured) {
+        console.warn('⚠️ Supabase NOT configured!');
+        console.warn('📖 Social login (Google/Apple) will NOT work until you configure Supabase.');
+        console.warn('📖 Setup guide: SUPABASE_SETUP.md (takes 5 minutes)');
+        console.warn('✅ Email login still works: admin@jade.com / admin123');
+      }
+    });
 
     // 处理 Supabase 登录成功
     function handleSupabaseAuth(user, provider) {
@@ -1341,14 +1377,23 @@
       btn.disabled = true;
       btn.style.opacity = '0.6';
 
+      // 检查 Supabase 是否已配置
       if (!supabase) {
-        console.error('Supabase not initialized');
-        showError('登录服务未初始化，请刷新页面重试');
         btn.disabled = false;
         btn.style.opacity = '1';
+
+        const errorMsg = currentLang === 'zh'
+          ? '请先配置 Supabase 以启用社交登录。查看 SUPABASE_SETUP.md'
+          : currentLang === 'ms'
+          ? 'Sila setup Supabase dahulu. Lihat SUPABASE_SETUP.md'
+          : 'Please setup Supabase first. See SUPABASE_SETUP.md';
+
+        showError(errorMsg);
+        console.error('Supabase not configured. See SUPABASE_SETUP.md for setup guide.');
         return;
       }
 
+      // 使用真实 OAuth
       try {
         const { data, error } = await supabase.auth.signInWithOAuth({
           provider: provider,
@@ -1359,11 +1404,11 @@
 
         if (error) throw error;
 
-        // OAuth 会自动重定向，无需手动处理
-        console.log('Redirecting to OAuth provider...');
+        // OAuth 会自动重定向到提供商
+        console.log('Redirecting to ' + provider + ' OAuth...');
 
       } catch (error) {
-        console.error('Login error:', error);
+        console.error('OAuth error:', error);
         btn.disabled = false;
         btn.style.opacity = '1';
 
@@ -1382,31 +1427,8 @@
     // INITIALIZATION
     // ═══════════════════════════════════════════════════════════
 
-    // 监听 Supabase 认证状态变化
-    if (supabase) {
-      supabase.auth.onAuthStateChange((event, session) => {
-        console.log('Auth event:', event);
-
-        if (event === 'SIGNED_IN' && session) {
-          const user = session.user;
-          const provider = user.app_metadata?.provider || 'email';
-
-          // 处理登录成功
-          handleSupabaseAuth(user, provider);
-        }
-      });
-
-      // 检查是否有OAuth回调
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session) {
-          const user = session.user;
-          const provider = user.app_metadata?.provider || 'email';
-          handleSupabaseAuth(user, provider);
-        }
-      });
-    }
-
-    console.log('Supabase Auth ready for real OAuth login');
+    // 页面加载完成后的初始化已移至 Supabase 初始化代码块中
+    console.log('Login page ready');
   </script>
 
 </body>
