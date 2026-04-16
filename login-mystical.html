@@ -7,7 +7,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- 无需外部OAuth库 - 使用内置模拟登录 -->
+  <!-- Supabase Auth - 真实的Google/Apple登录 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * {
       margin: 0;
@@ -1290,19 +1291,32 @@
     }
 
     // ═══════════════════════════════════════════════════════════
-    // 简化方案：使用第三方OAuth服务
+    // SUPABASE 配置（真实的OAuth登录）
     // ═══════════════════════════════════════════════════════════
 
-    // 使用 Auth0 作为认证服务（免费，无需配置）
-    const USE_THIRD_PARTY_AUTH = true;
+    // Supabase 项目配置（公开的，可以直接使用）
+    const SUPABASE_URL = 'https://your-project.supabase.co';
+    const SUPABASE_ANON_KEY = 'your-anon-key';
 
-    // 处理第三方登录成功
-    function handleSocialAuthSuccess(user, provider) {
+    // 初始化 Supabase 客户端
+    let supabase = null;
+
+    if (typeof window.supabase !== 'undefined') {
+      try {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log('✅ Supabase initialized');
+      } catch (error) {
+        console.error('Supabase init error:', error);
+      }
+    }
+
+    // 处理 Supabase 登录成功
+    function handleSupabaseAuth(user, provider) {
       const sessionData = {
-        userId: user.id || user.sub || `${provider}_${Date.now()}`,
+        userId: user.id,
         email: user.email,
-        name: user.name || user.given_name || user.email.split('@')[0],
-        picture: user.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=00b386&color=fff`,
+        name: user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0],
+        picture: user.user_metadata?.avatar_url || user.user_metadata?.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.email)}&background=00b386&color=fff`,
         role: 'user',
         provider: provider,
         loginTime: new Date().toISOString()
@@ -1319,79 +1333,80 @@
     }
 
     // ═══════════════════════════════════════════════════════════
-    // SOCIAL LOGIN - 使用开放的OAuth服务
+    // SOCIAL LOGIN - 使用 Supabase 真实OAuth
     // ═══════════════════════════════════════════════════════════
 
-    function socialLogin(provider) {
+    async function socialLogin(provider) {
       const btn = event.currentTarget;
       btn.disabled = true;
       btn.style.opacity = '0.6';
 
-      // 直接使用模拟登录进行演示
-      simulateSocialLogin(provider, btn);
-    }
-
-    // 模拟社交登录（用于演示）
-    function simulateSocialLogin(provider, btn) {
-      const demoUsers = {
-        google: [
-          { id: 'g1', email: 'demo.user@gmail.com', name: 'Demo User', picture: 'https://ui-avatars.com/api/?name=Demo+User&background=00b386&color=fff' },
-          { id: 'g2', email: 'test.account@gmail.com', name: 'Test Account', picture: 'https://ui-avatars.com/api/?name=Test+Account&background=f5c842&color=000' },
-          { id: 'g3', email: 'john.doe@gmail.com', name: 'John Doe', picture: 'https://ui-avatars.com/api/?name=John+Doe&background=004b31&color=fff' }
-        ],
-        apple: [
-          { id: 'a1', email: 'demo@privaterelay.appleid.com', name: 'Demo User', picture: 'https://ui-avatars.com/api/?name=Demo+User&background=000000&color=fff' },
-          { id: 'a2', email: 'test@privaterelay.appleid.com', name: 'Test Account', picture: 'https://ui-avatars.com/api/?name=Test+Account&background=000000&color=fff' }
-        ]
-      };
-
-      const users = demoUsers[provider] || demoUsers.google;
-      const user = users[Math.floor(Math.random() * users.length)];
-
-      const providerName = provider === 'google' ? 'Google' : 'Apple';
-      const icon = provider === 'google' ? '🔵' : '🍎';
-
-      const messages = {
-        zh: {
-          title: `${icon} ${providerName} 登录 (演示模式)`,
-          message: `继续以下账号登录：\n\n👤 ${user.name}\n📧 ${user.email}\n\n这是演示模式，无需真实账号。`,
-          confirm: '继续',
-          cancel: '取消'
-        },
-        ms: {
-          title: `${icon} Log Masuk ${providerName} (Mod Demo)`,
-          message: `Teruskan dengan:\n\n👤 ${user.name}\n📧 ${user.email}\n\nIni adalah mod demo.`,
-          confirm: 'Teruskan',
-          cancel: 'Batal'
-        },
-        en: {
-          title: `${icon} ${providerName} Sign-In (Demo Mode)`,
-          message: `Continue with:\n\n👤 ${user.name}\n📧 ${user.email}\n\nThis is demo mode, no real account needed.`,
-          confirm: 'Continue',
-          cancel: 'Cancel'
-        }
-      };
-
-      const lang = messages[currentLang] || messages.en;
-      const confirmMsg = `${lang.title}\n\n${lang.message}`;
-
-      if (confirm(confirmMsg)) {
-        // 显示加载状态
-        setTimeout(() => {
-          handleSocialAuthSuccess(user, provider);
-        }, 800);
-      } else {
+      if (!supabase) {
+        console.error('Supabase not initialized');
+        showError('登录服务未初始化，请刷新页面重试');
         btn.disabled = false;
         btn.style.opacity = '1';
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+          provider: provider,
+          options: {
+            redirectTo: window.location.origin + window.location.pathname
+          }
+        });
+
+        if (error) throw error;
+
+        // OAuth 会自动重定向，无需手动处理
+        console.log('Redirecting to OAuth provider...');
+
+      } catch (error) {
+        console.error('Login error:', error);
+        btn.disabled = false;
+        btn.style.opacity = '1';
+
+        const errorMsg = currentLang === 'zh'
+          ? '登录失败，请重试'
+          : currentLang === 'ms'
+          ? 'Log masuk gagal, cuba lagi'
+          : 'Login failed, please try again';
+
+        showError(errorMsg);
       }
     }
+
 
     // ═══════════════════════════════════════════════════════════
     // INITIALIZATION
     // ═══════════════════════════════════════════════════════════
 
-    // 使用模拟社交登录 - 无需配置
-    console.log('Social login ready (demo mode)');
+    // 监听 Supabase 认证状态变化
+    if (supabase) {
+      supabase.auth.onAuthStateChange((event, session) => {
+        console.log('Auth event:', event);
+
+        if (event === 'SIGNED_IN' && session) {
+          const user = session.user;
+          const provider = user.app_metadata?.provider || 'email';
+
+          // 处理登录成功
+          handleSupabaseAuth(user, provider);
+        }
+      });
+
+      // 检查是否有OAuth回调
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session) {
+          const user = session.user;
+          const provider = user.app_metadata?.provider || 'email';
+          handleSupabaseAuth(user, provider);
+        }
+      });
+    }
+
+    console.log('Supabase Auth ready for real OAuth login');
   </script>
 
 </body>
